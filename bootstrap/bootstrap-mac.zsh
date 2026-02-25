@@ -201,14 +201,21 @@ ensure_treesitter_parsers() {
 
   log "Ensuring Neovim Tree-sitter parsers are installed"
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f nvim --headless '+Lazy! sync' '+TSUpdateSync' '+qa'"
+    print -P "%F{yellow}dry-run:%f nvim --headless '+Lazy! sync' '+qa'"
+    print -P "%F{yellow}dry-run:%f nvim --headless '+lua <treesitter-check-and-update>' '+qa'"
     return
   fi
 
-  if nvim --headless "+Lazy! sync" "+TSUpdateSync" "+qa"; then
-    ok "Tree-sitter parsers updated"
+  if ! nvim --headless "+Lazy! sync" "+qa"; then
+    warn "Lazy sync failed; skipping Tree-sitter parser update"
+    return
+  fi
+
+  local ts_lua='local has_ts, _ = pcall(require, "nvim-treesitter.install"); if not has_ts then vim.notify("nvim-treesitter not available; skipping parser update", vim.log.levels.WARN); return end; if vim.fn.exists(":TSUpdateSync") == 2 then vim.cmd("TSUpdateSync") elseif vim.fn.exists(":TSUpdate") == 2 then vim.cmd("TSUpdate") else vim.notify("TSUpdate command not available; skipping parser update", vim.log.levels.WARN) end'
+  if nvim --headless "+lua $ts_lua" "+qa"; then
+    ok "Tree-sitter parser step completed"
   else
-    warn "Failed to update Tree-sitter parsers; run ':Lazy sync' and ':TSUpdateSync' inside Neovim"
+    warn "Tree-sitter parser update failed; run ':TSUpdateSync' manually inside Neovim"
   fi
 }
 
