@@ -111,6 +111,10 @@ if command -v lazydocker >/dev/null 2>&1; then
   alias lzd='lazydocker'
 fi
 
+if command -v spotify_player >/dev/null 2>&1; then
+  alias spt='spotify_player'
+fi
+
 # AI + cloud aliases
 if command -v codex >/dev/null 2>&1; then
   alias cx='codex'

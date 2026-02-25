@@ -35,6 +35,7 @@ Dry run:
 8. Installs runtimes via `mise`
 9. Installs `gcloud-cli` using `mise` Python
 10. Installs Rust via `rustup-init`
+11. Installs `spotify_player` (TUI) via Cargo with image support
 
 ## Dotfiles Structure
 

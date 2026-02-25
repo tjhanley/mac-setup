@@ -421,6 +421,7 @@ install_gcloud_cli() {
 install_app_store_apps() {
   local copyless2_id="993841014"
   local magnet_id="441258766"
+  local install_output=""
 
   if [[ "$OSTYPE" != darwin* ]]; then
     return
@@ -433,40 +434,61 @@ install_app_store_apps() {
 
   log "Installing App Store apps"
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f mas account (requires App Store sign-in)"
     print -P "%F{yellow}dry-run:%f mas install $copyless2_id # CopyLess 2"
     print -P "%F{yellow}dry-run:%f mas install $magnet_id # Magnet"
-    return
-  fi
-
-  if ! mas account >/dev/null 2>&1; then
-    warn "Not signed into the Mac App Store."
-    warn "Please sign in, then press Enter to continue."
-    warn "Tip: run 'open -a \"App Store\"' if needed."
-    read -r
-  fi
-
-  if ! mas account >/dev/null 2>&1; then
-    warn "Still not signed into App Store; skipping App Store installs"
     return
   fi
 
   if mas list | awk '{print $1}' | rg -q "^${copyless2_id}$"; then
     ok "CopyLess 2 already installed"
   else
-    mas install "$copyless2_id" && ok "Installed CopyLess 2"
+    install_output="$(mas install "$copyless2_id" 2>&1)" || true
+    if [[ "$install_output" == *"Not signed in"* || "$install_output" == *"not signed in"* || "$install_output" == *"This Apple ID has not yet been used with the App Store"* ]]; then
+      warn "App Store authentication required for mas install."
+      warn "Please sign in using the App Store app, then press Enter to retry."
+      warn "Tip: run 'open -a \"App Store\"' if needed."
+      read -r
+      mas install "$copyless2_id" && ok "Installed CopyLess 2"
+    elif [[ "$install_output" == *"already installed"* ]]; then
+      ok "CopyLess 2 already installed"
+    elif [[ -n "$install_output" ]]; then
+      print -- "$install_output"
+      warn "Failed to install CopyLess 2"
+    fi
   fi
 
   if mas list | awk '{print $1}' | rg -q "^${magnet_id}$"; then
     ok "Magnet already installed"
   else
-    mas install "$magnet_id" && ok "Installed Magnet"
+    install_output="$(mas install "$magnet_id" 2>&1)" || true
+    if [[ "$install_output" == *"Not signed in"* || "$install_output" == *"not signed in"* || "$install_output" == *"This Apple ID has not yet been used with the App Store"* ]]; then
+      warn "App Store authentication required for mas install."
+      warn "Please sign in using the App Store app, then press Enter to retry."
+      warn "Tip: run 'open -a \"App Store\"' if needed."
+      read -r
+      mas install "$magnet_id" && ok "Installed Magnet"
+    elif [[ "$install_output" == *"already installed"* ]]; then
+      ok "Magnet already installed"
+    elif [[ -n "$install_output" ]]; then
+      print -- "$install_output"
+      warn "Failed to install Magnet"
+    fi
   fi
 }
 
 install_rust() {
   if need_cmd rustup; then
-    ok "rustup already installed"
+    if need_cmd cargo || [[ -x "$HOME/.cargo/bin/cargo" ]]; then
+      ok "rustup/cargo already installed"
+      return
+    fi
+    log "Initializing Rust stable toolchain via rustup"
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f rustup default stable"
+    else
+      rustup default stable
+      ok "Rust stable toolchain initialized"
+    fi
     return
   fi
 
@@ -483,13 +505,45 @@ install_rust() {
   fi
 }
 
+install_spotify_tui() {
+  log "Installing spotify_player TUI (with image feature)"
+
+  local cargo_bin=""
+  if need_cmd cargo; then
+    cargo_bin="$(command -v cargo)"
+  elif [[ -x "$HOME/.cargo/bin/cargo" ]]; then
+    cargo_bin="$HOME/.cargo/bin/cargo"
+  fi
+
+  if [[ -z "$cargo_bin" ]]; then
+    warn "cargo not found; skipping spotify_player install"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f $cargo_bin install --locked spotify_player --features image"
+    return
+  fi
+
+  if "$cargo_bin" install --list | rg -q '^spotify_player v'; then
+    ok "spotify_player already installed"
+    return
+  fi
+
+  if "$cargo_bin" install --locked spotify_player --features image; then
+    ok "spotify_player installed"
+  else
+    warn "spotify_player install failed"
+  fi
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
 
 - Open Ghostty once to grant permissions and confirm settings.
 - Open Raycast and Zed if you use them.
-- If you want Magnet, install it from the App Store (or add mas later).
+- Open Spotify and complete login before using spotify_player.
 
 Tip:
 - Re-run this script anytime after changes; it's safe and idempotent.
@@ -504,7 +558,6 @@ main() {
 
   ensure_homebrew
   refresh_homebrew
-  ensure_gcloud_python
   ensure_config_dir
   ensure_local_env_file
   prepare_brew_binary_conflicts
@@ -523,6 +576,7 @@ main() {
   install_gcloud_cli
   install_app_store_apps
   install_rust
+  install_spotify_tui
   post_notes
 
   ok "Bootstrap finished"
