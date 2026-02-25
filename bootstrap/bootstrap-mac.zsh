@@ -80,6 +80,46 @@ move_conflict_target() {
   ok "Moved conflict: $target -> $dest"
 }
 
+link_managed_file() {
+  local source="$1"
+  local target="$2"
+  local label="$3"
+  local resolved_source=""
+  local resolved_target=""
+
+  if [[ ! -e "$source" ]]; then
+    warn "$label source missing: $source"
+    return
+  fi
+
+  resolved_source="$(resolve_existing_path "$source" || true)"
+  resolved_target="$(resolve_existing_path "$target" || true)"
+  if [[ -n "$resolved_source" && -n "$resolved_target" && "$resolved_source" == "$resolved_target" ]]; then
+    ok "$label already linked"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f link $target -> $source"
+    return
+  fi
+
+  run_cmd mkdir -p "$(dirname "$target")"
+
+  if [[ -d "$target" && ! -L "$target" ]]; then
+    warn "$label target is a directory; skipping: $target"
+    return
+  fi
+
+  if [[ -e "$target" || -L "$target" ]]; then
+    backup_path "$target"
+    run_cmd rm -f "$target"
+  fi
+
+  run_cmd ln -s "$source" "$target"
+  ok "$label linked: $target -> $source"
+}
+
 ensure_homebrew() {
   if need_cmd brew; then
     ok "Homebrew already installed"
@@ -156,7 +196,10 @@ stow_dotfiles() {
   backup_path "$HOME/.config/zellij"
   backup_path "$HOME/.config/mise"
   backup_path "$HOME/.config/zed"
+  backup_path "$HOME/.config/obsidian"
   backup_path "$HOME/.config/raycast"
+  backup_path "$HOME/Library/Application Support/Zed/settings.json"
+  backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
 
   log "Moving stow conflicts into backup"
   move_conflict_target ".zshrc"
@@ -167,6 +210,8 @@ stow_dotfiles() {
   move_conflict_target ".config/zellij/config.kdl"
   move_conflict_target ".config/zellij/themes/catppuccin.kdl"
   move_conflict_target ".config/mise/config.toml"
+  move_conflict_target ".config/zed/settings.json"
+  move_conflict_target ".config/obsidian/obsidian.json"
 
   log "Stowing dotfiles"
   if [[ ! -d "$STOW_DIR" ]]; then
@@ -181,6 +226,22 @@ stow_dotfiles() {
   fi
 
   ok "Dotfiles stowed"
+}
+
+configure_macos_app_links() {
+  if [[ "$OSTYPE" != darwin* ]]; then
+    return
+  fi
+
+  log "Linking macOS app configs to stow-managed files"
+  link_managed_file \
+    "$HOME/.config/zed/settings.json" \
+    "$HOME/Library/Application Support/Zed/settings.json" \
+    "Zed settings"
+  link_managed_file \
+    "$HOME/.config/obsidian/obsidian.json" \
+    "$HOME/Library/Application Support/obsidian/obsidian.json" \
+    "Obsidian settings"
 }
 
 install_lazyvim() {
@@ -285,6 +346,7 @@ main() {
   fi
 
   stow_dotfiles
+  configure_macos_app_links
   install_lazyvim
   ensure_treesitter_parsers
   install_mise_tools
