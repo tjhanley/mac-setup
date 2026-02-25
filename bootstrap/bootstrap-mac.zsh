@@ -40,13 +40,34 @@ backup_path() {
   fi
 }
 
+resolve_existing_path() {
+  local p="$1"
+  if [[ -e "$p" || -L "$p" ]]; then
+    (
+      cd "$(dirname "$p")" 2>/dev/null || exit 1
+      print -- "$(pwd -P)/$(basename "$p")"
+    )
+  fi
+}
+
 move_conflict_target() {
   local rel="$1"
   local target="$HOME/$rel"
   local dest="$BACKUP_DIR/$rel"
+  local resolved_target=""
+  local resolved_dotfiles=""
 
   if [[ -L "$target" || ! -e "$target" ]]; then
     return
+  fi
+
+  resolved_target="$(resolve_existing_path "$target" || true)"
+  resolved_dotfiles="$(cd "$DOTFILES_DIR" 2>/dev/null && pwd -P || true)"
+  if [[ -n "$resolved_target" && -n "$resolved_dotfiles" ]]; then
+    if [[ "$resolved_target" == "$resolved_dotfiles" || "$resolved_target" == "$resolved_dotfiles/"* ]]; then
+      warn "Skipping conflict move for repo-managed path: $target"
+      return
+    fi
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -189,34 +210,15 @@ install_lazyvim() {
 }
 
 ensure_treesitter_parsers() {
-  if ! need_cmd nvim; then
-    warn "nvim not found in PATH; skipping Tree-sitter parser setup"
-    return
-  fi
-
-  if [[ ! -f "$HOME/.config/nvim/init.lua" ]]; then
-    warn "~/.config/nvim/init.lua not found; skipping Tree-sitter parser setup"
-    return
-  fi
-
-  log "Ensuring Neovim Tree-sitter parsers are installed"
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f nvim --headless '+Lazy! sync' '+qa'"
-    print -P "%F{yellow}dry-run:%f nvim --headless '+lua <treesitter-check-and-update>' '+qa'"
-    return
-  fi
-
-  if ! nvim --headless "+Lazy! sync" "+qa"; then
-    warn "Lazy sync failed; skipping Tree-sitter parser update"
-    return
-  fi
-
-  local ts_lua='local has_ts, _ = pcall(require, "nvim-treesitter.install"); if not has_ts then vim.notify("nvim-treesitter not available; skipping parser update", vim.log.levels.WARN); return end; if vim.fn.exists(":TSUpdateSync") == 2 then vim.cmd("TSUpdateSync") elseif vim.fn.exists(":TSUpdate") == 2 then vim.cmd("TSUpdate") else vim.notify("TSUpdate command not available; skipping parser update", vim.log.levels.WARN) end'
-  if nvim --headless "+lua $ts_lua" "+qa"; then
-    ok "Tree-sitter parser step completed"
+  log "Checking Tree-sitter CLI"
+  if need_cmd tree-sitter; then
+    ok "Tree-sitter CLI installed"
   else
-    warn "Tree-sitter parser update failed; run ':TSUpdateSync' manually inside Neovim"
+    warn "tree-sitter CLI not found; ensure brew bundle completed successfully"
   fi
+
+  warn "Skipping headless Neovim parser updates to avoid mason async-install shutdown errors"
+  warn "Run ':Lazy sync' and ':TSUpdateSync' inside Neovim when convenient"
 }
 
 install_mise_tools() {

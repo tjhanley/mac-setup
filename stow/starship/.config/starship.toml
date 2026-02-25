@@ -2,10 +2,9 @@
 add_newline = false
 command_timeout = 1500
 palette = "catppuccin_mocha"
-right_format = "$cmd_duration$time"
 
 format = """
-[](lavender)$os$username$hostname[](fg:lavender bg:blue)$directory[](fg:blue bg:mauve)$git_branch$git_status[](fg:mauve bg:teal)$nodejs$python$ruby$golang$rust$docker_context[](fg:teal)$line_break$character
+[](lavender)$os$username$hostname[](fg:lavender bg:sapphire)$directory[](fg:sapphire bg:blue)$git_branch$git_status[](fg:blue bg:mauve)$nodejs$python$ruby$golang$rust$docker_context[](fg:mauve bg:pink)$cmd_duration$time[](fg:pink)$line_break$character
 """
 
 [palettes.catppuccin_mocha]
@@ -41,34 +40,34 @@ disabled = false
 format = "[ $symbol ](bg:lavender fg:crust bold)"
 
 [os.symbols]
-Macos = ""
+Macos = ""
 
 [username]
-show_always = false
+show_always = true
 style_user = "bg:lavender fg:crust bold"
 style_root = "bg:red fg:crust bold"
 format = "[$user]($style)"
 
 [hostname]
-ssh_only = true
+ssh_only = false
 style = "bg:lavender fg:crust bold"
 format = "[@$hostname ]($style)"
 
 [directory]
-style = "bg:blue fg:crust bold"
+style = "bg:sapphire fg:crust bold"
 read_only = " "
-read_only_style = "bg:blue fg:red bold"
+read_only_style = "bg:sapphire fg:red bold"
 truncation_length = 4
 truncate_to_repo = true
 format = "[ $path]($style)[$read_only]($read_only_style)"
 
 [git_branch]
 symbol = " "
-style = "bg:mauve fg:crust bold"
+style = "bg:blue fg:crust bold"
 format = "[ $symbol$branch]($style)"
 
 [git_status]
-style = "bg:mauve fg:crust bold"
+style = "bg:blue fg:crust bold"
 format = "[( $all_status$ahead_behind)]($style)"
 conflicted = "=${count}"
 ahead = "⇡${count}"
@@ -84,32 +83,32 @@ deleted = "x${count}"
 
 [nodejs]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$version]($style)"
 
 [python]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$version]($style)"
 
 [ruby]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$version]($style)"
 
 [golang]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$version]($style)"
 
 [rust]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$version]($style)"
 
 [docker_context]
 symbol = " "
-style = "bg:teal fg:crust bold"
+style = "bg:mauve fg:crust bold"
 format = "[ $symbol$context]($style)"
 only_with_files = true
 
@@ -119,14 +118,14 @@ style = "fg:overlay0"
 
 [cmd_duration]
 min_time = 300
-style = "bold peach"
-format = "[󱎫 $duration ]($style)"
+style = "bg:pink fg:crust bold"
+format = "[ 󱎫 $duration]($style)"
 
 [time]
 disabled = false
 time_format = "%H:%M"
-style = "bold sky"
-format = "[ $time]($style)"
+style = "bg:pink fg:crust bold"
+format = "[  $time ]($style)"
 
 [character]
 success_symbol = "[❯](bold green)"
