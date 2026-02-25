@@ -1,0 +1,122 @@
+# Catppuccin Mocha dense powerline-style Starship prompt
+add_newline = false
+command_timeout = 1500
+palette = "catppuccin_mocha"
+
+format = """
+[](lavender)$os$username$hostname[](bg:surface0 fg:lavender)$directory[](fg:surface0 bg:surface1)$git_branch$git_status[](fg:surface1 bg:surface2)$nodejs$python$ruby$golang$rust$docker_context[](fg:surface2 bg:base)$fill$cmd_duration$time[ ](fg:base)$line_break$character
+"""
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
+
+[os]
+disabled = false
+format = "[ $symbol ](bg:lavender fg:crust bold)"
+
+[os.symbols]
+Macos = ""
+
+[username]
+show_always = false
+style_user = "bg:lavender fg:crust bold"
+style_root = "bg:red fg:crust bold"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = true
+style = "bg:lavender fg:crust bold"
+format = "[@$hostname ]($style)"
+
+[directory]
+style = "bg:surface0 fg:text bold"
+read_only = " "
+read_only_style = "bg:surface0 fg:red bold"
+truncation_length = 4
+truncate_to_repo = true
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+
+[git_branch]
+symbol = " "
+style = "bg:surface1 fg:mauve bold"
+format = "[ $symbol$branch ]($style)"
+
+[git_status]
+style = "bg:surface1 fg:yellow bold"
+format = "[($all_status$ahead_behind )]($style)"
+
+[nodejs]
+symbol = " "
+style = "bg:surface2 fg:green bold"
+format = "[ $symbol$version ]($style)"
+
+[python]
+symbol = " "
+style = "bg:surface2 fg:yellow bold"
+format = "[ $symbol$version ]($style)"
+
+[ruby]
+symbol = " "
+style = "bg:surface2 fg:red bold"
+format = "[ $symbol$version ]($style)"
+
+[golang]
+symbol = " "
+style = "bg:surface2 fg:sky bold"
+format = "[ $symbol$version ]($style)"
+
+[rust]
+symbol = " "
+style = "bg:surface2 fg:peach bold"
+format = "[ $symbol$version ]($style)"
+
+[docker_context]
+symbol = " "
+style = "bg:surface2 fg:blue bold"
+format = "[ $symbol$context ]($style)"
+only_with_files = true
+
+[fill]
+symbol = " "
+style = "fg:overlay0"
+
+[cmd_duration]
+min_time = 300
+style = "bg:base fg:overlay1 bold"
+format = "[ took $duration ]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bg:base fg:teal bold"
+format = "[ $time ]($style)"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold mauve)"
