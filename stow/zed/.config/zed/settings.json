@@ -4,9 +4,7 @@
     "light": "One Light",
     "dark": "Catppuccin Mocha"
   },
-  "auto_install_extensions": {
-    "catppuccin": "latest"
-  },
+  "auto_install_extensions": true,
   "buffer_font_family": "DankMono-Regular",
   "buffer_font_size": 15,
   "buffer_line_height": "comfortable",
