@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Neovim
+.stylua.toml
+.nvimlog
+
+# General
+*.swp
+*.swo
+*.tmp
+*~
+
+# Local overrides
+.env
+.env.*
+
+# Backups
+config-backups/
+
+# OS
+Thumbs.db
