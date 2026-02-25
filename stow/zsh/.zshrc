@@ -20,6 +20,11 @@ if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
 
+# zoxide smart cd
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
 # FZF
 if command -v fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
@@ -35,3 +40,29 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+
+# Editor defaults
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR="nvim"
+  export VISUAL="nvim"
+  alias vim='nvim'
+  alias vi='nvim'
+fi
+
+# eza replaces ls (if installed)
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza --group-directories-first --icons=auto'
+  alias ll='eza -la --group-directories-first --icons=auto'
+  alias la='eza -a --group-directories-first --icons=auto'
+  alias lt='eza --tree --level=2 --icons=auto'
+fi
+
+# Common tool aliases
+if command -v lazygit >/dev/null 2>&1; then
+  alias lg='lazygit'
+fi
+
+if command -v zellij >/dev/null 2>&1; then
+  alias zj='zellij'
+  alias zja='zellij attach -c main'
+fi

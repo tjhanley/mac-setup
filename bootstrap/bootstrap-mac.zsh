@@ -6,6 +6,7 @@ BREWFILE="$DOTFILES_DIR/brew/Brewfile"
 STOW_DIR="$DOTFILES_DIR/stow"
 BACKUP_DIR="${BACKUP_DIR:-$HOME/config-backups/dotfiles-$(date +%Y%m%d-%H%M%S)}"
 DRY_RUN=0
+DEBUG="${DEBUG:-false}"
 
 if [[ "${1:-}" == "--dry-run" ]]; then
   DRY_RUN=1
@@ -16,6 +17,7 @@ ok()  { print -P "%F{green}✓%f $1"; }
 warn(){ print -P "%F{yellow}⚠%f $1"; }
 
 need_cmd() { command -v "$1" >/dev/null 2>&1; }
+is_debug() { [[ "$DEBUG" == "true" || "$DEBUG" == "1" ]]; }
 
 run_cmd() {
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -36,6 +38,25 @@ backup_path() {
       ok "Backed up: $p -> $BACKUP_DIR/"
     fi
   fi
+}
+
+move_conflict_target() {
+  local rel="$1"
+  local target="$HOME/$rel"
+  local dest="$BACKUP_DIR/$rel"
+
+  if [[ -L "$target" || ! -e "$target" ]]; then
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f move conflict $target -> $dest"
+    return
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  mv "$target" "$dest"
+  ok "Moved conflict: $target -> $dest"
 }
 
 ensure_homebrew() {
@@ -60,18 +81,41 @@ ensure_homebrew() {
   ok "Homebrew installed"
 }
 
+refresh_homebrew() {
+  log "Refreshing Homebrew"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f brew update"
+    print -P "%F{yellow}dry-run:%f brew upgrade"
+    return
+  fi
+
+  brew update
+  brew upgrade
+  ok "Homebrew updated"
+}
+
 install_brew_bundle() {
   log "Installing packages/apps from Brewfile"
   if [[ ! -f "$BREWFILE" ]]; then
     warn "Missing Brewfile at: $BREWFILE"
     return
   fi
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    brew bundle --file="$BREWFILE" --dry-run
-  else
-    brew bundle --file="$BREWFILE"
+
+  local -a verbose_arg=()
+  if is_debug; then
+    verbose_arg=(--verbose)
   fi
-  ok "Brew bundle complete"
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    if brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
+      ok "Brewfile already satisfied"
+    else
+      warn "Brewfile has missing dependencies (run without --dry-run to install)"
+    fi
+  else
+    brew bundle --file="$BREWFILE" "${verbose_arg[@]}"
+    ok "Brew bundle complete"
+  fi
 }
 
 ensure_config_dir() {
@@ -92,6 +136,16 @@ stow_dotfiles() {
   backup_path "$HOME/.config/mise"
   backup_path "$HOME/.config/zed"
   backup_path "$HOME/.config/raycast"
+
+  log "Moving stow conflicts into backup"
+  move_conflict_target ".zshrc"
+  move_conflict_target ".zprofile"
+  move_conflict_target ".gitconfig"
+  move_conflict_target ".config/starship.toml"
+  move_conflict_target ".config/ghostty/config"
+  move_conflict_target ".config/zellij/config.kdl"
+  move_conflict_target ".config/zellij/themes/catppuccin.kdl"
+  move_conflict_target ".config/mise/config.toml"
 
   log "Stowing dotfiles"
   if [[ ! -d "$STOW_DIR" ]]; then
@@ -188,6 +242,7 @@ main() {
   ok "Repo: $DOTFILES_DIR"
 
   ensure_homebrew
+  refresh_homebrew
   ensure_config_dir
   install_brew_bundle
 
