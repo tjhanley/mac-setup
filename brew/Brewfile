@@ -2,7 +2,7 @@
 brew "git"
 brew "stow"
 brew "neovim"
-brew "tree-sitter"
+brew "tree-sitter-cli"
 brew "typescript"
 brew "starship"
 brew "lazygit"

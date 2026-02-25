@@ -355,7 +355,16 @@ install_lazyvim() {
 
 ensure_treesitter_parsers() {
   log "Checking Tree-sitter CLI"
+  local tree_sitter_bin=""
   if need_cmd tree-sitter; then
+    tree_sitter_bin="$(command -v tree-sitter)"
+  elif [[ -x /opt/homebrew/opt/tree-sitter-cli/bin/tree-sitter ]]; then
+    tree_sitter_bin="/opt/homebrew/opt/tree-sitter-cli/bin/tree-sitter"
+  elif [[ -x /usr/local/opt/tree-sitter-cli/bin/tree-sitter ]]; then
+    tree_sitter_bin="/usr/local/opt/tree-sitter-cli/bin/tree-sitter"
+  fi
+
+  if [[ -n "$tree_sitter_bin" ]]; then
     ok "Tree-sitter CLI installed"
   else
     warn "tree-sitter CLI not found; ensure brew bundle completed successfully"
@@ -512,28 +521,38 @@ install_spotify_tui() {
   log "Installing spotify_player TUI (with image feature)"
 
   local cargo_bin=""
+  local rustc_bin=""
+  local toolchain_bin=""
   if need_cmd cargo; then
     cargo_bin="$(command -v cargo)"
   elif [[ -x "$HOME/.cargo/bin/cargo" ]]; then
     cargo_bin="$HOME/.cargo/bin/cargo"
+  elif need_cmd rustup; then
+    cargo_bin="$(rustup which cargo 2>/dev/null || true)"
+    rustc_bin="$(rustup which rustc 2>/dev/null || true)"
   fi
 
-  if [[ -z "$cargo_bin" ]]; then
+  if [[ -z "$cargo_bin" || ! -x "$cargo_bin" ]]; then
     warn "cargo not found; skipping spotify_player install"
     return
   fi
 
+  toolchain_bin="$(dirname "$cargo_bin")"
+  if [[ -n "$rustc_bin" && -x "$rustc_bin" ]]; then
+    toolchain_bin="$(dirname "$rustc_bin")"
+  fi
+
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f $cargo_bin install --locked spotify_player --features image"
+    print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_bin install --locked spotify_player --features image"
     return
   fi
 
-  if "$cargo_bin" install --list | rg -q '^spotify_player v'; then
+  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --list | rg -q '^spotify_player v'; then
     ok "spotify_player already installed"
     return
   fi
 
-  if "$cargo_bin" install --locked spotify_player --features image; then
+  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --locked spotify_player --features image; then
     ok "spotify_player installed"
   else
     warn "spotify_player install failed"
