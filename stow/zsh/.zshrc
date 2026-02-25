@@ -82,5 +82,21 @@ if command -v kubectl >/dev/null 2>&1; then
 fi
 
 if command -v gcloud >/dev/null 2>&1; then
+  if command -v mise >/dev/null 2>&1; then
+    _mise_python="$(mise which python 2>/dev/null || true)"
+    if [[ -n "$_mise_python" && -x "$_mise_python" ]]; then
+      export CLOUDSDK_PYTHON="$_mise_python"
+    fi
+    unset _mise_python
+  fi
+
+  if [[ -f /usr/local/share/google-cloud-sdk/path.zsh.inc ]]; then
+    source /usr/local/share/google-cloud-sdk/path.zsh.inc
+  fi
+
+  if [[ -f /usr/local/share/google-cloud-sdk/completion.zsh.inc ]]; then
+    source /usr/local/share/google-cloud-sdk/completion.zsh.inc
+  fi
+
   alias gal='gcloud auth login'
 fi

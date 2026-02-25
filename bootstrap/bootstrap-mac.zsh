@@ -27,6 +27,48 @@ run_cmd() {
   "$@"
 }
 
+backup_and_remove_path() {
+  local p="$1"
+  if [[ ! -e "$p" && ! -L "$p" ]]; then
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f move $p -> $BACKUP_DIR/bin-conflicts/"
+    return
+  fi
+
+  run_cmd mkdir -p "$BACKUP_DIR/bin-conflicts"
+  run_cmd mv "$p" "$BACKUP_DIR/bin-conflicts/"
+  ok "Moved conflicting path: $p -> $BACKUP_DIR/bin-conflicts/"
+}
+
+prepare_brew_binary_conflicts() {
+  log "Preparing known Homebrew binary conflicts"
+
+  # Docker Desktop often places its own kubectl symlink here.
+  local kubectl_path="/usr/local/bin/kubectl"
+  if [[ -L "$kubectl_path" ]]; then
+    local kubectl_target
+    kubectl_target="$(readlink "$kubectl_path" || true)"
+    if [[ "$kubectl_target" == *"/Applications/Docker.app/"* ]]; then
+      backup_and_remove_path "$kubectl_path"
+    fi
+  fi
+
+  # codex cask installs /usr/local/bin/codex; move pre-existing non-cask binaries.
+  local codex_path="/usr/local/bin/codex"
+  if [[ -e "$codex_path" || -L "$codex_path" ]]; then
+    local codex_target=""
+    if [[ -L "$codex_path" ]]; then
+      codex_target="$(readlink "$codex_path" || true)"
+    fi
+    if [[ "$codex_target" != *"/Caskroom/codex/"* ]]; then
+      backup_and_remove_path "$codex_path"
+    fi
+  fi
+}
+
 backup_path() {
   local p="$1"
   if [[ -e "$p" || -L "$p" ]]; then
@@ -155,6 +197,21 @@ refresh_homebrew() {
   ok "Homebrew updated"
 }
 
+ensure_gcloud_python() {
+  local mise_python=""
+
+  if need_cmd mise; then
+    mise_python="$(mise which python 2>/dev/null || true)"
+    if [[ -n "$mise_python" && -x "$mise_python" ]]; then
+      export CLOUDSDK_PYTHON="$mise_python"
+      ok "Using CLOUDSDK_PYTHON from mise: $CLOUDSDK_PYTHON"
+      return
+    fi
+  fi
+  warn "mise Python not found for gcloud"
+  warn "Install with: mise use -g python@3.12 && mise install"
+}
+
 install_brew_bundle() {
   log "Installing packages/apps from Brewfile"
   if [[ ! -f "$BREWFILE" ]]; then
@@ -168,13 +225,13 @@ install_brew_bundle() {
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    if brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
+    if HOMEBREW_BUNDLE_CASK_SKIP="gcloud-cli" brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
       ok "Brewfile already satisfied"
     else
       warn "Brewfile has missing dependencies (run without --dry-run to install)"
     fi
   else
-    brew bundle --file="$BREWFILE" "${verbose_arg[@]}"
+    HOMEBREW_BUNDLE_CASK_SKIP="gcloud-cli" brew bundle --file="$BREWFILE" "${verbose_arg[@]}"
     ok "Brew bundle complete"
   fi
 }
@@ -321,6 +378,33 @@ install_mise_tools() {
   fi
 }
 
+install_gcloud_cli() {
+  log "Installing gcloud-cli (after mise python is available)"
+  ensure_gcloud_python
+
+  if [[ -z "${CLOUDSDK_PYTHON:-}" ]]; then
+    warn "Skipping gcloud-cli install because CLOUDSDK_PYTHON is not set"
+    warn "Run: mise use -g python@3.12 && mise install && brew install --cask gcloud-cli"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f CLOUDSDK_PYTHON=$CLOUDSDK_PYTHON brew install --cask gcloud-cli"
+    return
+  fi
+
+  if CLOUDSDK_PYTHON="$CLOUDSDK_PYTHON" brew list --cask gcloud-cli >/dev/null 2>&1; then
+    ok "gcloud-cli already installed"
+    return
+  fi
+
+  if CLOUDSDK_PYTHON="$CLOUDSDK_PYTHON" brew install --cask gcloud-cli; then
+    ok "gcloud-cli installed"
+  else
+    warn "gcloud-cli install failed with CLOUDSDK_PYTHON=$CLOUDSDK_PYTHON"
+  fi
+}
+
 install_rust() {
   if need_cmd rustup; then
     ok "rustup already installed"
@@ -361,8 +445,10 @@ main() {
 
   ensure_homebrew
   refresh_homebrew
+  ensure_gcloud_python
   ensure_config_dir
   ensure_local_env_file
+  prepare_brew_binary_conflicts
   install_brew_bundle
 
   if ! need_cmd stow; then
@@ -375,6 +461,7 @@ main() {
   install_lazyvim
   ensure_treesitter_parsers
   install_mise_tools
+  install_gcloud_cli
   install_rust
   post_notes
 
