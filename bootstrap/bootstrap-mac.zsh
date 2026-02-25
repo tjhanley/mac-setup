@@ -418,6 +418,52 @@ install_gcloud_cli() {
   fi
 }
 
+install_app_store_apps() {
+  local copyless2_id="993841014"
+  local magnet_id="441258766"
+
+  if [[ "$OSTYPE" != darwin* ]]; then
+    return
+  fi
+
+  if ! need_cmd mas; then
+    warn "mas not found; skipping App Store app installs"
+    return
+  fi
+
+  log "Installing App Store apps"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f mas account (requires App Store sign-in)"
+    print -P "%F{yellow}dry-run:%f mas install $copyless2_id # CopyLess 2"
+    print -P "%F{yellow}dry-run:%f mas install $magnet_id # Magnet"
+    return
+  fi
+
+  if ! mas account >/dev/null 2>&1; then
+    warn "Not signed into the Mac App Store."
+    warn "Please sign in, then press Enter to continue."
+    warn "Tip: run 'open -a \"App Store\"' if needed."
+    read -r
+  fi
+
+  if ! mas account >/dev/null 2>&1; then
+    warn "Still not signed into App Store; skipping App Store installs"
+    return
+  fi
+
+  if mas list | awk '{print $1}' | rg -q "^${copyless2_id}$"; then
+    ok "CopyLess 2 already installed"
+  else
+    mas install "$copyless2_id" && ok "Installed CopyLess 2"
+  fi
+
+  if mas list | awk '{print $1}' | rg -q "^${magnet_id}$"; then
+    ok "Magnet already installed"
+  else
+    mas install "$magnet_id" && ok "Installed Magnet"
+  fi
+}
+
 install_rust() {
   if need_cmd rustup; then
     ok "rustup already installed"
@@ -475,6 +521,7 @@ main() {
   ensure_treesitter_parsers
   install_mise_tools
   install_gcloud_cli
+  install_app_store_apps
   install_rust
   post_notes
 

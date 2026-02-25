@@ -5,6 +5,28 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+# zsh completion core
+autoload -Uz compinit
+zmodload zsh/complist
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
+
+# Better completion UX
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# fzf-tab completion menu
+for _fzf_tab in \
+  /opt/homebrew/share/fzf-tab/fzf-tab.plugin.zsh \
+  /usr/local/share/fzf-tab/fzf-tab.plugin.zsh; do
+  if [[ -f "$_fzf_tab" ]]; then
+    source "$_fzf_tab"
+    break
+  fi
+done
+unset _fzf_tab
+
 # mise runtime manager
 if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
@@ -28,6 +50,19 @@ fi
 # FZF
 if command -v fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
+fi
+
+# CLI-specific completions
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion zsh)
+fi
+
+if command -v docker >/dev/null 2>&1; then
+  source <(docker completion zsh)
+fi
+
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise completion zsh)"
 fi
 
 # Prefer bat over cat when available
@@ -68,6 +103,14 @@ if command -v zellij >/dev/null 2>&1; then
   alias zja='zellij attach -c main'
 fi
 
+if command -v docker >/dev/null 2>&1; then
+  alias d='docker'
+fi
+
+if command -v lazydocker >/dev/null 2>&1; then
+  alias lzd='lazydocker'
+fi
+
 # AI + cloud aliases
 if command -v codex >/dev/null 2>&1; then
   alias cx='codex'
@@ -105,3 +148,24 @@ if command -v gcloud >/dev/null 2>&1; then
 
   alias gal='gcloud auth login'
 fi
+
+# zsh plugins loaded last
+for _zsh_auto in \
+  /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+  /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+  if [[ -f "$_zsh_auto" ]]; then
+    source "$_zsh_auto"
+    break
+  fi
+done
+unset _zsh_auto
+
+for _zsh_syntax in \
+  /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+  if [[ -f "$_zsh_syntax" ]]; then
+    source "$_zsh_syntax"
+    break
+  fi
+done
+unset _zsh_syntax
