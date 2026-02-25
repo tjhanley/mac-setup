@@ -2,9 +2,6 @@
 font-family = "JetBrainsMono Nerd Font"
 font-size = 13
 
-auto-copy-to-clipboard = true
 window-padding-x = 10
 window-padding-y = 10
-
-# Keep Catppuccin look
-theme = catppuccin-mocha
+theme = "Catppuccin Mocha"
