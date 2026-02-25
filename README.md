@@ -65,3 +65,5 @@ stow/
 - Add/remove packages in `brew/Brewfile`
 - Add stow packages under `stow/`
 - Update runtime versions in `stow/mise/.config/mise/config.toml`
+- Export installed Zed extensions into `stow/zed/.config/zed/settings.json`:
+  `./scripts/export-zed-extensions.sh`
