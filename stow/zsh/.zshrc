@@ -90,13 +90,18 @@ if command -v gcloud >/dev/null 2>&1; then
     unset _mise_python
   fi
 
-  if [[ -f /usr/local/share/google-cloud-sdk/path.zsh.inc ]]; then
-    source /usr/local/share/google-cloud-sdk/path.zsh.inc
-  fi
-
-  if [[ -f /usr/local/share/google-cloud-sdk/completion.zsh.inc ]]; then
-    source /usr/local/share/google-cloud-sdk/completion.zsh.inc
-  fi
+  for _gcloud_sdk in \
+    /usr/local/share/google-cloud-sdk \
+    /opt/homebrew/share/google-cloud-sdk \
+    "$HOME/google-cloud-sdk"; do
+    if [[ -f "$_gcloud_sdk/path.zsh.inc" ]]; then
+      source "$_gcloud_sdk/path.zsh.inc"
+    fi
+    if [[ -f "$_gcloud_sdk/completion.zsh.inc" ]]; then
+      source "$_gcloud_sdk/completion.zsh.inc"
+    fi
+  done
+  unset _gcloud_sdk
 
   alias gal='gcloud auth login'
 fi

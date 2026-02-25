@@ -26,14 +26,15 @@ Dry run:
 ## What It Does
 
 1. Installs Homebrew (if missing)
-2. Installs packages/apps from `brew/Brewfile`
+2. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` in initial pass)
 3. Ensures `~/.config` exists
 4. Creates `.env` from `.env.example` if missing
 5. Backs up existing configs to `~/config-backups/`
 6. Stows dotfiles from `stow/` into `$HOME`
 7. Installs LazyVim starter (if no existing `~/.config/nvim`)
 8. Installs runtimes via `mise`
-9. Installs Rust via `rustup-init`
+9. Installs `gcloud-cli` using `mise` Python
+10. Installs Rust via `rustup-init`
 
 ## Dotfiles Structure
 

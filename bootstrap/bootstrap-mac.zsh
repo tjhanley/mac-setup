@@ -224,6 +224,8 @@ install_brew_bundle() {
     verbose_arg=(--verbose)
   fi
 
+  warn "gcloud-cli is installed in a later step after mise python is available"
+
   if [[ "$DRY_RUN" -eq 1 ]]; then
     if HOMEBREW_BUNDLE_CASK_SKIP="gcloud-cli" brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
       ok "Brewfile already satisfied"
@@ -383,13 +385,23 @@ install_gcloud_cli() {
   ensure_gcloud_python
 
   if [[ -z "${CLOUDSDK_PYTHON:-}" ]]; then
-    warn "Skipping gcloud-cli install because CLOUDSDK_PYTHON is not set"
-    warn "Run: mise use -g python@3.12 && mise install && brew install --cask gcloud-cli"
-    return
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      warn "dry-run: gcloud-cli would be skipped because CLOUDSDK_PYTHON is not set"
+      warn "dry-run: run 'mise use -g python@3.12 && mise install' first"
+      return
+    fi
+    warn "CLOUDSDK_PYTHON is not set; cannot install gcloud-cli"
+    warn "Run: mise use -g python@3.12 && mise install"
+    return 1
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
     print -P "%F{yellow}dry-run:%f CLOUDSDK_PYTHON=$CLOUDSDK_PYTHON brew install --cask gcloud-cli"
+    if brew list --cask gcloud-cli >/dev/null 2>&1; then
+      ok "dry-run: gcloud-cli already installed"
+    else
+      warn "dry-run: gcloud-cli not currently installed"
+    fi
     return
   fi
 
@@ -402,6 +414,7 @@ install_gcloud_cli() {
     ok "gcloud-cli installed"
   else
     warn "gcloud-cli install failed with CLOUDSDK_PYTHON=$CLOUDSDK_PYTHON"
+    return 1
   fi
 }
 
