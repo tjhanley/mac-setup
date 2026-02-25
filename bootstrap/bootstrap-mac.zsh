@@ -185,6 +185,30 @@ ensure_config_dir() {
   ok "~/.config ready"
 }
 
+ensure_local_env_file() {
+  local env_example="$DOTFILES_DIR/.env.example"
+  local env_file="$DOTFILES_DIR/.env"
+
+  log "Ensuring local .env file exists"
+  if [[ ! -f "$env_example" ]]; then
+    warn "Missing template file: $env_example"
+    return
+  fi
+
+  if [[ -f "$env_file" ]]; then
+    ok ".env already exists"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f cp $env_example $env_file"
+    return
+  fi
+
+  cp "$env_example" "$env_file"
+  ok "Created .env from .env.example"
+}
+
 stow_dotfiles() {
   log "Backing up pre-existing configs"
   backup_path "$HOME/.zshrc"
@@ -338,6 +362,7 @@ main() {
   ensure_homebrew
   refresh_homebrew
   ensure_config_dir
+  ensure_local_env_file
   install_brew_bundle
 
   if ! need_cmd stow; then

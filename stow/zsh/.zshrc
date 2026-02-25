@@ -67,3 +67,20 @@ if command -v zellij >/dev/null 2>&1; then
   alias zj='zellij'
   alias zja='zellij attach -c main'
 fi
+
+# AI + cloud aliases
+if command -v codex >/dev/null 2>&1; then
+  alias cx='codex'
+fi
+
+if command -v claude >/dev/null 2>&1; then
+  alias cc='claude'
+fi
+
+if command -v kubectl >/dev/null 2>&1; then
+  alias k='kubectl'
+fi
+
+if command -v gcloud >/dev/null 2>&1; then
+  alias gal='gcloud auth login'
+fi

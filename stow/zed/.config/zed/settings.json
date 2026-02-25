@@ -9,6 +9,7 @@
     "catppuccin-icons": true,
     "html": true
   },
+  "vim_mode": true,
   "buffer_font_family": "DankMono-Regular",
   "buffer_font_size": 15,
   "buffer_line_height": "comfortable",
