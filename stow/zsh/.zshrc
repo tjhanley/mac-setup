@@ -40,6 +40,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+alias l='ls -lah'
 
 # Editor defaults
 if command -v nvim >/dev/null 2>&1; then
