@@ -1,0 +1,29 @@
+# CLI
+brew "git"
+brew "stow"
+brew "neovim"
+brew "starship"
+brew "lazygit"
+brew "ripgrep"
+brew "fd"
+brew "fzf"
+brew "bat"
+brew "jq"
+brew "zoxide"
+brew "eza"
+
+# Terminal + multiplexer
+cask "ghostty"
+brew "zellij"
+
+# Fonts
+cask "font-jetbrains-mono-nerd-font"
+
+# Runtime managers
+brew "mise"
+brew "rustup-init"
+
+# Apps (optional)
+cask "raycast"
+cask "zed"
+cask "obsidian"

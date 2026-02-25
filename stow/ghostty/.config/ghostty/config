@@ -1,0 +1,13 @@
+# Ghostty configuration
+# Theme names are case-sensitive; this uses the Catppuccin theme family.
+
+theme = catppuccin-mocha
+
+# Optional preferences
+auto-copy-to-clipboard = true
+font-family = "JetBrains Mono"
+font-size = 13
+
+# Window
+window-padding-x = 10
+window-padding-y = 10

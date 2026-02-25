@@ -1,0 +1,8 @@
+# Zellij configuration
+# Theme name matches the Catppuccin theme file in themes/.
+
+theme "catppuccin-mocha"
+
+# UI preferences (optional)
+pane_frames false
+scrollback_editor "nvim"
