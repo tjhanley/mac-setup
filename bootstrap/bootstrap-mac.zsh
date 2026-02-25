@@ -188,6 +188,30 @@ install_lazyvim() {
   warn "Open nvim once to let plugins install: nvim"
 }
 
+ensure_treesitter_parsers() {
+  if ! need_cmd nvim; then
+    warn "nvim not found in PATH; skipping Tree-sitter parser setup"
+    return
+  fi
+
+  if [[ ! -f "$HOME/.config/nvim/init.lua" ]]; then
+    warn "~/.config/nvim/init.lua not found; skipping Tree-sitter parser setup"
+    return
+  fi
+
+  log "Ensuring Neovim Tree-sitter parsers are installed"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f nvim --headless '+Lazy! sync' '+TSUpdateSync' '+qa'"
+    return
+  fi
+
+  if nvim --headless "+Lazy! sync" "+TSUpdateSync" "+qa"; then
+    ok "Tree-sitter parsers updated"
+  else
+    warn "Failed to update Tree-sitter parsers; run ':Lazy sync' and ':TSUpdateSync' inside Neovim"
+  fi
+}
+
 install_mise_tools() {
   if ! need_cmd mise; then
     warn "mise not found in PATH; skipping tool installs"
@@ -253,6 +277,7 @@ main() {
 
   stow_dotfiles
   install_lazyvim
+  ensure_treesitter_parsers
   install_mise_tools
   install_rust
   post_notes
