@@ -479,6 +479,7 @@ install_app_store_apps() {
 install_rust() {
   if need_cmd rustup; then
     if need_cmd cargo || [[ -x "$HOME/.cargo/bin/cargo" ]]; then
+      export PATH="$HOME/.cargo/bin:$PATH"
       ok "rustup/cargo already installed"
       return
     fi
@@ -487,6 +488,7 @@ install_rust() {
       print -P "%F{yellow}dry-run:%f rustup default stable"
     else
       rustup default stable
+      export PATH="$HOME/.cargo/bin:$PATH"
       ok "Rust stable toolchain initialized"
     fi
     return
@@ -498,6 +500,7 @@ install_rust() {
       print -P "%F{yellow}dry-run:%f rustup-init -y"
     else
       rustup-init -y
+      export PATH="$HOME/.cargo/bin:$PATH"
       ok "Rust toolchain installed"
     fi
   else
