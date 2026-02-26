@@ -6,6 +6,7 @@ Opinionated macOS bootstrap using:
 - `mise` for runtimes (node, python, ruby, go)
 - `rustup` for Rust
 - Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
+- Amethyst tiling window manager (focus-follows-mouse)
 
 ## Requirements
 - macOS
@@ -38,6 +39,7 @@ Dry run:
 11. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 12. Installs Rust via `rustup-init`
 13. Installs `spotify_player` (TUI) via Cargo with image support
+14. Installs Amethyst and stows its config
 
 ## Dotfiles Structure
 
@@ -60,6 +62,8 @@ stow/
     .config/zed/settings.json
   obsidian/
     .config/obsidian/obsidian.json
+  amethyst/
+    .config/amethyst/amethyst.yml
   yazi/
     .config/yazi/theme.toml
     .config/yazi/Catppuccin-mocha.tmTheme
@@ -72,7 +76,8 @@ starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
 kubectl, awscli, lazydocker, zellij, mise, mas
 
 Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
-docker-desktop, codex, claude-code, gcloud-cli, font-jetbrains-mono-nerd-font
+docker-desktop, codex, claude-code, gcloud-cli, font-jetbrains-mono-nerd-font,
+amethyst
 
 Shell completions: kubectl, docker, mise
 
@@ -81,6 +86,7 @@ Shell completions: kubectl, docker, mise
 - Re-running the script is safe and idempotent.
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
+- Open Amethyst once and grant Accessibility permissions when prompted.
 - Open Spotify and complete login before using `spotify_player`.
 
 ## Customize
@@ -91,3 +97,16 @@ Shell completions: kubectl, docker, mise
 - Export installed Zed extensions into `stow/zed/.config/zed/settings.json`:
   `./scripts/export-zed-extensions.sh`
 - Add machine-specific secrets to `.env` (generated from `.env.example`)
+
+## Amethyst
+
+Amethyst is installed via Homebrew cask and configured from
+`stow/amethyst/.config/amethyst/amethyst.yml`. This repo enables
+`focus-follows-mouse` and leaves gaps/margins/keybindings at defaults.
+
+First run:
+- Launch Amethyst.
+- Grant Accessibility permissions (System Settings → Privacy & Security).
+
+If you want to exclude apps from tiling, add a floating list to
+`stow/amethyst/.config/amethyst/amethyst.yml` and re-run `./setup.sh` or `stow`.
