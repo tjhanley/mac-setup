@@ -5,7 +5,7 @@ Opinionated macOS bootstrap using:
 - GNU Stow for dotfiles
 - `mise` for runtimes (node, python, ruby, go)
 - `rustup` for Rust
-- Catppuccin theming for Ghostty and Zellij
+- Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
 
 ## Requirements
 - macOS
@@ -31,11 +31,13 @@ Dry run:
 4. Creates `.env` from `.env.example` if missing
 5. Backs up existing configs to `~/config-backups/`
 6. Stows dotfiles from `stow/` into `$HOME`
-7. Installs LazyVim starter (if no existing `~/.config/nvim`)
-8. Installs runtimes via `mise`
-9. Installs `gcloud-cli` using `mise` Python
-10. Installs Rust via `rustup-init`
-11. Installs `spotify_player` (TUI) via Cargo with image support
+7. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+8. Installs LazyVim starter (if no existing `~/.config/nvim`)
+9. Installs runtimes via `mise`
+10. Installs `gcloud-cli` using `mise` Python
+11. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+12. Installs Rust via `rustup-init`
+13. Installs `spotify_player` (TUI) via Cargo with image support
 
 ## Dotfiles Structure
 
@@ -52,16 +54,34 @@ stow/
     .config/ghostty/config
   zellij/
     .config/zellij/config.kdl
-    .config/zellij/themes/
   mise/
     .config/mise/config.toml
+  zed/
+    .config/zed/settings.json
+  obsidian/
+    .config/obsidian/obsidian.json
+  yazi/
+    .config/yazi/theme.toml
+    .config/yazi/Catppuccin-mocha.tmTheme
 ```
+
+## CLI Tools
+
+Installed via Homebrew: git, stow, neovim, tree-sitter-cli, typescript,
+starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
+kubectl, awscli, lazydocker, zellij, mise, mas
+
+Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
+docker-desktop, codex, claude-code, gcloud-cli, font-jetbrains-mono-nerd-font
+
+Shell completions: kubectl, docker, mise
 
 ## Notes
 
 - Re-running the script is safe and idempotent.
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
+- Open Spotify and complete login before using `spotify_player`.
 
 ## Customize
 

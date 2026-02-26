@@ -292,12 +292,11 @@ stow_dotfiles() {
   move_conflict_target ".config/starship.toml"
   move_conflict_target ".config/ghostty/config"
   move_conflict_target ".config/zellij/config.kdl"
-  move_conflict_target ".config/zellij/themes/catppuccin.kdl"
   move_conflict_target ".config/mise/config.toml"
   move_conflict_target ".config/zed/settings.json"
   move_conflict_target ".config/obsidian/obsidian.json"
   move_conflict_target ".config/yazi/theme.toml"
-  move_conflict_target ".config/yazi/Catppuccin-macchiato.tmTheme"
+  move_conflict_target ".config/yazi/Catppuccin-mocha.tmTheme"
 
   log "Stowing dotfiles"
   if [[ ! -d "$STOW_DIR" ]]; then
@@ -451,7 +450,7 @@ install_app_store_apps() {
     return
   fi
 
-  if mas list | awk '{print $1}' | rg -q "^${copyless2_id}$"; then
+  if mas list | awk '{print $1}' | grep -q "^${copyless2_id}$"; then
     ok "CopyLess 2 already installed"
   else
     install_output="$(mas install "$copyless2_id" 2>&1)" || true
@@ -469,7 +468,7 @@ install_app_store_apps() {
     fi
   fi
 
-  if mas list | awk '{print $1}' | rg -q "^${magnet_id}$"; then
+  if mas list | awk '{print $1}' | grep -q "^${magnet_id}$"; then
     ok "Magnet already installed"
   else
     install_output="$(mas install "$magnet_id" 2>&1)" || true
@@ -550,7 +549,7 @@ install_spotify_tui() {
     return
   fi
 
-  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --list | rg -q '^spotify_player v'; then
+  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --list | grep -q '^spotify_player v'; then
     ok "spotify_player already installed"
     return
   fi
