@@ -280,6 +280,7 @@ stow_dotfiles() {
   backup_path "$HOME/.config/mise"
   backup_path "$HOME/.config/zed"
   backup_path "$HOME/.config/obsidian"
+  backup_path "$HOME/.config/yazi"
   backup_path "$HOME/.config/raycast"
   backup_path "$HOME/Library/Application Support/Zed/settings.json"
   backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
@@ -295,6 +296,8 @@ stow_dotfiles() {
   move_conflict_target ".config/mise/config.toml"
   move_conflict_target ".config/zed/settings.json"
   move_conflict_target ".config/obsidian/obsidian.json"
+  move_conflict_target ".config/yazi/theme.toml"
+  move_conflict_target ".config/yazi/Catppuccin-macchiato.tmTheme"
 
   log "Stowing dotfiles"
   if [[ ! -d "$STOW_DIR" ]]; then

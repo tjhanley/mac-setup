@@ -94,6 +94,10 @@ if command -v eza >/dev/null 2>&1; then
 fi
 
 # Common tool aliases
+if command -v yazi >/dev/null 2>&1; then
+  alias y='yazi'
+fi
+
 if command -v lazygit >/dev/null 2>&1; then
   alias lg='lazygit'
 fi
