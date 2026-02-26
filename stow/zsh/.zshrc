@@ -103,6 +103,7 @@ if command -v yazi >/dev/null 2>&1; then
     fi
     rm -f -- "$tmp"
   }
+  compdef y=yazi
 fi
 
 if command -v lazygit >/dev/null 2>&1; then
