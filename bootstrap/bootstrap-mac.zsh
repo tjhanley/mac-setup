@@ -523,6 +523,7 @@ install_spotify_tui() {
   log "Installing spotify_player TUI (with image feature)"
 
   local cargo_bin=""
+  local cargo_binstall_bin=""
   local rustc_bin=""
   local toolchain_bin=""
   if need_cmd cargo; then
@@ -545,13 +546,27 @@ install_spotify_tui() {
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_bin install --locked spotify_player --features image"
+    if need_cmd cargo-binstall; then
+      cargo_binstall_bin="$(command -v cargo-binstall)"
+      print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_binstall_bin --no-confirm spotify_player"
+    else
+      print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_bin install --locked spotify_player --features image"
+    fi
     return
   fi
 
   if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --list | grep -q '^spotify_player v'; then
     ok "spotify_player already installed"
     return
+  fi
+
+  if need_cmd cargo-binstall; then
+    cargo_binstall_bin="$(command -v cargo-binstall)"
+    if PATH="$toolchain_bin:$PATH" "$cargo_binstall_bin" --no-confirm spotify_player; then
+      ok "spotify_player installed (prebuilt via cargo-binstall)"
+      return
+    fi
+    warn "cargo-binstall failed; falling back to cargo source build"
   fi
 
   if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --locked spotify_player --features image; then

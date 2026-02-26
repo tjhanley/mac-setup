@@ -5,6 +5,14 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+path_prepend_unique() {
+  local dir="$1"
+  [[ -n "$dir" && -d "$dir" ]] || return 0
+  if [[ ":$PATH:" != *":$dir:"* ]]; then
+    export PATH="$dir:$PATH"
+  fi
+}
+
 # zsh completion core
 autoload -Uz compinit
 zmodload zsh/complist
@@ -34,7 +42,13 @@ fi
 
 # Rust toolchain
 if [[ -d "$HOME/.cargo/bin" ]]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
+  path_prepend_unique "$HOME/.cargo/bin"
+elif command -v rustup >/dev/null 2>&1; then
+  _rustup_cargo="$(rustup which cargo 2>/dev/null || true)"
+  if [[ -n "$_rustup_cargo" && -x "$_rustup_cargo" ]]; then
+    path_prepend_unique "$(dirname "$_rustup_cargo")"
+  fi
+  unset _rustup_cargo
 fi
 
 # Starship prompt
@@ -127,6 +141,10 @@ if command -v spotify_player >/dev/null 2>&1; then
   alias spt='spotify_player'
 fi
 
+if [[ -d "/Applications/Spotify.app" ]]; then
+  alias spotify='open -a Spotify'
+fi
+
 # AI + cloud aliases
 if command -v codex >/dev/null 2>&1; then
   alias cx='codex'
@@ -185,3 +203,4 @@ for _zsh_syntax in \
   fi
 done
 unset _zsh_syntax
+unset -f path_prepend_unique
