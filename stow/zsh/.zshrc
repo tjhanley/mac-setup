@@ -51,6 +51,22 @@ elif command -v rustup >/dev/null 2>&1; then
   unset _rustup_cargo
 fi
 
+# Force zellij to use stow-managed config path
+export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
+
+# Auto-start zellij for interactive Ghostty shells.
+# Opt out per-shell with: NO_AUTO_ZELLIJ=1 zsh
+if command -v zellij >/dev/null 2>&1; then
+  if [[ $- == *i* ]] && [[ -t 1 ]] && [[ "${TERM_PROGRAM:-}" == "ghostty" ]] && [[ -z "${ZELLIJ:-}" ]] && [[ -z "${TMUX:-}" ]] && [[ "${NO_AUTO_ZELLIJ:-0}" != "1" ]]; then
+    _active_zellij_session="$(zellij ls --no-formatting 2>/dev/null | awk 'NF && $0 !~ /EXITED/ {print $1; exit}')"
+    if [[ -n "$_active_zellij_session" ]]; then
+      exec zellij attach "$_active_zellij_session"
+    else
+      exec zellij attach -c main
+    fi
+  fi
+fi
+
 # Starship prompt
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"

@@ -1,5 +1,5 @@
 // Zellij configuration
-// Theme name matches the Catppuccin theme file in themes/.
+// Uses Zellij's builtin catppuccin-mocha theme.
 
 theme "catppuccin-mocha";
 
