@@ -32,6 +32,7 @@ cask "font-jetbrains-mono-nerd-font"
 
 # Runtime managers
 brew "mise"
+brew "rust"
 brew "rustup-init"
 
 # Apps (optional)

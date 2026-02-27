@@ -32,7 +32,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zoxide, eza, yazi
 - kubectl, awscli
 - zellij
-- mise, rustup-init, mas
+- mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 
 ### Casks/apps/fonts

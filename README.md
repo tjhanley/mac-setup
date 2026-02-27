@@ -4,7 +4,7 @@ Opinionated macOS bootstrap using:
 - Homebrew + Brewfile
 - GNU Stow for dotfiles
 - `mise` for runtimes (node, python, ruby, go)
-- `rustup` for Rust
+- Rust + Cargo (Homebrew `rust`, with `rustup` toolchain management)
 - Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
 - Amethyst tiling window manager (focus-follows-mouse)
 
@@ -73,7 +73,7 @@ stow/
 
 Installed via Homebrew: git, stow, neovim, tree-sitter-cli, typescript,
 starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
-kubectl, awscli, lazydocker, zellij, mise, mas
+kubectl, awscli, lazydocker, zellij, mise, rust, rustup-init, cargo-binstall, mas
 
 Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, claude-code, gcloud-cli, font-jetbrains-mono-nerd-font,
