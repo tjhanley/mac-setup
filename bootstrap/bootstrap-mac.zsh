@@ -304,13 +304,33 @@ stow_dotfiles() {
     return
   fi
 
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    (cd "$STOW_DIR" && stow --target="$HOME" --restow -n */)
-  else
-    (cd "$STOW_DIR" && stow --target="$HOME" --restow */)
-  fi
+  # nvim is stowed separately after LazyVim install (see stow_nvim_plugins)
+  local -a stow_args=(--target="$HOME" --restow)
+  [[ "$DRY_RUN" -eq 1 ]] && stow_args+=(-n)
+
+  (cd "$STOW_DIR" && for pkg in */; do
+    [[ "$pkg" == "nvim/" ]] && continue
+    stow "${stow_args[@]}" "$pkg" || true
+  done)
 
   ok "Dotfiles stowed"
+}
+
+stow_nvim_plugins() {
+  log "Stowing Neovim plugin configs"
+
+  if [[ ! -d "$STOW_DIR/nvim" ]]; then
+    warn "No nvim stow package found; skipping"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    (cd "$STOW_DIR" && stow --target="$HOME" --restow -n nvim)
+  else
+    (cd "$STOW_DIR" && stow --target="$HOME" --restow nvim)
+  fi
+
+  ok "Neovim plugins stowed"
 }
 
 configure_macos_app_links() {
@@ -576,6 +596,53 @@ install_spotify_tui() {
   fi
 }
 
+install_ghostty_shaders() {
+  log "Installing Ghostty shaders"
+
+  local shaders_dir="$HOME/.config/ghostty/shaders"
+  if [[ -d "$shaders_dir" ]]; then
+    ok "Ghostty shaders already present"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f git clone hackr-sh/ghostty-shaders -> $shaders_dir"
+    return
+  fi
+
+  run_cmd mkdir -p "$(dirname "$shaders_dir")"
+  if git clone https://github.com/hackr-sh/ghostty-shaders.git "$shaders_dir"; then
+    ok "Ghostty shaders installed at $shaders_dir"
+  else
+    warn "Failed to clone ghostty-shaders"
+  fi
+}
+
+install_zjstatus() {
+  log "Installing zjstatus (Zellij status bar plugin)"
+
+  local plugins_dir="$HOME/.config/zellij/plugins"
+  local wasm_path="$plugins_dir/zjstatus.wasm"
+
+  if [[ -f "$wasm_path" ]]; then
+    ok "zjstatus already installed"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f download zjstatus.wasm -> $wasm_path"
+    return
+  fi
+
+  run_cmd mkdir -p "$plugins_dir"
+  if curl -fsSL -o "$wasm_path" \
+    "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm"; then
+    ok "zjstatus installed at $wasm_path"
+  else
+    warn "Failed to download zjstatus.wasm"
+  fi
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -608,8 +675,11 @@ main() {
   fi
 
   stow_dotfiles
+  install_ghostty_shaders
   configure_macos_app_links
   install_lazyvim
+  stow_nvim_plugins
+  install_zjstatus
   ensure_treesitter_parsers
   install_mise_tools
   install_gcloud_cli

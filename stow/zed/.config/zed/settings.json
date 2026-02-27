@@ -7,6 +7,7 @@
   "auto_install_extensions": {
     "catppuccin": true,
     "catppuccin-icons": true,
+    "ghostty": true,
     "html": true
   },
   "vim_mode": true,

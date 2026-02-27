@@ -1,0 +1,45 @@
+// Default layout with zjstatus bar (Catppuccin Mocha)
+// Zellij auto-loads this when present at ~/.config/zellij/layouts/default.kdl
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+                format_left   "{mode} #[fg=#89b4fa,bold]{session}"
+                format_center "{tabs}"
+                format_right  "{datetime}"
+                format_space  ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#313244]{char}"
+                border_position "top"
+
+                hide_frame_for_single_pane "true"
+
+                mode_normal       "#[bg=#a6e3a1,fg=#1e1e2e,bold] NORMAL "
+                mode_locked       "#[bg=#f38ba8,fg=#1e1e2e,bold] LOCKED "
+                mode_resize       "#[bg=#f9e2af,fg=#1e1e2e,bold] RESIZE "
+                mode_pane         "#[bg=#89b4fa,fg=#1e1e2e,bold] PANE "
+                mode_tab          "#[bg=#cba6f7,fg=#1e1e2e,bold] TAB "
+                mode_scroll       "#[bg=#fab387,fg=#1e1e2e,bold] SCROLL "
+                mode_enter_search "#[bg=#f9e2af,fg=#1e1e2e,bold] SEARCH "
+                mode_search       "#[bg=#f9e2af,fg=#1e1e2e,bold] SEARCH "
+                mode_rename_tab   "#[bg=#cba6f7,fg=#1e1e2e,bold] RENAME "
+                mode_rename_pane  "#[bg=#cba6f7,fg=#1e1e2e,bold] RENAME "
+                mode_session      "#[bg=#94e2d5,fg=#1e1e2e,bold] SESSION "
+                mode_move         "#[bg=#fab387,fg=#1e1e2e,bold] MOVE "
+                mode_prompt       "#[bg=#89b4fa,fg=#1e1e2e,bold] PROMPT "
+                mode_tmux         "#[bg=#fab387,fg=#1e1e2e,bold] TMUX "
+
+                tab_normal "#[fg=#a6adc8] {name} "
+                tab_active "#[fg=#89b4fa,bold] {name} "
+
+                datetime          "#[fg=#a6adc8] {format} "
+                datetime_format   "%H:%M %d-%b"
+                datetime_timezone "Local"
+            }
+        }
+        children
+    }
+}
