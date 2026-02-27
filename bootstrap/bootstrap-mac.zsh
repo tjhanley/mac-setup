@@ -39,7 +39,7 @@ backup_and_remove_path() {
   fi
 
   run_cmd mkdir -p "$BACKUP_DIR/bin-conflicts"
-  run_cmd mv "$p" "$BACKUP_DIR/bin-conflicts/"
+  run_cmd sudo mv "$p" "$BACKUP_DIR/bin-conflicts/"
   ok "Moved conflicting path: $p -> $BACKUP_DIR/bin-conflicts/"
 }
 
