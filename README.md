@@ -96,7 +96,30 @@ Shell completions: kubectl, docker, mise
 - Update runtime versions in `stow/mise/.config/mise/config.toml`
 - Export installed Zed extensions into `stow/zed/.config/zed/settings.json`:
   `./scripts/export-zed-extensions.sh`
+- Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
+  `./scripts/skip-worktree.sh --help`
 - Add machine-specific secrets to `.env` (generated from `.env.example`)
+
+## Local Skip-Worktree
+
+Use this when you want local app state in tracked files without committing it.
+
+```sh
+# add one tracked file to the managed list
+./scripts/skip-worktree.sh add stow/obsidian/.config/obsidian/obsidian.json
+
+# apply skip-worktree to every path in .local/skip-worktree.paths
+./scripts/skip-worktree.sh apply
+
+# see managed paths and whether each is active (S = active)
+./scripts/skip-worktree.sh status
+
+# list every active skip-worktree path in the repo
+./scripts/skip-worktree.sh list
+
+# clear skip-worktree for managed paths
+./scripts/skip-worktree.sh clear
+```
 
 ## Amethyst
 
