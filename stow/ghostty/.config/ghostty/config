@@ -4,6 +4,7 @@ font-size = 13
 
 window-padding-x = 10
 window-padding-y = 10
+window-initial-state = fullscreen
 theme = "Catppuccin Mocha"
 
 # Vim-like movement helpers in terminal apps/shells
