@@ -31,15 +31,17 @@ Dry run:
 3. Ensures `~/.config` exists
 4. Creates `.env` from `.env.example` if missing
 5. Backs up existing configs to `~/config-backups/`
-6. Stows dotfiles from `stow/` into `$HOME`
-7. Links macOS app configs (Zed, Obsidian) to stow-managed paths
-8. Installs LazyVim starter (if no existing `~/.config/nvim`)
-9. Installs runtimes via `mise`
-10. Installs `gcloud-cli` using `mise` Python
-11. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-12. Installs Rust via `rustup-init`
-13. Installs `spotify_player` (TUI) via Cargo with image support
-14. Installs Amethyst and stows its config
+6. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 10)
+7. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+8. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+9. Installs LazyVim starter (if no existing `~/.config/nvim`)
+10. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
+11. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+12. Installs runtimes via `mise`
+13. Installs `gcloud-cli` using `mise` Python
+14. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+15. Installs Rust via `rustup-init`
+16. Installs `spotify_player` (TUI) via Cargo with image support
 
 ## Dotfiles Structure
 
@@ -56,10 +58,13 @@ stow/
     .config/ghostty/config
   zellij/
     .config/zellij/config.kdl
+    .config/zellij/layouts/default.kdl   # zjstatus bar with clock
   mise/
     .config/mise/config.toml
   zed/
     .config/zed/settings.json
+  nvim/
+    .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
   obsidian/
     .config/obsidian/obsidian.json
   amethyst/

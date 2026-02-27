@@ -24,6 +24,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs `spotify_player` via Cargo with image feature.
+- Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
+- Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
+- Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
 
 ## Installed/managed tools and apps
 ### CLI/dev tools
@@ -39,7 +42,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - ghostty, raycast, zed, obsidian
 - brave-browser, spotify
 - docker-desktop, codex, claude-code
-- gcloud-cli
+- gcloud-cli, amethyst
 - font-jetbrains-mono-nerd-font
 
 ### App Store (via mas)
@@ -88,21 +91,29 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 
 ### Ghostty
 - JetBrainsMono Nerd Font at size 13.
+- Fullscreen by default (`fullscreen = true`).
 - Vim-like alt+hjkl keybinds.
+- Shaders available (cloned from `hackr-sh/ghostty-shaders`); commented-out examples in config.
+- Neovim integration: `ghostty.nvim` (config validation), `ghostty-theme-sync.nvim` (`:GhosttyTheme`), `tree-sitter-ghostty` (treesitter grammar).
+- Zed extension auto-installed for Ghostty config syntax highlighting.
 
 ### Zellij
 - Pane frames disabled, scrollback editor set to nvim.
 - Mouse mode enabled.
+- zjstatus custom status bar (`layouts/default.kdl`): mode indicator + session name (left), tabs (center), datetime clock (right).
+- zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
 ## Stow packages
 - `zsh/` — `.zshrc`, `.zprofile`
 - `git/` — `.gitconfig`
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
-- `zellij/` — `.config/zellij/config.kdl`
+- `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`
+- `nvim/` — `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
+- `amethyst/` — `.config/amethyst/amethyst.yml`
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 
 ## macOS app config linking
@@ -112,7 +123,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 ## Repo hygiene
 - `.gitignore` covers macOS files, editor dirs, `.env`, backups.
 - `README.md` with usage, structure, and customization notes.
+- `CLAUDE.md` / `AGENTS.md` — agent instructions for Claude Code and Codex to keep docs in sync.
 - `scripts/export-zed-extensions.sh` for syncing installed Zed extensions.
+- `scripts/skip-worktree.sh` for managing local skip-worktree paths (stored in `.local/skip-worktree.paths`).
 
 ## Commands used often
 - Run setup: `./setup.sh`
