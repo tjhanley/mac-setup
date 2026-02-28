@@ -59,7 +59,7 @@ stow/
     .config/ghostty/config
   zellij/
     .config/zellij/config.kdl
-    .config/zellij/layouts/default.kdl   # zjstatus bar with clock
+    .config/zellij/layouts/default.kdl   # zjstatus Catppuccin Mocha status bar
   mise/
     .config/mise/config.toml
   zed/

@@ -72,6 +72,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Editor defaults: `EDITOR`/`VISUAL` = `nvim`; `vi`/`vim` aliases.
 - eza aliases: `ls`, `ll`, `la`, `lt`.
 - yazi cwd-on-exit wrapper: `y`.
+- Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker), `spt` (spotify_player).
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
@@ -102,9 +103,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Zed extension auto-installed for Ghostty config syntax highlighting.
 
 ### Zellij
-- Pane frames enabled with rounded corners; `simplified_ui false` for keybinding hints in status bar.
+- Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
 - Scrollback editor set to nvim; mouse mode enabled.
-- zjstatus custom status bar (`layouts/default.kdl`): mode indicator + session name (left), tabs (center), datetime clock (right).
+- zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), user@host + calendar icon + datetime (right). Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
 ## Stow packages
