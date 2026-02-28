@@ -97,7 +97,8 @@ rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
 duf
 
 Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
-docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font, amethyst
+docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
+font-jetbrains-mono-nerd-font, amethyst
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 

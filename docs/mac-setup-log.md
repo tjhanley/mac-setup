@@ -50,7 +50,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - brave-browser, spotify
 - docker-desktop, codex
 - gcloud-cli, amethyst
-- font-jetbrains-mono-nerd-font
+- font-blex-mono-nerd-font, font-jetbrains-mono-nerd-font
 
 ### App Store (via mas)
 - CopyLess 2
@@ -91,7 +91,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 ## Theme + terminal work
 ### Catppuccin Mocha (consistent across tools)
 - Starship: powerline-style with `catppuccin_mocha` palette.
-- Ghostty: `theme = "Catppuccin Mocha"`, JetBrainsMono Nerd Font.
+- Ghostty: `theme = "Catppuccin Mocha"`, BlexMono Nerd Font (IBM Plex Mono).
 - Zellij: `theme "catppuccin-mocha"` (built-in).
 - Zed: `Catppuccin Mocha` dark theme with catppuccin extensions and icon theme. Auto-installs terraform, dockerfile, toml, make, env extensions. Claude (Anthropic) as default assistant model. Format on save, inlay hints enabled.
 - Yazi: `catppuccin-mocha-blue` theme + Mocha tmTheme for syntax highlighting.
@@ -102,7 +102,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Right-side time and duration.
 
 ### Ghostty
-- JetBrainsMono Nerd Font at size 13.
+- BlexMono Nerd Font (IBM Plex Mono) at size 13.
 - Fullscreen by default (`fullscreen = true`).
 - Vim-like alt+hjkl keybinds.
 - Shaders available (cloned from `hackr-sh/ghostty-shaders`); commented-out examples in config.
