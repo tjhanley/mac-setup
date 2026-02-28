@@ -2,7 +2,6 @@
   defaultBranch = main
 [user]
   name = Thomas Hanley
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFAcgPtUmlA5jhTOltwmUR8p3ej3L1E/h8q5sJ8/V6g8
 [core]
   editor = nvim
   pager = delta

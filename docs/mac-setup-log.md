@@ -158,7 +158,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
 - docker-desktop is skipped in `brew bundle` and installed separately; bootstrap pre-creates `/usr/local/cli-plugins` (requires sudo) for docker-compose linking.
 - App Store installs prompt for authentication if not signed in.
-- Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.email` is omitted (set per-machine or per-repo). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
+- Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.email` and `user.signingkey` are omitted from tracked config (set per-machine in `~/.gitconfig.local`). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
 
 ## Current state
 - Repo is pushing successfully to `origin/main`.

@@ -821,9 +821,19 @@ ensure_commit_signing() {
   local signing_key=""
   signing_key="$(git config --global user.signingkey 2>/dev/null || true)"
   if [[ -z "$signing_key" ]]; then
-    warn "No git signing key configured"
-    warn "Set one with: git config --global user.signingkey '<your-ssh-public-key>'"
-    return
+    local pub_path="$HOME/.ssh/id_ed25519.pub"
+    if [[ -f "$pub_path" ]]; then
+      local pubkey
+      pubkey="$(cat "$pub_path")"
+      local local_config="$HOME/.gitconfig.local"
+      git config --file "$local_config" user.signingkey "$pubkey"
+      ok "Signing key set from $pub_path (in ~/.gitconfig.local)"
+      signing_key="$pubkey"
+    else
+      warn "No git signing key configured and no SSH public key found"
+      warn "Set one with: git config --global user.signingkey '<your-ssh-public-key>'"
+      return
+    fi
   fi
   ok "Signing key configured: ${signing_key:0:30}..."
 
