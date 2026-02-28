@@ -4,11 +4,11 @@
 theme "catppuccin-mocha";
 
 // UI preferences
-simplified_ui false;
+simplified_ui true;
 pane_frames true;
 scrollback_editor "nvim";
 mouse_mode true;
-advanced_mouse_actions true;
+session_serialization false;
 
 ui {
     pane_frames {
