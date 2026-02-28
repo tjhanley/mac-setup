@@ -27,6 +27,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
+- Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
 
 ## Installed/managed tools and apps
 ### CLI/dev tools

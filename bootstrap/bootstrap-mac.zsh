@@ -336,6 +336,38 @@ stow_nvim_plugins() {
   ok "Neovim plugins stowed"
 }
 
+ensure_lazyvim_extras() {
+  local lazyvim_json="$HOME/.config/nvim/lazyvim.json"
+  if [[ ! -f "$lazyvim_json" ]]; then
+    return
+  fi
+
+  log "Ensuring LazyVim extras"
+
+  local -a desired_extras=(
+    "lazyvim.plugins.extras.ai.claudecode"
+  )
+
+  local changed=0
+  for extra in "${desired_extras[@]}"; do
+    if ! grep -q "\"$extra\"" "$lazyvim_json"; then
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        print -P "%F{yellow}dry-run:%f add $extra to lazyvim.json"
+      else
+        # Insert after the opening of the extras array
+        sed -i '' "s|\"extras\": \[|\"extras\": [\n    \"$extra\",|" "$lazyvim_json"
+        changed=1
+      fi
+    fi
+  done
+
+  if [[ "$changed" -eq 1 ]]; then
+    ok "LazyVim extras updated"
+  else
+    ok "LazyVim extras already configured"
+  fi
+}
+
 configure_macos_app_links() {
   if [[ "$OSTYPE" != darwin* ]]; then
     return
@@ -644,6 +676,7 @@ main() {
   configure_macos_app_links
   install_lazyvim
   stow_nvim_plugins
+  ensure_lazyvim_extras
   install_zjstatus
   ensure_treesitter_parsers
   install_mise_tools
