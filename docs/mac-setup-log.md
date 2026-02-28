@@ -99,8 +99,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 
 ### Starship
 - Dense/powerline-style with stronger segment backgrounds.
+- Apple logo () + directory + git + runtime languages + cmd_duration (no user@host or time — shown in zjstatus).
 - Explicit git state symbols.
-- Right-side time and duration.
 
 ### Ghostty
 - BlexMono Nerd Font (IBM Plex Mono) at size 17.

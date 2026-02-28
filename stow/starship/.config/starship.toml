@@ -4,7 +4,7 @@ command_timeout = 1500
 palette = "catppuccin_mocha"
 
 format = """
-[](lavender)$os$username$hostname[](fg:lavender bg:sapphire)$directory[](fg:sapphire bg:blue)$git_branch$git_status[](fg:blue bg:mauve)$nodejs$python$ruby$golang$rust$docker_context[](fg:mauve bg:pink)$cmd_duration$time[](fg:pink)$line_break$character
+[](sapphire)$os$directory[](fg:sapphire bg:blue)$git_branch$git_status[](fg:blue bg:mauve)$nodejs$python$ruby$golang$rust$docker_context[](fg:mauve bg:pink)$cmd_duration[](fg:pink)$line_break$character
 """
 
 [palettes.catppuccin_mocha]
@@ -37,21 +37,10 @@ crust = "#11111b"
 
 [os]
 disabled = false
-format = "[ $symbol ](bg:lavender fg:crust bold)"
+format = "[$symbol](bg:sapphire fg:crust bold)"
 
 [os.symbols]
-Macos = ""
-
-[username]
-show_always = true
-style_user = "bg:lavender fg:crust bold"
-style_root = "bg:red fg:crust bold"
-format = "[$user]($style)"
-
-[hostname]
-ssh_only = false
-style = "bg:lavender fg:crust bold"
-format = "[@$hostname ]($style)"
+Macos = " "
 
 [directory]
 style = "bg:sapphire fg:crust bold"
@@ -120,13 +109,6 @@ style = "fg:overlay0"
 min_time = 300
 style = "bg:pink fg:crust bold"
 format = "[ 󱎫 $duration]($style)"
-
-[time]
-disabled = false
-time_format = "%H:%M"
-style = "bg:pink fg:crust bold"
-format = "[  $time ]($style)"
-
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
