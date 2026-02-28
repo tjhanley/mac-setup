@@ -32,20 +32,21 @@ Dry run:
 4. Ensures `~/.config` exists
 5. Creates `.env` from `.env.example` if missing
 6. Backs up existing configs to `~/config-backups/`
-7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 12)
-8. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
-9. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
-10. Verifies git commit signing (1Password SSH agent, signing key)
-11. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
-12. Links macOS app configs (Zed, Obsidian) to stow-managed paths
-13. Installs LazyVim starter (if no existing `~/.config/nvim`)
-14. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
-15. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-16. Installs runtimes via `mise`
-17. Installs `gcloud-cli` using `mise` Python
-18. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
-19. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-20. Installs Rust via `rustup-init`
+7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 13)
+8. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
+9. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
+10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
+11. Verifies git commit signing (1Password SSH agent, signing key)
+12. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+13. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+14. Installs LazyVim starter (if no existing `~/.config/nvim`)
+15. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
+16. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+17. Installs runtimes via `mise`
+18. Installs `gcloud-cli` using `mise` Python
+19. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
+20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+21. Installs Rust via `rustup-init`
 
 ## Dotfiles Structure
 

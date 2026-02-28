@@ -845,6 +845,38 @@ ensure_commit_signing() {
   ok "Git commit signing is ready (1Password SSH)"
 }
 
+install_icloud_fonts() {
+  log "Installing fonts from iCloud Drive"
+
+  local icloud_fonts="$HOME/Library/Mobile Documents/com~apple~CloudDocs/fonts"
+  local user_fonts="$HOME/Library/Fonts"
+
+  if [[ ! -d "$icloud_fonts" ]]; then
+    warn "iCloud fonts folder not found: $icloud_fonts"
+    warn "Place .ttf/.otf files in iCloud Drive > fonts/ to auto-install"
+    return
+  fi
+
+  local count=0
+  for font in "$icloud_fonts"/*.{ttf,otf}(N); do
+    local name="${font:t}"
+    if [[ -f "$user_fonts/$name" ]]; then
+      continue
+    fi
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f cp $font -> $user_fonts/$name"
+    else
+      run_cmd cp "$font" "$user_fonts/$name"
+      ok "Installed font: $name"
+    fi
+    ((count++))
+  done
+
+  if [[ "$count" -eq 0 ]]; then
+    ok "All iCloud fonts already installed"
+  fi
+}
+
 install_man_page() {
   log "Installing mac-setup man page"
   local brew_man=""
@@ -897,6 +929,7 @@ main() {
 
   stow_dotfiles
   install_man_page
+  install_icloud_fonts
   ensure_git_email
   ensure_ssh_key
   ensure_commit_signing

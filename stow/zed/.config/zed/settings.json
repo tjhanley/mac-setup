@@ -17,11 +17,11 @@
     "env": true
   },
   "vim_mode": true,
-  "buffer_font_family": "DankMono-Regular",
+  "buffer_font_family": "Dank Mono",
   "buffer_font_size": 15,
   "buffer_line_height": "comfortable",
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font",
+    "font_family": "BlexMono Nerd Font",
     "font_size": 14
   },
   "format_on_save": "on",
