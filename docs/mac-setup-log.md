@@ -84,7 +84,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship: powerline-style with `catppuccin_mocha` palette.
 - Ghostty: `theme = "Catppuccin Mocha"`, JetBrainsMono Nerd Font.
 - Zellij: `theme "catppuccin-mocha"` (built-in).
-- Zed: `Catppuccin Mocha` dark theme with catppuccin extensions.
+- Zed: `Catppuccin Mocha` dark theme with catppuccin extensions and icon theme. Auto-installs terraform, dockerfile, toml, make, env extensions. Claude (Anthropic) as default assistant model. Format on save, inlay hints enabled.
 - Yazi: `catppuccin-mocha-blue` theme + Mocha tmTheme for syntax highlighting.
 
 ### Starship

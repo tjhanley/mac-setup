@@ -4,11 +4,17 @@
     "light": "One Light",
     "dark": "Catppuccin Mocha"
   },
+  "icon_theme": "Catppuccin Icons",
   "auto_install_extensions": {
     "catppuccin": true,
     "catppuccin-icons": true,
     "ghostty": true,
-    "html": true
+    "html": true,
+    "terraform": true,
+    "dockerfile": true,
+    "toml": true,
+    "make": true,
+    "env": true
   },
   "vim_mode": true,
   "buffer_font_family": "DankMono-Regular",
@@ -17,5 +23,17 @@
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font",
     "font_size": 14
+  },
+  "format_on_save": "on",
+  "inlay_hints": {
+    "enabled": true
+  },
+  "tab_size": 2,
+  "assistant": {
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-20250514"
+    },
+    "version": "2"
   }
 }
