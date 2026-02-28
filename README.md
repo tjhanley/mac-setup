@@ -34,16 +34,18 @@ Dry run:
 6. Backs up existing configs to `~/config-backups/`
 7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 12)
 8. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
-9. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
-10. Links macOS app configs (Zed, Obsidian) to stow-managed paths
-11. Installs LazyVim starter (if no existing `~/.config/nvim`)
-12. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
-13. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-14. Installs runtimes via `mise`
-15. Installs `gcloud-cli` using `mise` Python
-16. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
-17. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-18. Installs Rust via `rustup-init`
+9. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
+10. Verifies git commit signing (1Password SSH agent, signing key)
+11. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+12. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+13. Installs LazyVim starter (if no existing `~/.config/nvim`)
+14. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
+15. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+16. Installs runtimes via `mise`
+17. Installs `gcloud-cli` using `mise` Python
+18. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
+19. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+20. Installs Rust via `rustup-init`
 
 ## Dotfiles Structure
 
@@ -61,6 +63,8 @@ stow/
     .config/lazygit/config.yml               # Catppuccin Mocha theme
   ripgrep/
     .ripgreprc                               # smart-case, search hidden
+  ssh/
+    .ssh/config                              # 1Password agent, Include config.local
   starship/
     .config/starship.toml
   ghostty/
@@ -92,9 +96,8 @@ bat, jq, zoxide, eza, yazi, kubectl, awscli, lazydocker, zellij, mise, rust,
 rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
 duf
 
-Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
-docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font,
-amethyst
+Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
+docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font, amethyst
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 

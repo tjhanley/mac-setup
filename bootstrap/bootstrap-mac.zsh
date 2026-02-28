@@ -302,6 +302,7 @@ stow_dotfiles() {
   backup_path "$HOME/.zprofile"
   backup_path "$HOME/.gitconfig"
   backup_path "$HOME/.gitignore"
+  backup_path "$HOME/.ssh/config"
   backup_path "$HOME/.ripgreprc"
   backup_path "$HOME/.config/bat"
   backup_path "$HOME/.config/lazygit"
@@ -322,6 +323,7 @@ stow_dotfiles() {
   move_conflict_target ".zprofile"
   move_conflict_target ".gitconfig"
   move_conflict_target ".gitignore"
+  move_conflict_target ".ssh/config"
   move_conflict_target ".ripgreprc"
   move_conflict_target ".config/bat/config"
   move_conflict_target ".config/lazygit/config.yml"
@@ -728,6 +730,111 @@ ensure_git_email() {
   ok "git user.email set to $email (in ~/.gitconfig.local)"
 }
 
+ensure_ssh_key() {
+  log "Ensuring SSH key exists"
+
+  local key_path="$HOME/.ssh/id_ed25519"
+  local pub_path="${key_path}.pub"
+
+  if [[ -f "$key_path" ]]; then
+    ok "SSH key already exists: $key_path"
+  else
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f ssh-keygen -t ed25519 -> $key_path"
+    else
+      run_cmd mkdir -p "$HOME/.ssh"
+      chmod 700 "$HOME/.ssh"
+
+      local email=""
+      email="$(git config --global user.email 2>/dev/null || true)"
+
+      print -P "%F{cyan}Generating SSH key (ed25519)...%f"
+      if [[ -n "$email" ]]; then
+        ssh-keygen -t ed25519 -C "$email" -f "$key_path"
+      else
+        ssh-keygen -t ed25519 -f "$key_path"
+      fi
+      ok "SSH key generated: $key_path"
+    fi
+  fi
+
+  # Upload to GitHub via gh CLI
+  if [[ ! -f "$pub_path" ]]; then
+    return
+  fi
+
+  if ! need_cmd gh; then
+    warn "gh not found; install GitHub CLI to upload SSH key"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f gh ssh-key add $pub_path"
+    return
+  fi
+
+  if ! gh auth status >/dev/null 2>&1; then
+    print -P "%F{cyan}Authenticate with GitHub to upload your SSH key:%f"
+    gh auth login
+  fi
+
+  local hostname=""
+  hostname="$(scutil --get LocalHostName 2>/dev/null || hostname -s)"
+  local key_title="mac-setup ${hostname} $(date +%Y-%m-%d)"
+
+  # Check if this key is already uploaded
+  local pub_fingerprint=""
+  pub_fingerprint="$(ssh-keygen -lf "$pub_path" | awk '{print $2}')"
+  if gh ssh-key list 2>/dev/null | grep -q "$pub_fingerprint"; then
+    ok "SSH key already uploaded to GitHub"
+    return
+  fi
+
+  if gh ssh-key add "$pub_path" --title "$key_title"; then
+    ok "SSH key uploaded to GitHub as: $key_title"
+  else
+    warn "Failed to upload SSH key to GitHub"
+    warn "Upload manually: gh ssh-key add $pub_path --title \"$key_title\""
+  fi
+}
+
+ensure_commit_signing() {
+  log "Checking git commit signing (1Password SSH)"
+
+  local op_sign="/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+  local agent_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+  if [[ ! -x "$op_sign" ]]; then
+    warn "1Password not found at $op_sign"
+    warn "Install 1Password and enable the SSH agent in Settings > Developer"
+    return
+  fi
+  ok "op-ssh-sign found"
+
+  if [[ ! -S "$agent_sock" ]]; then
+    warn "1Password SSH agent socket not found"
+    warn "Open 1Password > Settings > Developer > enable 'SSH Agent'"
+    return
+  fi
+  ok "1Password SSH agent is running"
+
+  local signing_key=""
+  signing_key="$(git config --global user.signingkey 2>/dev/null || true)"
+  if [[ -z "$signing_key" ]]; then
+    warn "No git signing key configured"
+    warn "Set one with: git config --global user.signingkey '<your-ssh-public-key>'"
+    return
+  fi
+  ok "Signing key configured: ${signing_key:0:30}..."
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f would verify commit signing"
+    return
+  fi
+
+  ok "Git commit signing is ready (1Password SSH)"
+}
+
 install_man_page() {
   log "Installing mac-setup man page"
   local brew_man=""
@@ -781,6 +888,8 @@ main() {
   stow_dotfiles
   install_man_page
   ensure_git_email
+  ensure_ssh_key
+  ensure_commit_signing
   install_ghostty_shaders
   configure_macos_app_links
   install_lazyvim

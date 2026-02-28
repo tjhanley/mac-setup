@@ -30,6 +30,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
 - Prompts for `git user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
+- Generates SSH key (ed25519) if `~/.ssh/id_ed25519` is missing; uses git email as comment. Uploads public key to GitHub via `gh ssh-key add` (authenticates with `gh auth login` if needed, checks fingerprint to avoid duplicates).
+- Verifies git commit signing: checks `op-ssh-sign` binary, 1Password SSH agent socket, and signing key in gitconfig. Warns with setup instructions if anything is missing.
 
 ## Installed/managed tools and apps
 ### CLI/dev tools
@@ -44,7 +46,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - tldr, htop, wget, trash, dust, duf
 
 ### Casks/apps/fonts
-- ghostty, raycast, zed, obsidian
+- 1password, ghostty, raycast, zed, obsidian
 - brave-browser, spotify
 - docker-desktop, codex
 - gcloud-cli, amethyst
@@ -119,6 +121,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `bat/` — `.config/bat/config` (Catppuccin Mocha theme, line numbers, change markers)
 - `lazygit/` — `.config/lazygit/config.yml` (Catppuccin Mocha theme, nerd font icons)
 - `ripgrep/` — `.ripgreprc` (smart-case, search hidden files, exclude `.git/`)
+- `ssh/` — `.ssh/config` (1Password SSH agent, `Include config.local` for machine-specific hosts)
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`

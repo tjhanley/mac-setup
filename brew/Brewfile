@@ -49,6 +49,7 @@ brew "rust"
 brew "rustup-init"
 
 # Apps (optional)
+cask "1password"
 cask "raycast"
 cask "zed"
 cask "obsidian"
