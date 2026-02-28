@@ -64,6 +64,7 @@ stow/
   zed/
     .config/zed/settings.json
   nvim/
+    .config/nvim/lua/config/options.lua    # disable unused providers
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
   obsidian/
     .config/obsidian/obsidian.json
@@ -78,7 +79,8 @@ stow/
 
 Installed via Homebrew: git, stow, neovim, tree-sitter-cli, typescript,
 starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
-kubectl, awscli, lazydocker, zellij, mise, rust, rustup-init, cargo-binstall, mas
+kubectl, awscli, lazydocker, zellij, mise, rust, rustup-init, cargo-binstall,
+imagemagick, mas
 
 Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font,

@@ -37,6 +37,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zellij
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
+- imagemagick (used by Snacks.image in Neovim)
 
 ### Casks/apps/fonts
 - ghostty, raycast, zed, obsidian
@@ -112,7 +113,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`
-- `nvim/` — `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
+- `nvim/` — `.config/nvim/lua/config/options.lua` (disable unused providers), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
 - `amethyst/` — `.config/amethyst/amethyst.yml`
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`

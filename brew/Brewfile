@@ -23,6 +23,9 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "mas"
 
+# Image processing (used by Snacks.image in Neovim)
+brew "imagemagick"
+
 # Terminal + multiplexer
 cask "ghostty"
 brew "zellij"
