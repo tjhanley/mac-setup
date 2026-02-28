@@ -24,7 +24,6 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs `docker-desktop` separately with `--no-quarantine` to avoid macOS xattr permission errors during cask adoption.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
-- Installs `spotify_player` via Cargo with image feature.
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
@@ -50,9 +49,6 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - CopyLess 2
 - Magnet
 
-### Cargo-installed
-- spotify_player (with image feature)
-
 ## Runtime management strategy
 - Selected manager: `mise` (instead of `asdf`) for Node/Python/Ruby/Go.
 - Rust managed via `rustup`.
@@ -73,7 +69,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - eza aliases: `ls`, `ll`, `la`, `lt`.
 - yazi cwd-on-exit wrapper: `y`.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
-- Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker), `spt` (spotify_player).
+- Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
@@ -145,7 +141,6 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
 - docker-desktop is skipped in `brew bundle` and installed separately with `--no-quarantine` to work around macOS xattr errors when adopting an existing Docker.app.
 - App Store installs prompt for authentication if not signed in.
-- Rust install precedes spotify_player cargo build.
 
 ## Current state
 - Repo is pushing successfully to `origin/main`.

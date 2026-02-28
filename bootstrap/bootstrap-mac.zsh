@@ -542,63 +542,6 @@ install_rust() {
   fi
 }
 
-install_spotify_tui() {
-  log "Installing spotify_player TUI (with image feature)"
-
-  local cargo_bin=""
-  local cargo_binstall_bin=""
-  local rustc_bin=""
-  local toolchain_bin=""
-  if need_cmd cargo; then
-    cargo_bin="$(command -v cargo)"
-  elif [[ -x "$HOME/.cargo/bin/cargo" ]]; then
-    cargo_bin="$HOME/.cargo/bin/cargo"
-  elif need_cmd rustup; then
-    cargo_bin="$(rustup which cargo 2>/dev/null || true)"
-    rustc_bin="$(rustup which rustc 2>/dev/null || true)"
-  fi
-
-  if [[ -z "$cargo_bin" || ! -x "$cargo_bin" ]]; then
-    warn "cargo not found; skipping spotify_player install"
-    return
-  fi
-
-  toolchain_bin="$(dirname "$cargo_bin")"
-  if [[ -n "$rustc_bin" && -x "$rustc_bin" ]]; then
-    toolchain_bin="$(dirname "$rustc_bin")"
-  fi
-
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    if need_cmd cargo-binstall; then
-      cargo_binstall_bin="$(command -v cargo-binstall)"
-      print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_binstall_bin --no-confirm spotify_player"
-    else
-      print -P "%F{yellow}dry-run:%f PATH=$toolchain_bin:$PATH $cargo_bin install --locked spotify_player --features image"
-    fi
-    return
-  fi
-
-  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --list | grep -q '^spotify_player v'; then
-    ok "spotify_player already installed"
-    return
-  fi
-
-  if need_cmd cargo-binstall; then
-    cargo_binstall_bin="$(command -v cargo-binstall)"
-    if PATH="$toolchain_bin:$PATH" "$cargo_binstall_bin" --no-confirm spotify_player; then
-      ok "spotify_player installed (prebuilt via cargo-binstall)"
-      return
-    fi
-    warn "cargo-binstall failed; falling back to cargo source build"
-  fi
-
-  if PATH="$toolchain_bin:$PATH" "$cargo_bin" install --locked spotify_player --features image; then
-    ok "spotify_player installed"
-  else
-    warn "spotify_player install failed"
-  fi
-}
-
 install_ghostty_shaders() {
   log "Installing Ghostty shaders"
 
@@ -673,8 +616,6 @@ post_notes() {
 
 - Open Ghostty once to grant permissions and confirm settings.
 - Open Raycast and Zed if you use them.
-- Open Spotify and complete login before using spotify_player.
-
 Tip:
 - Re-run this script anytime after changes; it's safe and idempotent.
 - Your backups are in ~/config-backups/ (timestamped).
@@ -710,7 +651,6 @@ main() {
   install_docker_desktop
   install_app_store_apps
   install_rust
-  install_spotify_tui
   post_notes
 
   ok "Bootstrap finished"

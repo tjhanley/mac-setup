@@ -151,10 +151,6 @@ if command -v lazydocker >/dev/null 2>&1; then
   alias lzd='lazydocker'
 fi
 
-if command -v spotify_player >/dev/null 2>&1; then
-  alias spt='spotify_player'
-fi
-
 if [[ -d "/Applications/Spotify.app" ]]; then
   alias spotify='open -a Spotify'
 fi

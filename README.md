@@ -42,7 +42,6 @@ Dry run:
 14. Installs `docker-desktop` with `--no-quarantine` (avoids macOS xattr errors)
 15. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 16. Installs Rust via `rustup-init`
-17. Installs `spotify_player` (TUI) via Cargo with image support
 
 ## Dotfiles Structure
 
@@ -95,7 +94,6 @@ Shell completions: kubectl, docker, mise
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
 - Open Amethyst once and grant Accessibility permissions when prompted.
-- Open Spotify and complete login before using `spotify_player`.
 
 ## Customize
 
