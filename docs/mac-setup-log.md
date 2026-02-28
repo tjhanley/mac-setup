@@ -70,7 +70,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship init.
 - zoxide init.
 - fzf init.
-- CLI-specific completions: kubectl, docker, mise, gh, rustup, cargo.
+- CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, rustup, cargo.
 - History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
 - Shell options: `auto_cd`, `extended_glob`, `correct`.
 - `RIPGREP_CONFIG_PATH` set to `~/.ripgreprc`.
@@ -103,7 +103,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Right-side time and duration.
 
 ### Ghostty
-- BlexMono Nerd Font (IBM Plex Mono) at size 13.
+- BlexMono Nerd Font (IBM Plex Mono) at size 17.
 - Fullscreen by default (`fullscreen = true`).
 - Vim-like alt+hjkl keybinds.
 - Shaders available (cloned from `hackr-sh/ghostty-shaders`); commented-out examples in config.
