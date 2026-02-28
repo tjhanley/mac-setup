@@ -1,0 +1,224 @@
+.TH MAC-SETUP 7 "2026-02-28" "mac-setup" "Tom's System Reference"
+.SH NAME
+mac-setup \- opinionated macOS bootstrap with Homebrew, Stow, and Catppuccin Mocha
+.SH SYNOPSIS
+.B ./setup.sh
+.RI [ \-\-dry\-run ]
+.SH DESCRIPTION
+Idempotent macOS bootstrap that installs packages via Homebrew, manages
+dotfiles with GNU Stow, installs runtimes with mise, and applies
+Catppuccin Mocha theming across all tools.
+.PP
+The repo lives at
+.B ~/Workspace/mac-setup
+and can be re-run safely at any time.
+.SH BOOTSTRAP STEPS
+.IP 1. 4
+Install Xcode Command Line Tools and accept license
+.IP 2. 4
+Install Homebrew
+.IP 3. 4
+Install packages/apps from Brewfile
+.IP 4. 4
+Back up existing configs to ~/config-backups/
+.IP 5. 4
+Stow dotfiles into $HOME
+.IP 6. 4
+Prompt for git user.email (stored in ~/.gitconfig.local)
+.IP 7. 4
+Install Ghostty shaders, LazyVim, zjstatus
+.IP 8. 4
+Install runtimes via mise (node, python, ruby, go)
+.IP 9. 4
+Install gcloud-cli, Docker Desktop, App Store apps, Rust
+.SH STOW PACKAGES
+Each package under
+.B stow/
+mirrors $HOME structure.
+Re-stow with:
+.B (cd stow && stow \-\-target="$HOME" \-\-restow <package>)
+.PP
+.TS
+l l.
+Package	Contents
+_
+zsh	.zshrc, .zprofile
+git	.gitconfig, .gitignore (global)
+bat	.config/bat/config
+lazygit	.config/lazygit/config.yml
+ripgrep	.ripgreprc
+starship	.config/starship.toml
+ghostty	.config/ghostty/config
+zellij	.config/zellij/config.kdl, layouts/default.kdl
+mise	.config/mise/config.toml
+zed	.config/zed/settings.json
+nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua
+obsidian	.config/obsidian/obsidian.json
+amethyst	.config/amethyst/amethyst.yml
+yazi	.config/yazi/theme.toml, Catppuccin-mocha.tmTheme
+.TE
+.SH GIT ALIASES
+OMZ-style aliases defined in .zshrc:
+.PP
+.TS
+l l.
+Alias	Command
+_
+g	git
+ga	git add
+gaa	git add \-\-all
+gb	git branch
+gba	git branch \-\-all
+gc	git commit
+gcmsg	git commit \-m
+gco	git checkout
+gcb	git checkout \-b
+gd	git diff
+gds	git diff \-\-staged
+gf	git fetch
+gl	git pull
+gp	git push
+gpf	git push \-\-force\-with\-lease
+glog	git log \-\-oneline \-\-graph \-\-decorate
+gloga	git log \-\-oneline \-\-graph \-\-decorate \-\-all
+grb	git rebase
+grbi	git rebase \-i
+gst	git status
+gsw	git switch
+gswc	git switch \-c
+.TE
+.SH TOOL ALIASES
+.TS
+l l.
+Alias	Tool
+_
+lg	lazygit
+zj	zellij
+zja	zellij attach \-c main
+d	docker
+lzd	lazydocker
+k	kubectl
+y	yazi (cwd-on-exit wrapper)
+cc	claude
+cx	codex
+gal	gcloud auth login
+.TE
+.SH SHELL ALIASES
+.TS
+l l.
+Alias	Action
+_
+..	cd ..
+\&...	cd ../..
+\&....	cd ../../..
+cat	bat (when installed)
+ls	eza \-\-group\-directories\-first \-\-icons=auto
+ll	eza \-la (long listing)
+la	eza \-a (show hidden)
+lt	eza \-\-tree \-\-level=2
+vim, vi	nvim
+l	ls \-lah
+.TE
+.SH SHELL COMPLETIONS
+Loaded for: kubectl, docker, mise, gh, rustup, cargo, gcloud, fzf, yazi.
+.SH SHELL OPTIONS
+.TP
+.B auto_cd
+Type a directory name to cd into it (e.g.,
+.B ../foo
+instead of
+.BR "cd ../foo" ).
+.TP
+.B extended_glob
+Advanced glob patterns (#, ~, ^).
+.TP
+.B correct
+Suggests corrections for mistyped commands.
+.TP
+.B share_history
+Share history across all open shells.
+.TP
+.B hist_ignore_dups
+Skip duplicate history entries.
+.TP
+.B hist_ignore_space
+Commands starting with a space are not recorded.
+.SH GIT CONFIG
+Managed via stow at
+.BR ~/.gitconfig .
+Machine-specific overrides go in
+.BR ~/.gitconfig.local .
+.PP
+Key settings:
+.TP
+.B core.pager
+delta (with navigate mode)
+.TP
+.B commit.gpgSign
+SSH signing via 1Password (op-ssh-sign)
+.TP
+.B core.excludesfile
+~/.gitignore (stow-managed global gitignore)
+.TP
+.B push.autoSetupRemote
+Auto-track upstream on first push
+.TP
+.B fetch.prune
+Remove stale remote-tracking branches
+.TP
+.B filter.lfs
+Git LFS enabled
+.SH RUNTIMES
+Managed by
+.BR mise .
+Versions in
+.BR ~/.config/mise/config.toml :
+node 22, python 3.13, ruby 3.4, go 1.24.
+Rust managed via
+.BR rustup .
+.SH THEME
+Catppuccin Mocha everywhere: Ghostty, Zellij (zjstatus), Starship, Zed,
+Yazi, bat, lazygit.
+.SH FILES
+.TP
+.B ~/Workspace/mac-setup/
+Repository root
+.TP
+.B ~/config-backups/
+Timestamped backups from bootstrap runs
+.TP
+.B ~/.gitconfig.local
+Machine-specific git config (user.email, credential helpers)
+.TP
+.B ~/.secrets
+Machine-specific env vars (not tracked)
+.TP
+.B ~/.local/state/zsh/history
+Zsh history file (50k lines)
+.SH COMMON TASKS
+.TP
+.B Re-run bootstrap
+./setup.sh
+.TP
+.B Dry run
+./setup.sh \-\-dry\-run
+.TP
+.B Re-stow a package
+(cd stow && stow \-\-target="$HOME" \-\-restow git)
+.TP
+.B Update runtimes
+Edit stow/mise/.config/mise/config.toml, then mise install
+.TP
+.B Add a Homebrew package
+Add to brew/Brewfile, then brew bundle \-\-file=brew/Brewfile
+.TP
+.B Run tests
+bats tests/
+.TP
+.B Export Zed extensions
+\&./scripts/export-zed-extensions.sh
+.TP
+.B Manage skip-worktree
+\&./scripts/skip-worktree.sh \-\-help
+.SH AUTHOR
+Thomas Hanley

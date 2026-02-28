@@ -74,6 +74,7 @@ path_prepend_unique "$HOME/.local/bin"
 export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
+
 # Auto-start zellij for interactive Ghostty shells.
 # Opt out per-shell with: NO_AUTO_ZELLIJ=1 zsh
 if command -v zellij >/dev/null 2>&1; then

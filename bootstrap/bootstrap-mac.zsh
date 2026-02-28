@@ -728,6 +728,26 @@ ensure_git_email() {
   ok "git user.email set to $email (in ~/.gitconfig.local)"
 }
 
+install_man_page() {
+  log "Installing mac-setup man page"
+  local brew_man=""
+  if [[ -d /opt/homebrew/share/man/man7 ]]; then
+    brew_man="/opt/homebrew/share/man/man7"
+  elif [[ -d /usr/local/share/man/man7 ]]; then
+    brew_man="/usr/local/share/man/man7"
+  fi
+
+  if [[ -z "$brew_man" ]]; then
+    warn "No Homebrew man7 directory found; skipping man page install"
+    return
+  fi
+
+  link_managed_file \
+    "$DOTFILES_DIR/man/man7/mac-setup.7" \
+    "$brew_man/mac-setup.7" \
+    "mac-setup man page"
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -759,6 +779,7 @@ main() {
   fi
 
   stow_dotfiles
+  install_man_page
   ensure_git_email
   install_ghostty_shaders
   configure_macos_app_links

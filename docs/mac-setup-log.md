@@ -140,6 +140,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `scripts/export-zed-extensions.sh` for syncing installed Zed extensions.
 - `scripts/skip-worktree.sh` for managing local skip-worktree paths (stored in `.local/skip-worktree.paths`).
 - `tests/` — bats-core test suite (structure, syntax, bootstrap dry-run). CI via `.github/workflows/ci.yml` on push/PR to main.
+- `man/man7/mac-setup.7` — custom man page (`man mac-setup`); symlinked into Homebrew's man path during bootstrap.
 
 ## Commands used often
 - Run setup: `./setup.sh`

@@ -100,6 +100,17 @@ Claude Code: installed via the official standalone installer (`~/.local/bin/clau
 
 Shell completions: kubectl, docker, mise, gh, rustup, cargo
 
+## Man Page
+
+A full system reference is available as a man page:
+
+```sh
+man mac-setup
+```
+
+Covers bootstrap steps, stow packages, git/tool/shell aliases, completions,
+shell options, git config, runtimes, theme, files, and common tasks.
+
 ## Notes
 
 - Re-running the script is safe and idempotent.
