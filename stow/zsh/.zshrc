@@ -51,6 +51,9 @@ elif command -v rustup >/dev/null 2>&1; then
   unset _rustup_cargo
 fi
 
+# Local bin (mise shims, pipx, user scripts, etc.)
+path_prepend_unique "$HOME/.local/bin"
+
 # Force zellij to use stow-managed config path
 export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
 
@@ -220,3 +223,8 @@ for _zsh_syntax in \
 done
 unset _zsh_syntax
 unset -f path_prepend_unique
+
+# Machine-specific secrets and overrides (not tracked in git)
+if [[ -f "$HOME/.secrets" ]]; then
+  source "$HOME/.secrets"
+fi

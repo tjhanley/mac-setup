@@ -23,6 +23,7 @@ Icon
 .env
 .env.*
 !.env.example
+.secrets
 .local/
 
 # Backups

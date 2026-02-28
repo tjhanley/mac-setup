@@ -82,8 +82,10 @@ starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
 kubectl, awscli, lazydocker, zellij, mise, rust, rustup-init, cargo-binstall, mas
 
 Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
-docker-desktop, codex, claude-code, gcloud-cli, font-jetbrains-mono-nerd-font,
+docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font,
 amethyst
+
+Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
 Shell completions: kubectl, docker, mise
 
@@ -104,7 +106,8 @@ Shell completions: kubectl, docker, mise
   `./scripts/export-zed-extensions.sh`
 - Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
   `./scripts/skip-worktree.sh --help`
-- Add machine-specific secrets to `.env` (generated from `.env.example`)
+- Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)
+- Add shared env vars to `.env` (generated from `.env.example`)
 
 ## Local Skip-Worktree
 
