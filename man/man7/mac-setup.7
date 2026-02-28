@@ -26,10 +26,14 @@ Stow dotfiles into $HOME
 .IP 6. 4
 Prompt for git user.email (stored in ~/.gitconfig.local)
 .IP 7. 4
-Install Ghostty shaders, LazyVim, zjstatus
+Generate SSH key (ed25519) if missing; upload to GitHub via gh
 .IP 8. 4
-Install runtimes via mise (node, python, ruby, go)
+Verify git commit signing (1Password SSH agent, signing key)
 .IP 9. 4
+Install Ghostty shaders, LazyVim, zjstatus
+.IP 10. 4
+Install runtimes via mise (node, python, ruby, go)
+.IP 11. 4
 Install gcloud-cli, Docker Desktop, App Store apps, Rust
 .SH STOW PACKAGES
 Each package under
@@ -47,6 +51,7 @@ git	.gitconfig, .gitignore (global)
 bat	.config/bat/config
 lazygit	.config/lazygit/config.yml
 ripgrep	.ripgreprc
+ssh	.ssh/config (1Password agent, Include config.local)
 starship	.config/starship.toml
 ghostty	.config/ghostty/config
 zellij	.config/zellij/config.kdl, layouts/default.kdl
@@ -189,6 +194,12 @@ Timestamped backups from bootstrap runs
 .TP
 .B ~/.gitconfig.local
 Machine-specific git config (user.email, credential helpers)
+.TP
+.B ~/.ssh/config
+1Password SSH agent config (stow-managed), includes config.local
+.TP
+.B ~/.ssh/config.local
+Machine-specific SSH hosts (not tracked)
 .TP
 .B ~/.secrets
 Machine-specific env vars (not tracked)
