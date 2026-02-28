@@ -1,5 +1,8 @@
 # CLI
 brew "git"
+brew "git-delta"
+brew "git-lfs"
+brew "gh"
 brew "stow"
 brew "neovim"
 brew "tree-sitter-cli"
@@ -22,6 +25,13 @@ brew "cargo-binstall"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "mas"
+brew "bats-core"
+brew "tldr"
+brew "htop"
+brew "wget"
+brew "trash"
+brew "dust"
+brew "duf"
 
 # Image processing (used by Snacks.image in Neovim)
 brew "imagemagick"

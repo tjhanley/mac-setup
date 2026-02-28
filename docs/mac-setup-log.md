@@ -28,10 +28,11 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
+- Prompts for `git user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
 
 ## Installed/managed tools and apps
 ### CLI/dev tools
-- git, stow, neovim, tree-sitter-cli, typescript
+- git, git-delta, git-lfs, gh, stow, neovim, tree-sitter-cli, typescript
 - starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq
 - zoxide, eza, yazi
 - kubectl, awscli
@@ -39,6 +40,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 - imagemagick (used by Snacks.image in Neovim)
+- tldr, htop, wget, trash, dust, duf
 
 ### Casks/apps/fonts
 - ghostty, raycast, zed, obsidian
@@ -65,6 +67,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zoxide init.
 - fzf init.
 - CLI-specific completions: kubectl, docker, mise.
+- History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
+- Shell options: `auto_cd`, `extended_glob`, `correct`.
+- `RIPGREP_CONFIG_PATH` set to `~/.ripgreprc`.
 - `cat` alias to `bat` (when available).
 - Dot-navigation aliases: `..`, `...`, `....`, `.....`.
 - Editor defaults: `EDITOR`/`VISUAL` = `nvim`; `vi`/`vim` aliases.
@@ -108,7 +113,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 
 ## Stow packages
 - `zsh/` — `.zshrc`, `.zprofile`
-- `git/` — `.gitconfig`
+- `git/` — `.gitconfig`, `.gitignore` (global gitignore with macOS, AI tooling, secrets patterns)
+- `bat/` — `.config/bat/config` (Catppuccin Mocha theme, line numbers, change markers)
+- `lazygit/` — `.config/lazygit/config.yml` (Catppuccin Mocha theme, nerd font icons)
+- `ripgrep/` — `.ripgreprc` (smart-case, search hidden files, exclude `.git/`)
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`
@@ -129,6 +137,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `CLAUDE.md` / `AGENTS.md` — agent instructions for Claude Code and Codex to keep docs in sync.
 - `scripts/export-zed-extensions.sh` for syncing installed Zed extensions.
 - `scripts/skip-worktree.sh` for managing local skip-worktree paths (stored in `.local/skip-worktree.paths`).
+- `tests/` — bats-core test suite (structure, syntax, bootstrap dry-run). CI via `.github/workflows/ci.yml` on push/PR to main.
 
 ## Commands used often
 - Run setup: `./setup.sh`
@@ -143,6 +152,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
 - docker-desktop is skipped in `brew bundle` and installed separately with `--no-quarantine` to work around macOS xattr errors when adopting an existing Docker.app.
 - App Store installs prompt for authentication if not signed in.
+- Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.email` is omitted (set per-machine or per-repo). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
 
 ## Current state
 - Repo is pushing successfully to `origin/main`.

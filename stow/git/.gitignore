@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+._*
+
+# Environment / secrets
+.env
+**/svcacct.json
+
+# AI tooling
+**/.claude/
+**/CLAUDE.md
+**/*.plan.md
+.specstory/
+.cursorindexingignore
+cursor-chats/
+.todos/
+
+# Sidecar
+.sidecar/
+.sidecar-agent
+.sidecar-task
+.sidecar-pr
+.sidecar-start.sh
+.sidecar-base
+.td-root
+
+# Misc
+.overcommit*
+Pipfile

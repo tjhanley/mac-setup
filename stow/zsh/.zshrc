@@ -5,6 +5,22 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+# History
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+[[ -d "$(dirname "$HISTFILE")" ]] || mkdir -p "$(dirname "$HISTFILE")"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt append_history
+setopt share_history
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+
+# Shell options
+setopt auto_cd
+setopt extended_glob
+setopt correct
+
 path_prepend_unique() {
   local dir="$1"
   [[ -n "$dir" && -d "$dir" ]] || return 0
@@ -54,8 +70,9 @@ fi
 # Local bin (mise shims, pipx, user scripts, etc.)
 path_prepend_unique "$HOME/.local/bin"
 
-# Force zellij to use stow-managed config path
+# Tool config paths
 export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 # Auto-start zellij for interactive Ghostty shells.
 # Opt out per-shell with: NO_AUTO_ZELLIJ=1 zsh

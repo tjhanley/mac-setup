@@ -276,6 +276,10 @@ stow_dotfiles() {
   backup_path "$HOME/.zshrc"
   backup_path "$HOME/.zprofile"
   backup_path "$HOME/.gitconfig"
+  backup_path "$HOME/.gitignore"
+  backup_path "$HOME/.ripgreprc"
+  backup_path "$HOME/.config/bat"
+  backup_path "$HOME/.config/lazygit"
   backup_path "$HOME/.config/nvim"
   backup_path "$HOME/.config/starship.toml"
   backup_path "$HOME/.config/ghostty"
@@ -292,6 +296,10 @@ stow_dotfiles() {
   move_conflict_target ".zshrc"
   move_conflict_target ".zprofile"
   move_conflict_target ".gitconfig"
+  move_conflict_target ".gitignore"
+  move_conflict_target ".ripgreprc"
+  move_conflict_target ".config/bat/config"
+  move_conflict_target ".config/lazygit/config.yml"
   move_conflict_target ".config/starship.toml"
   move_conflict_target ".config/ghostty/config"
   move_conflict_target ".config/zellij/config.kdl"
@@ -441,7 +449,7 @@ install_mise_tools() {
   if [[ "$DRY_RUN" -eq 1 ]]; then
     print -P "%F{yellow}dry-run:%f mise install"
   else
-    mise install
+    MISE_HTTP_TIMEOUT=120 mise install
     ok "mise install complete"
   fi
 }
@@ -642,6 +650,39 @@ install_docker_desktop() {
   fi
 }
 
+ensure_git_email() {
+  log "Checking git user.email"
+
+  local current_email=""
+  current_email="$(git config --global user.email 2>/dev/null || true)"
+  if [[ -n "$current_email" ]]; then
+    ok "git user.email already set: $current_email"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f would prompt for git user.email"
+    return
+  fi
+
+  local local_config="$HOME/.gitconfig.local"
+  print -P "%F{cyan}No git user.email configured.%f"
+  print -n "Enter your git email (or press Enter to skip): "
+  local email=""
+  read -r email
+  if [[ -z "$email" ]]; then
+    warn "Skipped git user.email — set it later: git config --global user.email 'you@example.com'"
+    return
+  fi
+
+  if [[ ! -f "$local_config" ]]; then
+    printf '[user]\n  email = %s\n' "$email" > "$local_config"
+  else
+    git config --file "$local_config" user.email "$email"
+  fi
+  ok "git user.email set to $email (in ~/.gitconfig.local)"
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -672,6 +713,7 @@ main() {
   fi
 
   stow_dotfiles
+  ensure_git_email
   install_ghostty_shaders
   configure_macos_app_links
   install_lazyvim

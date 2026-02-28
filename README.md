@@ -32,16 +32,17 @@ Dry run:
 4. Creates `.env` from `.env.example` if missing
 5. Backs up existing configs to `~/config-backups/`
 6. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 10)
-7. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
-8. Links macOS app configs (Zed, Obsidian) to stow-managed paths
-9. Installs LazyVim starter (if no existing `~/.config/nvim`)
-10. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
-11. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-12. Installs runtimes via `mise`
-13. Installs `gcloud-cli` using `mise` Python
-14. Installs `docker-desktop` with `--no-quarantine` (avoids macOS xattr errors)
-15. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-16. Installs Rust via `rustup-init`
+7. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
+8. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+9. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+10. Installs LazyVim starter (if no existing `~/.config/nvim`)
+11. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
+12. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+13. Installs runtimes via `mise`
+14. Installs `gcloud-cli` using `mise` Python
+15. Installs `docker-desktop` with `--no-quarantine` (avoids macOS xattr errors)
+16. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+17. Installs Rust via `rustup-init`
 
 ## Dotfiles Structure
 
@@ -52,6 +53,13 @@ stow/
     .zprofile
   git/
     .gitconfig
+    .gitignore
+  bat/
+    .config/bat/config                       # Catppuccin Mocha theme
+  lazygit/
+    .config/lazygit/config.yml               # Catppuccin Mocha theme
+  ripgrep/
+    .ripgreprc                               # smart-case, search hidden
   starship/
     .config/starship.toml
   ghostty/
@@ -77,10 +85,11 @@ stow/
 
 ## CLI Tools
 
-Installed via Homebrew: git, stow, neovim, tree-sitter-cli, typescript,
-starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq, zoxide, eza, yazi,
-kubectl, awscli, lazydocker, zellij, mise, rust, rustup-init, cargo-binstall,
-imagemagick, mas
+Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
+tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
+bat, jq, zoxide, eza, yazi, kubectl, awscli, lazydocker, zellij, mise, rust,
+rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
+duf
 
 Casks: ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-jetbrains-mono-nerd-font,
@@ -96,6 +105,14 @@ Shell completions: kubectl, docker, mise
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
 - Open Amethyst once and grant Accessibility permissions when prompted.
+
+## Tests
+
+Tests use [bats-core](https://github.com/bats-core/bats-core) and run on every push via GitHub Actions.
+
+```sh
+bats tests/
+```
 
 ## Customize
 
