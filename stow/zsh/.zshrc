@@ -29,6 +29,30 @@ path_prepend_unique() {
   fi
 }
 
+# CLI completions — dump to fpath before compinit so they lazy-load correctly
+_comp_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions"
+mkdir -p "$_comp_cache"
+
+if command -v kubectl >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_kubectl" ]] || kubectl completion zsh > "$_comp_cache/_kubectl"
+fi
+if command -v docker >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_docker" ]] || docker completion zsh > "$_comp_cache/_docker"
+fi
+if command -v mise >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_mise" ]] || mise completion zsh > "$_comp_cache/_mise"
+fi
+if command -v gh >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_gh" ]] || gh completion -s zsh > "$_comp_cache/_gh"
+fi
+if command -v rustup >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_rustup" ]] || rustup completions zsh > "$_comp_cache/_rustup"
+  [[ -f "$_comp_cache/_cargo" ]] || rustup completions zsh cargo > "$_comp_cache/_cargo"
+fi
+
+fpath=("$_comp_cache" $fpath)
+unset _comp_cache
+
 # zsh completion core
 autoload -Uz compinit
 zmodload zsh/complist
@@ -96,28 +120,6 @@ fi
 # FZF
 if command -v fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
-fi
-
-# CLI-specific completions
-if command -v kubectl >/dev/null 2>&1; then
-  source <(kubectl completion zsh)
-fi
-
-if command -v docker >/dev/null 2>&1; then
-  source <(docker completion zsh)
-fi
-
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise completion zsh)"
-fi
-
-if command -v gh >/dev/null 2>&1; then
-  source <(gh completion -s zsh)
-fi
-
-if command -v rustup >/dev/null 2>&1; then
-  source <(rustup completions zsh)
-  source <(rustup completions zsh cargo)
 fi
 
 # Git aliases (OMZ-style)
