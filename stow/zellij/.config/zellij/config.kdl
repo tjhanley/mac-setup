@@ -3,8 +3,8 @@
 
 theme "catppuccin-mocha";
 
-// UI preferences (optional)
-pane_frames false;
+// UI preferences
+pane_frames true;
 scrollback_editor "nvim";
 mouse_mode true;
 advanced_mouse_actions true;
