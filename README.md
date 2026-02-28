@@ -27,7 +27,7 @@ Dry run:
 ## What It Does
 
 1. Installs Homebrew (if missing)
-2. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` in initial pass)
+2. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` and `docker-desktop` in initial pass)
 3. Ensures `~/.config` exists
 4. Creates `.env` from `.env.example` if missing
 5. Backs up existing configs to `~/config-backups/`
@@ -39,9 +39,10 @@ Dry run:
 11. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
 12. Installs runtimes via `mise`
 13. Installs `gcloud-cli` using `mise` Python
-14. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-15. Installs Rust via `rustup-init`
-16. Installs `spotify_player` (TUI) via Cargo with image support
+14. Installs `docker-desktop` with `--no-quarantine` (avoids macOS xattr errors)
+15. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+16. Installs Rust via `rustup-init`
+17. Installs `spotify_player` (TUI) via Cargo with image support
 
 ## Dotfiles Structure
 

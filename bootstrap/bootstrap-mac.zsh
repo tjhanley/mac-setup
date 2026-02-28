@@ -225,15 +225,18 @@ install_brew_bundle() {
   fi
 
   warn "gcloud-cli is installed in a later step after mise python is available"
+  warn "docker-desktop is installed separately with --no-quarantine to avoid xattr errors"
+
+  local skip_casks="gcloud-cli docker-desktop"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    if HOMEBREW_BUNDLE_CASK_SKIP="gcloud-cli" brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
+    if HOMEBREW_BUNDLE_CASK_SKIP="$skip_casks" brew bundle check --file="$BREWFILE" "${verbose_arg[@]}"; then
       ok "Brewfile already satisfied"
     else
       warn "Brewfile has missing dependencies (run without --dry-run to install)"
     fi
   else
-    HOMEBREW_BUNDLE_CASK_SKIP="gcloud-cli" brew bundle --file="$BREWFILE" "${verbose_arg[@]}"
+    HOMEBREW_BUNDLE_CASK_SKIP="$skip_casks" brew bundle --file="$BREWFILE" "${verbose_arg[@]}"
     ok "Brew bundle complete"
   fi
 }
@@ -643,6 +646,27 @@ install_zjstatus() {
   fi
 }
 
+install_docker_desktop() {
+  log "Installing Docker Desktop (with --no-quarantine)"
+
+  if brew list --cask docker-desktop >/dev/null 2>&1; then
+    ok "Docker Desktop already installed"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f brew install --cask --no-quarantine docker-desktop"
+    return
+  fi
+
+  if brew install --cask --no-quarantine docker-desktop; then
+    ok "Docker Desktop installed"
+  else
+    warn "Docker Desktop install failed"
+    warn "Install manually: brew install --cask --no-quarantine docker-desktop"
+  fi
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -683,6 +707,7 @@ main() {
   ensure_treesitter_parsers
   install_mise_tools
   install_gcloud_cli
+  install_docker_desktop
   install_app_store_apps
   install_rust
   install_spotify_tui
