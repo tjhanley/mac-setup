@@ -66,7 +66,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship init.
 - zoxide init.
 - fzf init.
-- CLI-specific completions: kubectl, docker, mise.
+- CLI-specific completions: kubectl, docker, mise, gh, rustup, cargo.
 - History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
 - Shell options: `auto_cd`, `extended_glob`, `correct`.
 - `RIPGREP_CONFIG_PATH` set to `~/.ripgreprc`.
@@ -76,6 +76,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - eza aliases: `ls`, `ll`, `la`, `lt`.
 - yazi cwd-on-exit wrapper: `y`.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
+- Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.

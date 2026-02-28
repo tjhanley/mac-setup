@@ -97,7 +97,7 @@ amethyst
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
-Shell completions: kubectl, docker, mise
+Shell completions: kubectl, docker, mise, gh, rustup, cargo
 
 ## Notes
 

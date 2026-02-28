@@ -110,6 +110,39 @@ if command -v mise >/dev/null 2>&1; then
   eval "$(mise completion zsh)"
 fi
 
+if command -v gh >/dev/null 2>&1; then
+  source <(gh completion -s zsh)
+fi
+
+if command -v rustup >/dev/null 2>&1; then
+  source <(rustup completions zsh)
+  source <(rustup completions zsh cargo)
+fi
+
+# Git aliases (OMZ-style)
+alias g='git'
+alias ga='git add'
+alias gaa='git add --all'
+alias gb='git branch'
+alias gba='git branch --all'
+alias gc='git commit'
+alias gcmsg='git commit -m'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gf='git fetch'
+alias gl='git pull'
+alias gp='git push'
+alias gpf='git push --force-with-lease'
+alias glog='git log --oneline --graph --decorate'
+alias gloga='git log --oneline --graph --decorate --all'
+alias grb='git rebase'
+alias grbi='git rebase -i'
+alias gst='git status'
+alias gsw='git switch'
+alias gswc='git switch -c'
+
 # Prefer bat over cat when available
 if command -v bat >/dev/null 2>&1; then
   alias cat='bat'
