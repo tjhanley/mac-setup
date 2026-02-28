@@ -102,8 +102,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Zed extension auto-installed for Ghostty config syntax highlighting.
 
 ### Zellij
-- Pane frames disabled, scrollback editor set to nvim.
-- Mouse mode enabled.
+- Pane frames enabled with rounded corners; `simplified_ui false` for keybinding hints in status bar.
+- Scrollback editor set to nvim; mouse mode enabled.
 - zjstatus custom status bar (`layouts/default.kdl`): mode indicator + session name (left), tabs (center), datetime clock (right).
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
