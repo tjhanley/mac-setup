@@ -35,9 +35,9 @@ layout {
                 color_crust "#11111b"
 
                 // -- Layout --
-                format_left   "#[bg=$surface0,fg=$sapphire]#[bg=$sapphire,fg=$crust,bold] {session} #[bg=$surface0] {mode}#[bg=$surface0] {tabs}"
+                format_left   "#[bg=$surface0,fg=$sapphire]#[bg=$sapphire,fg=$crust,bold] {session} #[bg=$surface0,fg=$sapphire] {mode}#[bg=$surface0] {tabs}"
                 format_center "{notifications}"
-                format_right  "#[bg=$surface0,fg=$flamingo]#[fg=$crust,bg=$flamingo] #[bg=$surface1,fg=$flamingo,bold] {command_user}@{command_host}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$maroon]#[bg=$maroon,fg=$crust]󰃭 #[bg=$surface1,fg=$maroon,bold] {datetime}#[bg=$surface0,fg=$surface1]"
+                format_right  "#[bg=$surface0,fg=$green]#[bg=$green,fg=$crust] #[bg=$surface1,fg=$green,bold] {command_cpu}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$teal]#[bg=$teal,fg=$crust]󰍛 #[bg=$surface1,fg=$teal,bold] {command_mem}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$flamingo]#[fg=$crust,bg=$flamingo]  #[bg=$surface1,fg=$flamingo,bold] {command_user}@{command_host}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$maroon]#[bg=$maroon,fg=$crust]󰃭 #[bg=$surface1,fg=$maroon,bold] {datetime}#[bg=$surface0,fg=$surface1]"
                 format_space  "#[bg=$surface0]"
                 format_hide_on_overlength "true"
                 format_precedence "lrc"
@@ -50,20 +50,20 @@ layout {
                 hide_frame_for_single_pane "true"
 
                 // -- Mode indicators --
-                mode_normal        "#[bg=$green,fg=$crust,bold] NORMAL#[bg=$surface0,fg=$green]"
-                mode_tmux          "#[bg=$mauve,fg=$crust,bold] TMUX#[bg=$surface0,fg=$mauve]"
-                mode_locked        "#[bg=$red,fg=$crust,bold] LOCKED#[bg=$surface0,fg=$red]"
-                mode_pane          "#[bg=$teal,fg=$crust,bold] PANE#[bg=$surface0,fg=$teal]"
-                mode_tab           "#[bg=$teal,fg=$crust,bold] TAB#[bg=$surface0,fg=$teal]"
-                mode_scroll        "#[bg=$flamingo,fg=$crust,bold] SCROLL#[bg=$surface0,fg=$flamingo]"
-                mode_enter_search  "#[bg=$flamingo,fg=$crust,bold] ENT-SEARCH#[bg=$surface0,fg=$flamingo]"
-                mode_search        "#[bg=$flamingo,fg=$crust,bold] SEARCH#[bg=$surface0,fg=$flamingo]"
-                mode_resize        "#[bg=$yellow,fg=$crust,bold] RESIZE#[bg=$surface0,fg=$yellow]"
-                mode_rename_tab    "#[bg=$yellow,fg=$crust,bold] RENAME-TAB#[bg=$surface0,fg=$yellow]"
-                mode_rename_pane   "#[bg=$yellow,fg=$crust,bold] RENAME-PANE#[bg=$surface0,fg=$yellow]"
-                mode_move          "#[bg=$yellow,fg=$crust,bold] MOVE#[bg=$surface0,fg=$yellow]"
-                mode_session       "#[bg=$pink,fg=$crust,bold] SESSION#[bg=$surface0,fg=$pink]"
-                mode_prompt        "#[bg=$pink,fg=$crust,bold] PROMPT#[bg=$surface0,fg=$pink]"
+                mode_normal        "#[bg=$surface0,fg=$green]#[bg=$green,fg=$crust,bold] NORMAL #[bg=$surface0,fg=$green]"
+                mode_tmux          "#[bg=$surface0,fg=$mauve]#[bg=$mauve,fg=$crust,bold] TMUX #[bg=$surface0,fg=$mauve]"
+                mode_locked        "#[bg=$surface0,fg=$red]#[bg=$red,fg=$crust,bold] LOCKED #[bg=$surface0,fg=$red]"
+                mode_pane          "#[bg=$surface0,fg=$teal]#[bg=$teal,fg=$crust,bold] PANE #[bg=$surface0,fg=$teal]"
+                mode_tab           "#[bg=$surface0,fg=$teal]#[bg=$teal,fg=$crust,bold] TAB #[bg=$surface0,fg=$teal]"
+                mode_scroll        "#[bg=$surface0,fg=$flamingo]#[bg=$flamingo,fg=$crust,bold] SCROLL #[bg=$surface0,fg=$flamingo]"
+                mode_enter_search  "#[bg=$surface0,fg=$flamingo]#[bg=$flamingo,fg=$crust,bold] ENT-SEARCH #[bg=$surface0,fg=$flamingo]"
+                mode_search        "#[bg=$surface0,fg=$flamingo]#[bg=$flamingo,fg=$crust,bold] SEARCH #[bg=$surface0,fg=$flamingo]"
+                mode_resize        "#[bg=$surface0,fg=$yellow]#[bg=$yellow,fg=$crust,bold] RESIZE #[bg=$surface0,fg=$yellow]"
+                mode_rename_tab    "#[bg=$surface0,fg=$yellow]#[bg=$yellow,fg=$crust,bold] RENAME-TAB #[bg=$surface0,fg=$yellow]"
+                mode_rename_pane   "#[bg=$surface0,fg=$yellow]#[bg=$yellow,fg=$crust,bold] RENAME-PANE #[bg=$surface0,fg=$yellow]"
+                mode_move          "#[bg=$surface0,fg=$yellow]#[bg=$yellow,fg=$crust,bold] MOVE #[bg=$surface0,fg=$yellow]"
+                mode_session       "#[bg=$surface0,fg=$pink]#[bg=$pink,fg=$crust,bold] SESSION #[bg=$surface0,fg=$pink]"
+                mode_prompt        "#[bg=$surface0,fg=$pink]#[bg=$pink,fg=$crust,bold] PROMPT #[bg=$surface0,fg=$pink]"
 
                 // -- Tabs --
                 tab_normal              "#[bg=$surface0,fg=$blue]#[bg=$blue,fg=$crust,bold]{index} #[bg=$surface1,fg=$blue,bold] {name}{floating_indicator}#[bg=$surface0,fg=$surface1]"
@@ -82,6 +82,17 @@ layout {
                 notification_format_unread "#[bg=$surface0,fg=$yellow]#[bg=$yellow,fg=$crust] #[bg=$surface1,fg=$yellow] {message}#[bg=$surface0,fg=$surface1]"
                 notification_format_no_notifications ""
                 notification_show_interval "10"
+
+                // -- Commands (system stats) --
+                command_cpu_command    "/Users/tom/.config/zellij/scripts/cpu.sh"
+                command_cpu_format     "{stdout}"
+                command_cpu_interval   "5"
+                command_cpu_rendermode "dynamic"
+
+                command_mem_command    "/Users/tom/.config/zellij/scripts/mem.sh"
+                command_mem_format     "{stdout}"
+                command_mem_interval   "10"
+                command_mem_rendermode "dynamic"
 
                 // -- Commands (user@host in status bar) --
                 command_host_command    "uname -n"
