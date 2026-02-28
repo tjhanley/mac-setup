@@ -162,6 +162,31 @@ link_managed_file() {
   ok "$label linked: $target -> $source"
 }
 
+ensure_xcode_clt() {
+  log "Ensuring Xcode Command Line Tools"
+
+  if xcode-select -p >/dev/null 2>&1; then
+    ok "Xcode CLT already installed"
+  else
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f xcode-select --install"
+    else
+      xcode-select --install
+      warn "Waiting for Xcode CLT installer — press Enter when done"
+      read -r
+    fi
+  fi
+
+  # Accept license if needed (idempotent — exits 0 if already accepted)
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f sudo xcodebuild -license accept"
+  else
+    sudo xcodebuild -license accept 2>/dev/null || true
+  fi
+
+  ok "Xcode CLT ready"
+}
+
 ensure_homebrew() {
   if need_cmd brew; then
     ok "Homebrew already installed"
@@ -720,6 +745,7 @@ main() {
   log "Bootstrap starting"
   ok "Repo: $DOTFILES_DIR"
 
+  ensure_xcode_clt
   ensure_homebrew
   refresh_homebrew
   ensure_config_dir

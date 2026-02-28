@@ -26,23 +26,24 @@ Dry run:
 
 ## What It Does
 
-1. Installs Homebrew (if missing)
-2. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` and `docker-desktop` in initial pass)
-3. Ensures `~/.config` exists
-4. Creates `.env` from `.env.example` if missing
-5. Backs up existing configs to `~/config-backups/`
-6. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 10)
-7. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
-8. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
-9. Links macOS app configs (Zed, Obsidian) to stow-managed paths
-10. Installs LazyVim starter (if no existing `~/.config/nvim`)
-11. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
-12. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-13. Installs runtimes via `mise`
-14. Installs `gcloud-cli` using `mise` Python
-15. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
-16. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-17. Installs Rust via `rustup-init`
+1. Installs Xcode Command Line Tools and accepts license (if needed)
+2. Installs Homebrew (if missing)
+3. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` and `docker-desktop` in initial pass)
+4. Ensures `~/.config` exists
+5. Creates `.env` from `.env.example` if missing
+6. Backs up existing configs to `~/config-backups/`
+7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 12)
+8. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
+9. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+10. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+11. Installs LazyVim starter (if no existing `~/.config/nvim`)
+12. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
+13. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+14. Installs runtimes via `mise`
+15. Installs `gcloud-cli` using `mise` Python
+16. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
+17. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+18. Installs Rust via `rustup-init`
 
 ## Dotfiles Structure
 

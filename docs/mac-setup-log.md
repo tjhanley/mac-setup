@@ -10,6 +10,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Dotfiles layout via GNU Stow under `stow/`
 
 ## Bootstrap behavior
+- Installs Xcode Command Line Tools if missing (waits for GUI installer, then accepts license).
 - Installs Homebrew if missing.
 - Runs `brew update` and `brew upgrade` on each run.
 - Installs Brewfile dependencies.
