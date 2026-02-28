@@ -40,7 +40,7 @@ Dry run:
 12. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
 13. Installs runtimes via `mise`
 14. Installs `gcloud-cli` using `mise` Python
-15. Installs `docker-desktop` with `--no-quarantine` (avoids macOS xattr errors)
+15. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
 16. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 17. Installs Rust via `rustup-init`
 

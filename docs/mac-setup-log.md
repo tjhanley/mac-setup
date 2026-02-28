@@ -21,7 +21,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs LazyVim starter only when safe.
 - Runs `mise install` for runtime tools.
 - Installs `gcloud-cli` after mise python is available.
-- Installs `docker-desktop` separately with `--no-quarantine` to avoid macOS xattr permission errors during cask adoption.
+- Installs `docker-desktop` separately (ensures `/usr/local/cli-plugins` exists for docker-compose linking).
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
@@ -150,7 +150,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Bootstrap handles this by moving conflicts into backup before stowing.
 - Dry-run mode reports intended actions but does not perform filesystem moves.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
-- docker-desktop is skipped in `brew bundle` and installed separately with `--no-quarantine` to work around macOS xattr errors when adopting an existing Docker.app.
+- docker-desktop is skipped in `brew bundle` and installed separately; bootstrap pre-creates `/usr/local/cli-plugins` (requires sudo) for docker-compose linking.
 - App Store installs prompt for authentication if not signed in.
 - Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.email` is omitted (set per-machine or per-repo). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
 

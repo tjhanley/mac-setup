@@ -225,7 +225,7 @@ install_brew_bundle() {
   fi
 
   warn "gcloud-cli is installed in a later step after mise python is available"
-  warn "docker-desktop is installed separately with --no-quarantine to avoid xattr errors"
+  warn "docker-desktop is installed separately to avoid brew bundle conflicts"
 
   local skip_casks="gcloud-cli docker-desktop"
 
@@ -630,23 +630,43 @@ install_zjstatus() {
 }
 
 install_docker_desktop() {
-  log "Installing Docker Desktop (with --no-quarantine)"
+  log "Installing Docker Desktop"
 
   if brew list --cask docker-desktop >/dev/null 2>&1; then
     ok "Docker Desktop already installed"
     return
   fi
 
+  # Docker cask links docker-compose into /usr/local/cli-plugins
+  if [[ ! -d /usr/local/cli-plugins ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f sudo mkdir -p /usr/local/cli-plugins"
+    else
+      run_cmd sudo mkdir -p /usr/local/cli-plugins
+    fi
+  fi
+
+  # Remove stale Docker binaries from previous installs that block cask linking
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f brew install --cask --no-quarantine docker-desktop"
+    print -P "%F{yellow}dry-run:%f clean stale Docker binaries in /usr/local/bin"
+  else
+    sudo find /usr/local/bin -maxdepth 1 -name '*docker*' ! -type d -delete 2>/dev/null || true
+    sudo rm -f /usr/local/bin/hub-tool /usr/local/bin/kubectl.docker 2>/dev/null || true
+    # Stale completion symlinks from previous Docker installs
+    rm -f /opt/homebrew/etc/bash_completion.d/docker-compose 2>/dev/null || true
+    rm -f /opt/homebrew/etc/bash_completion.d/docker 2>/dev/null || true
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f brew install --cask docker-desktop"
     return
   fi
 
-  if brew install --cask --no-quarantine docker-desktop; then
+  if brew install --cask docker-desktop; then
     ok "Docker Desktop installed"
   else
     warn "Docker Desktop install failed"
-    warn "Install manually: brew install --cask --no-quarantine docker-desktop"
+    warn "Install manually: brew install --cask docker-desktop"
   fi
 }
 
