@@ -2,13 +2,14 @@
 set -euo pipefail
 
 commands=(
-  "lazygit"
-  "lazydocker"
-  "k9s"
-  "htop"
-  "yazi"
-  "fastfetch"
   "basalt"
+  "fastfetch"
+  "htop"
+  "k9s"
+  "lazydocker"
+  "lazygit"
+  "nvim"
+  "yazi"
 )
 
 selected=$(printf '%s\n' "${commands[@]}" | fzf --prompt="Launch > " --reverse --border=rounded)
