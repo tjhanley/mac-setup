@@ -976,6 +976,9 @@ main() {
   log "Bootstrap starting"
   ok "Repo: $DOTFILES_DIR"
 
+  print -P "\n%F{yellow}sudo is required to accept the Xcode license and resolve Homebrew binary conflicts.%f"
+  sudo -v
+
   ensure_xcode_clt
   ensure_homebrew
   refresh_homebrew
