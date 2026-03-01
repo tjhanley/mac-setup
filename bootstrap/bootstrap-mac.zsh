@@ -413,8 +413,19 @@ configure_macos_app_links() {
     "$HOME/.config/zed/settings.json" \
     "$HOME/Library/Application Support/Zed/settings.json" \
     "Zed settings"
+  # Seed Obsidian config if it doesn't exist yet (basalt-tui needs it)
+  local obsidian_cfg="$HOME/.config/obsidian/obsidian.json"
+  if [[ ! -f "$obsidian_cfg" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f seed $obsidian_cfg"
+    else
+      mkdir -p "$(dirname "$obsidian_cfg")"
+      print '{}' > "$obsidian_cfg"
+      ok "Seeded Obsidian config: $obsidian_cfg"
+    fi
+  fi
   link_managed_file \
-    "$HOME/.config/obsidian/obsidian.json" \
+    "$obsidian_cfg" \
     "$HOME/Library/Application Support/obsidian/obsidian.json" \
     "Obsidian settings"
 }
@@ -926,6 +937,28 @@ install_man_page() {
     "mac-setup man page"
 }
 
+prune_old_backups() {
+  local backup_parent="$HOME/config-backups"
+  local keep=3
+
+  [[ -d "$backup_parent" ]] || return 0
+
+  local -a all_backups=("$backup_parent"/dotfiles-*(N/On))
+  (( ${#all_backups[@]} <= keep )) && return 0
+
+  local -a stale=("${all_backups[@]:$keep}")
+  log "Pruning old backups (keeping $keep most recent)"
+
+  for dir in "${stale[@]}"; do
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f rm -rf $dir"
+    else
+      rm -rf "$dir"
+      ok "Removed $dir"
+    fi
+  done
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -975,6 +1008,7 @@ main() {
   install_app_store_apps
   install_rust
   install_cargo_tools
+  prune_old_backups
   post_notes
 
   ok "Bootstrap finished"

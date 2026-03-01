@@ -17,6 +17,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Supports `--dry-run` mode.
 - `brew` verbosity is controlled by `DEBUG=true|1`.
 - Backs up existing target files into timestamped `~/config-backups/...`.
+- Prunes old backups at the end of each run, keeping the 3 most recent.
 - Moves stow conflicts into backup before stowing (avoids stow conflict aborts).
 - Handles known binary conflicts (Docker kubectl, codex cask).
 - Installs LazyVim starter only when safe.
@@ -141,7 +142,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 
 ## macOS app config linking
 - Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`.
-- Obsidian settings symlinked similarly.
+- Obsidian settings symlinked similarly. Config is seeded with `{}` if missing (required by basalt-tui).
 
 ## Repo hygiene
 - `.gitignore` covers macOS files, editor dirs, `.env`, `.secrets`, backups.
