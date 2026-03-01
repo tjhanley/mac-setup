@@ -3,7 +3,6 @@ set -euo pipefail
 
 commands=(
   "basalt"
-  "fastfetch"
   "htop"
   "k9s"
   "lazydocker"
