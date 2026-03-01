@@ -8,7 +8,7 @@ simplified_ui true;
 pane_frames true;
 scrollback_editor "nvim";
 mouse_mode true;
-session_serialization false;
+session_serialization true;
 
 keybinds {
     shared {
