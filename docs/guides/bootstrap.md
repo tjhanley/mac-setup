@@ -19,7 +19,7 @@ The script requires `sudo` early on for Xcode license acceptance and Homebrew bi
 
 ## Step-by-step breakdown
 
-The bootstrap runs 23 steps in order. Each step is idempotent -- it checks whether work has already been done before acting.
+The bootstrap runs 24 steps in order. Each step is idempotent -- it checks whether work has already been done before acting.
 
 ### 1. Xcode Command Line Tools
 
@@ -82,7 +82,7 @@ Verifies 1Password SSH signing is ready:
 
 ### 14. Ghostty shaders
 
-Clones `hackr-sh/ghostty-shaders` to `~/.config/ghostty/shaders/`. Shader files are available but commented out in the Ghostty config by default.
+Clones `hackr-sh/ghostty-shaders` to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths). Migrates legacy installs from `~/.config/ghostty/shaders/` if found. Shader files are available but commented out in the Ghostty config by default.
 
 ### 15. macOS app config linking
 
@@ -96,31 +96,35 @@ Seeds the Obsidian config with `{}` if it does not exist (required by basalt-tui
 
 Clones the [LazyVim starter](https://github.com/LazyVim/starter) to `~/.config/nvim` if no existing config is found. Removes the `.git` directory so it is not a nested repo. Skips if `~/.config/nvim` already exists.
 
-### 17. Neovim plugins
+### 17. LazyVim local options
 
-Stows the `nvim` package separately (after LazyVim install to avoid directory conflicts). Also ensures LazyVim extras like `claudecode` are present in `lazyvim.json`.
+Ensures LazyVim's `lua/config/options.lua` includes `pcall(require, "config.local")` so it loads repo-managed local options from the stow package.
 
-### 18. zjstatus
+### 18. Neovim plugins
+
+Stows the `nvim` package separately (after LazyVim install to avoid directory conflicts). Moves known plugin-file conflicts into backup first. Also ensures LazyVim extras like `claudecode` are present in `lazyvim.json`.
+
+### 19. zjstatus
 
 Downloads `zjstatus.wasm` from GitHub releases to `~/.config/zellij/plugins/`. The status bar layout in `layouts/default.kdl` references this plugin.
 
-### 19. Runtimes (mise)
+### 20. Runtimes (mise)
 
-Runs `mise install` to install runtimes from `~/.config/mise/config.toml`: node 22, python 3.13, ruby 3.4, go 1.24.
+Runs `mise install` to install runtimes from `~/.config/mise/config.toml`: node 22, python 3.13, ruby 3.4, go 1.24. Uses an extended remote-fetch timeout with one retry.
 
-### 20. gcloud CLI
+### 21. gcloud CLI
 
 Installs the `gcloud-cli` cask with `CLOUDSDK_PYTHON` set to mise's python. This step runs after mise so that a working Python is available.
 
-### 21. Docker Desktop
+### 22. Docker Desktop
 
 Pre-creates `/usr/local/cli-plugins` (for docker-compose linking), cleans stale Docker binaries from previous installs, then installs the `docker-desktop` cask.
 
-### 22. App Store apps
+### 23. App Store apps
 
 Installs CopyLess 2 and Magnet via `mas`. Prompts for App Store sign-in if not authenticated.
 
-### 23. Rust and Cargo tools
+### 24. Rust and Cargo tools
 
 Installs Rust via `rustup-init` if not already present. Then installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
 
@@ -207,13 +211,14 @@ Dry-run is useful for understanding what the script does before committing to a 
 | `install_ghostty_shaders` | 14 | Clone shader repo |
 | `configure_macos_app_links` | 15 | Symlink app configs |
 | `install_lazyvim` | 16 | Clone LazyVim starter |
-| `stow_nvim_plugins` | 17 | Stow nvim package |
-| `install_zjstatus` | 18 | Download zjstatus.wasm |
-| `install_mise_tools` | 19 | Install runtimes |
-| `install_gcloud_cli` | 20 | Install gcloud with mise python |
-| `install_docker_desktop` | 21 | Install Docker Desktop |
-| `install_app_store_apps` | 22 | Install App Store apps |
-| `install_rust` / `install_cargo_tools` | 23 | Rust + Cargo tools |
+| `ensure_lazyvim_local_options` | 17 | Inject local options loader |
+| `stow_nvim_plugins` | 18 | Stow nvim package |
+| `install_zjstatus` | 19 | Download zjstatus.wasm |
+| `install_mise_tools` | 20 | Install runtimes |
+| `install_gcloud_cli` | 21 | Install gcloud with mise python |
+| `install_docker_desktop` | 22 | Install Docker Desktop |
+| `install_app_store_apps` | 23 | Install App Store apps |
+| `install_rust` / `install_cargo_tools` | 24 | Rust + Cargo tools |
 | `prune_old_backups` | -- | Keep 3 most recent backups |
 
 ## Troubleshooting

@@ -5,7 +5,9 @@
   pager = delta
   excludesfile = ~/.gitignore
 [pull]
-  rebase = false
+  rebase = true
+[branch]
+  autoSetupMerge = always
 [push]
   autoSetupRemote = true
 [fetch]

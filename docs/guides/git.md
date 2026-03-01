@@ -203,6 +203,7 @@ git add .gitattributes
 | Setting | Value | Effect |
 |---------|-------|--------|
 | `init.defaultBranch` | `main` | New repos use `main` instead of `master` |
-| `pull.rebase` | `false` | Pull uses merge by default |
+| `pull.rebase` | `true` | Pull uses rebase instead of merge |
+| `branch.autoSetupMerge` | `always` | New branches auto-track their remote |
 | `push.autoSetupRemote` | `true` | First push auto-tracks the upstream branch |
 | `fetch.prune` | `true` | Removes stale remote-tracking branches on fetch |
