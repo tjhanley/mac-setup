@@ -12,5 +12,5 @@ commands=(
 
 selected=$(printf '%s\n' "${commands[@]}" | fzf --prompt="Launch > " --reverse --border=rounded)
 if [[ -n "$selected" ]]; then
-  zellij run -f -- $selected
+  zellij run -- $selected
 fi

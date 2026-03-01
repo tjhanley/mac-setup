@@ -13,7 +13,7 @@ session_serialization false;
 keybinds {
     shared {
         bind "Super k" { Clear; Write 12; }
-        bind "Alt l" {
+        bind "Super Shift l" {
             Run "bash" "-c" "$HOME/.config/zellij/scripts/launcher.sh" {
                 close_on_exit true
                 floating true
