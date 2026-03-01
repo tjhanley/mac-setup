@@ -77,7 +77,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `cat` alias to `bat` (when available).
 - Dot-navigation aliases: `..`, `...`, `....`, `.....`.
 - Editor defaults: `EDITOR`/`VISUAL` = `nvim`; `vi`/`vim` aliases.
-- eza aliases: `ls`, `ll`, `la`, `lt`.
+- eza aliases: `ls`, `ll` (with `--git`, `--header`, `--time-style=relative`), `la`, `lt` (with `--git`, `--git-ignore`).
+- eza Catppuccin Mocha theme via `~/.config/eza/theme.yml`.
 - yazi cwd-on-exit wrapper: `y`.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
@@ -132,6 +133,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `nvim/` — `.config/nvim/lua/config/options.lua` (disable unused providers), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
 - `amethyst/` — `.config/amethyst/amethyst.yml`
+- `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 
 ## macOS app config linking

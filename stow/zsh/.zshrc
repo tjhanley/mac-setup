@@ -169,9 +169,9 @@ fi
 # eza replaces ls (if installed)
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza --group-directories-first --icons=auto'
-  alias ll='eza -la --group-directories-first --icons=auto'
+  alias ll='eza -la --group-directories-first --icons=auto --git --header --time-style=relative'
   alias la='eza -a --group-directories-first --icons=auto'
-  alias lt='eza --tree --level=2 --icons=auto'
+  alias lt='eza --tree --level=2 --icons=auto --git --git-ignore'
 fi
 
 # Common tool aliases

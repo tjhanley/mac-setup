@@ -85,6 +85,8 @@ stow/
     .config/obsidian/obsidian.json
   amethyst/
     .config/amethyst/amethyst.yml
+  eza/
+    .config/eza/theme.yml                # Catppuccin Mocha theme
   yazi/
     .config/yazi/theme.toml
     .config/yazi/Catppuccin-mocha.tmTheme
