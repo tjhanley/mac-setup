@@ -27,9 +27,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
-- Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
+- Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
-- Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
+- Ensures LazyVim `lua/config/options.lua` includes `pcall(require, "config.local")` to load repo-managed local options.
+- Stows `nvim` package separately after LazyVim install (moves known plugin-file conflicts into backup first).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
 - Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`) into `~/Library/Fonts/`. Skips already-installed fonts.
 - Prompts for `git user.name` and `user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
@@ -110,7 +111,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - BlexMono Nerd Font (IBM Plex Mono) at size 17.
 - Fullscreen by default (`fullscreen = true`).
 - Vim-like alt+hjkl keybinds.
-- Shaders available (cloned from `hackr-sh/ghostty-shaders`); commented-out examples in config.
+- Shaders available (cloned from `hackr-sh/ghostty-shaders` into `~/.local/share/ghostty/shaders`); commented-out examples in config.
 - Neovim integration: `ghostty.nvim` (config validation), `ghostty-theme-sync.nvim` (`:GhosttyTheme`), `tree-sitter-ghostty` (treesitter grammar).
 - Zed extension auto-installed for Ghostty config syntax highlighting.
 
@@ -134,7 +135,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`
-- `nvim/` — `.config/nvim/lua/config/options.lua` (disable unused providers), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
+- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
 - `amethyst/` — `.config/amethyst/amethyst.yml`
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)

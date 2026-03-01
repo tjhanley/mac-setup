@@ -56,18 +56,19 @@ See also: `man mac-setup` for the full system reference.
 9. Prompts for `git user.name` and `user.email` if not set (stored in `~/.gitconfig.local`)
 10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
 11. Verifies git commit signing (1Password SSH agent, signing key)
-12. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
+12. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
 13. Links macOS app configs (Zed, Obsidian) to stow-managed paths
 14. Installs LazyVim starter (if no existing `~/.config/nvim`)
-15. Stows Neovim plugin configs (Ghostty plugins) into LazyVim
-16. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-17. Installs runtimes via `mise`
-18. Installs `gcloud-cli` using `mise` Python
-19. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
-20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-21. Installs Rust via `rustup-init`
-22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-23. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
+15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
+16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
+17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+18. Installs runtimes via `mise`
+19. Installs `gcloud-cli` using `mise` Python
+20. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
+21. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+22. Installs Rust via `rustup-init`
+23. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
+24. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 
@@ -103,7 +104,7 @@ stow/
   zed/
     .config/zed/settings.json
   nvim/
-    .config/nvim/lua/config/options.lua    # disable unused providers
+    .config/nvim/lua/config/local.lua      # repo-managed local options (loaded by LazyVim options.lua)
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
   obsidian/
     .config/obsidian/obsidian.json

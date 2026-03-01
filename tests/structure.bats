@@ -37,8 +37,8 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   [[ -f "$REPO_ROOT/stow/zed/.config/zed/settings.json" ]]
 }
 
-@test "stow/nvim contains options and plugin configs" {
-  [[ -f "$REPO_ROOT/stow/nvim/.config/nvim/lua/config/options.lua" ]]
+@test "stow/nvim contains local options and plugin configs" {
+  [[ -f "$REPO_ROOT/stow/nvim/.config/nvim/lua/config/local.lua" ]]
   [[ -f "$REPO_ROOT/stow/nvim/.config/nvim/lua/plugins/ghostty.lua" ]]
 }
 

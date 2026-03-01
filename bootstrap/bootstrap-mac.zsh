@@ -362,13 +362,54 @@ stow_nvim_plugins() {
     return
   fi
 
+  # Move known file-level plugin conflicts into backup before stowing.
+  move_conflict_target ".config/nvim/lua/plugins/ghostty.lua"
+
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    (cd "$STOW_DIR" && stow --target="$HOME" --restow -n nvim)
+    if ! (cd "$STOW_DIR" && stow --target="$HOME" --restow -n nvim); then
+      warn "Neovim stow check found unresolved conflicts"
+      warn "Review ~/.config/nvim and re-run after resolving conflicts"
+      return
+    fi
   else
-    (cd "$STOW_DIR" && stow --target="$HOME" --restow nvim)
+    if ! (cd "$STOW_DIR" && stow --target="$HOME" --restow nvim); then
+      warn "Neovim plugin stow failed due to unresolved conflicts"
+      warn "Review ~/.config/nvim and re-run after resolving conflicts"
+      return
+    fi
   fi
 
   ok "Neovim plugins stowed"
+}
+
+ensure_lazyvim_local_options_hook() {
+  log "Ensuring LazyVim local options hook"
+
+  local options_file="$HOME/.config/nvim/lua/config/options.lua"
+  local hook='pcall(require, "config.local")'
+
+  if [[ ! -f "$options_file" ]]; then
+    warn "LazyVim options file not found; skipping local options hook: $options_file"
+    return
+  fi
+
+  if grep -Fq "$hook" "$options_file"; then
+    ok "LazyVim local options hook already configured"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f append local options hook to $options_file"
+    return
+  fi
+
+  cat >> "$options_file" <<'EOF_NVIM_LOCAL_OPTIONS'
+
+-- Load local/repo-managed options if present.
+pcall(require, "config.local")
+EOF_NVIM_LOCAL_OPTIONS
+
+  ok "Added LazyVim local options hook"
 }
 
 ensure_lazyvim_extras() {
@@ -652,10 +693,33 @@ install_cargo_tools() {
 install_ghostty_shaders() {
   log "Installing Ghostty shaders"
 
-  local shaders_dir="$HOME/.config/ghostty/shaders"
+  local shaders_dir="$HOME/.local/share/ghostty/shaders"
+  local legacy_dir="$HOME/.config/ghostty/shaders"
+  local resolved_legacy=""
+  local resolved_dotfiles=""
+
   if [[ -d "$shaders_dir" ]]; then
     ok "Ghostty shaders already present"
     return
+  fi
+
+  if [[ -d "$legacy_dir" ]]; then
+    resolved_legacy="$(resolve_existing_path "$legacy_dir" || true)"
+    resolved_dotfiles="$(cd "$DOTFILES_DIR" 2>/dev/null && pwd -P || true)"
+
+    if [[ -n "$resolved_legacy" && -n "$resolved_dotfiles" && "$resolved_legacy" == "$resolved_dotfiles/"* ]]; then
+      warn "Found legacy Ghostty shaders under repo-managed path: $legacy_dir"
+      warn "Skipping migration from repo path; cloning to $shaders_dir instead"
+    else
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        print -P "%F{yellow}dry-run:%f move $legacy_dir -> $shaders_dir"
+      else
+        run_cmd mkdir -p "$(dirname "$shaders_dir")"
+        run_cmd mv "$legacy_dir" "$shaders_dir"
+        ok "Migrated Ghostty shaders to $shaders_dir"
+      fi
+      return
+    fi
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -1023,6 +1087,7 @@ main() {
   install_ghostty_shaders
   configure_macos_app_links
   install_lazyvim
+  ensure_lazyvim_local_options_hook
   stow_nvim_plugins
   ensure_lazyvim_extras
   install_zjstatus

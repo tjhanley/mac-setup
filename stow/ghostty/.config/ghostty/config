@@ -13,7 +13,7 @@ keybind = alt+l=esc:f
 keybind = alt+j=csi:B
 keybind = alt+k=csi:A
 
-# Shaders (uncomment to enable — installed to ~/.config/ghostty/shaders/)
-# custom-shader = ~/.config/ghostty/shaders/crt.glsl
-# custom-shader = ~/.config/ghostty/shaders/bloom.glsl
-# custom-shader = ~/.config/ghostty/shaders/gradient.glsl
+# Shaders (uncomment to enable — installed to ~/.local/share/ghostty/shaders/)
+# custom-shader = ~/.local/share/ghostty/shaders/crt.glsl
+# custom-shader = ~/.local/share/ghostty/shaders/bloom.glsl
+# custom-shader = ~/.local/share/ghostty/shaders/gradient.glsl
