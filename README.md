@@ -47,6 +47,7 @@ Dry run:
 19. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
 20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 21. Installs Rust via `rustup-init`
+22. Sets desktop wallpaper from `assets/desktop-image.png`
 
 ## Dotfiles Structure
 

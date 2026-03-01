@@ -897,6 +897,30 @@ install_man_page() {
     "mac-setup man page"
 }
 
+set_desktop_wallpaper() {
+  log "Setting desktop wallpaper"
+  local wallpaper="$DOTFILES_DIR/assets/desktop-image.png"
+
+  if [[ ! -f "$wallpaper" ]]; then
+    warn "Wallpaper not found at $wallpaper; skipping"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f would set desktop wallpaper to $wallpaper"
+    return
+  fi
+
+  osascript -e "
+    tell application \"System Events\"
+      tell every desktop
+        set picture to \"$wallpaper\"
+      end tell
+    end tell
+  "
+  ok "Desktop wallpaper set"
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
@@ -945,6 +969,7 @@ main() {
   install_docker_desktop
   install_app_store_apps
   install_rust
+  set_desktop_wallpaper
   post_notes
 
   ok "Bootstrap finished"
