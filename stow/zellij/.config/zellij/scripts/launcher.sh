@@ -3,11 +3,15 @@ set -euo pipefail
 
 commands=(
   "basalt"
+  "claude"
+  "claude --worktree"
+  "codex"
   "htop"
   "k9s"
   "lazydocker"
   "lazygit"
   "nvim"
+  "sidecar"
   "yazi"
 )
 
