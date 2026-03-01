@@ -32,6 +32,7 @@ brew "wget"
 brew "trash"
 brew "dust"
 brew "duf"
+brew "fastfetch"
 
 # Image processing (used by Snacks.image in Neovim)
 brew "imagemagick"

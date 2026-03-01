@@ -44,7 +44,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 - imagemagick (used by Snacks.image in Neovim)
-- tldr, htop, wget, trash, dust, duf
+- tldr, htop, wget, trash, dust, duf, fastfetch
 
 ### Casks/apps/fonts
 - 1password, ghostty, raycast, zed, obsidian

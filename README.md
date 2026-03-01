@@ -96,7 +96,7 @@ Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
 tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
 bat, jq, zoxide, eza, yazi, kubectl, awscli, lazydocker, zellij, mise, rust,
 rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
-duf
+duf, fastfetch
 
 Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,

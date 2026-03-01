@@ -11,6 +11,9 @@ mouse_mode true;
 session_serialization false;
 
 keybinds {
+    shared {
+        bind "Super k" { Clear; Write 12; }
+    }
     pane {
         bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0; }
     }
