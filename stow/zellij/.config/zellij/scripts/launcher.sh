@@ -8,6 +8,7 @@ commands=(
   "htop"
   "yazi"
   "fastfetch"
+  "basalt"
 )
 
 selected=$(printf '%s\n' "${commands[@]}" | fzf --prompt="Launch > " --reverse --border=rounded)
