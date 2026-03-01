@@ -33,7 +33,6 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Prompts for `git user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
 - Generates SSH key (ed25519) if `~/.ssh/id_ed25519` is missing; uses git email as comment. Uploads public key to GitHub via `gh ssh-key add` (authenticates with `gh auth login` if needed, checks fingerprint to avoid duplicates).
 - Verifies git commit signing: checks `op-ssh-sign` binary, 1Password SSH agent socket, and signing key in gitconfig. Warns with setup instructions if anything is missing.
-- Sets desktop wallpaper on all desktops from `assets/desktop-image.png` via `osascript`.
 
 ## Installed/managed tools and apps
 ### CLI/dev tools
