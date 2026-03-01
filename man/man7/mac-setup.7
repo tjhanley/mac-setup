@@ -148,6 +148,72 @@ Skip duplicate history entries.
 .TP
 .B hist_ignore_space
 Commands starting with a space are not recorded.
+.SH ZELLIJ KEYBINDS
+Default zellij keybinds plus custom overrides.
+.SS Mode switching
+.TS
+l l.
+Keys	Action
+_
+Ctrl+p	Pane mode
+Ctrl+t	Tab mode
+Ctrl+n	Resize mode
+Ctrl+h	Move mode
+Ctrl+s	Scroll mode
+Ctrl+o	Session mode
+.TE
+.SS Resize mode (Ctrl+n)
+.TS
+l l.
+Keys	Action
+_
+h / Left	Resize left
+j / Down	Resize down
+k / Up	Resize up
+l / Right	Resize right
++	Increase size
+\-	Decrease size
+.TE
+.SS Move mode (Ctrl+h)
+.TS
+l l.
+Keys	Action
+_
+h / Left	Move pane left
+j / Down	Move pane down
+k / Up	Move pane up
+l / Right	Move pane right
+Tab	Swap with next pane
+.TE
+.SS Pane mode (Ctrl+p)
+.TS
+l l.
+Keys	Action
+_
+h / Left	Focus pane left
+j / Down	Focus pane down
+k / Up	Focus pane up
+l / Right	Focus pane right
+p	Focus previous pane
+n	New pane
+d	New pane (down)
+r	Rename pane (custom override)
+s	New stacked pane
+x	Close pane
+f	Toggle fullscreen
+w	Toggle floating
+e	Embed floating pane
+z	Toggle pane frames
+.TE
+.SS Custom keybinds
+.TS
+l l.
+Keys	Action
+_
+Super+k	Clear scrollback
+Super+Shift+l	Launcher (fzf app picker)
+Alt+arrows	Resize pane (no mode switch)
+.TE
 .SH GIT CONFIG
 Managed via stow at
 .BR ~/.gitconfig .
