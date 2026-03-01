@@ -1,2 +1,3 @@
 # Amethyst configuration
-# Use Amethyst defaults; no overrides for now.
+mouse-follows-focus: false
+focus-follows-mouse: false

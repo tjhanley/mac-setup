@@ -6,7 +6,7 @@ Opinionated macOS bootstrap using:
 - `mise` for runtimes (node, python, ruby, go)
 - Rust + Cargo (Homebrew `rust`, with `rustup` toolchain management)
 - Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
-- Amethyst tiling window manager (focus-follows-mouse)
+- Amethyst tiling window manager
 
 ## Requirements
 - macOS
@@ -175,7 +175,7 @@ Use this when you want local app state in tracked files without committing it.
 
 Amethyst is installed via Homebrew cask and configured from
 `stow/amethyst/.config/amethyst/amethyst.yml`. This repo enables
-`focus-follows-mouse` and leaves gaps/margins/keybindings at defaults.
+`focus-follows-mouse: false` and leaves gaps/margins/keybindings at defaults.
 
 First run:
 - Launch Amethyst.
