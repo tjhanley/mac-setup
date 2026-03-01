@@ -30,6 +30,19 @@ Dry run:
 ./setup.sh --dry-run
 ```
 
+## Documentation
+
+Practical usage guides live in [`docs/guides/`](docs/guides/):
+
+- [Zellij](docs/guides/zellij.md) -- keybinds, launcher, zjstatus bar, scripts
+- [Shell](docs/guides/shell.md) -- aliases, completions, fzf, navigation, plugins
+- [Git](docs/guides/git.md) -- delta pager, 1Password signing, config split
+- [Theming](docs/guides/theming.md) -- Catppuccin Mocha setup, re-theming with Claude Code
+- [Customization](docs/guides/customization.md) -- adding packages, stow modules, runtimes
+- [Bootstrap](docs/guides/bootstrap.md) -- understanding and troubleshooting setup.sh
+
+See also: `man mac-setup` for the full system reference.
+
 ## What It Does
 
 1. Installs Xcode Command Line Tools and accepts license (if needed)
