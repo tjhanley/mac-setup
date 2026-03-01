@@ -8,6 +8,12 @@ Opinionated macOS bootstrap using:
 - Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
 - Amethyst tiling window manager
 
+## Disclaimer
+
+This project is provided as-is with no warranty. It modifies system settings,
+installs software, and overwrites configuration files. Review the scripts before
+running them and use at your own risk. See [LICENSE](LICENSE) for details.
+
 ## Requirements
 - macOS
 - git
