@@ -1,4 +1,4 @@
-.TH MAC-SETUP 7 "2026-02-28" "mac-setup" "Tom's System Reference"
+.TH MAC-SETUP 7 "2026-03-01" "mac-setup" "Tom's System Reference"
 .SH NAME
 mac-setup \- opinionated macOS bootstrap with Homebrew, Stow, and Catppuccin Mocha
 .SH SYNOPSIS
@@ -18,23 +18,33 @@ Install Xcode Command Line Tools and accept license
 .IP 2. 4
 Install Homebrew
 .IP 3. 4
-Install packages/apps from Brewfile
+Install packages/apps from Brewfile (gcloud-cli and docker-desktop deferred)
 .IP 4. 4
-Back up existing configs to ~/config-backups/
+Create .env from .env.example if missing
 .IP 5. 4
-Stow dotfiles into $HOME
+Back up existing configs to ~/config-backups/
 .IP 6. 4
-Prompt for git user.email (stored in ~/.gitconfig.local)
+Stow dotfiles into $HOME
 .IP 7. 4
-Generate SSH key (ed25519) if missing; upload to GitHub via gh
+Install private fonts from iCloud Drive
 .IP 8. 4
-Verify git commit signing (1Password SSH agent, signing key)
+Prompt for git user.name and user.email (stored in ~/.gitconfig.local)
 .IP 9. 4
-Install Ghostty shaders, LazyVim, zjstatus
+Generate SSH key (ed25519) if missing; upload to GitHub via gh
 .IP 10. 4
-Install runtimes via mise (node, python, ruby, go)
+Verify git commit signing (1Password SSH agent, signing key)
 .IP 11. 4
-Install gcloud-cli, Docker Desktop, App Store apps, Rust
+Install Ghostty shaders, link macOS app configs (Zed, Obsidian)
+.IP 12. 4
+Install LazyVim, stow Neovim plugin configs, download zjstatus
+.IP 13. 4
+Install runtimes via mise (node, python, ruby, go)
+.IP 14. 4
+Install gcloud-cli, Docker Desktop, App Store apps
+.IP 15. 4
+Install Rust via rustup-init and Cargo tools (basalt-tui) via cargo-binstall
+.IP 16. 4
+Prune old backups in ~/config-backups/, keeping the 3 most recent
 .SH STOW PACKAGES
 Each package under
 .B stow/
@@ -54,11 +64,12 @@ ripgrep	.ripgreprc
 ssh	.ssh/config (1Password agent, Include config.local)
 starship	.config/starship.toml
 ghostty	.config/ghostty/config
-zellij	.config/zellij/config.kdl, layouts/default.kdl
+zellij	.config/zellij/config.kdl, layouts/default.kdl, scripts/
 mise	.config/mise/config.toml
 zed	.config/zed/settings.json
 nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua
 obsidian	.config/obsidian/obsidian.json
+eza	.config/eza/theme.yml
 amethyst	.config/amethyst/amethyst.yml
 yazi	.config/yazi/theme.toml, Catppuccin-mocha.tmTheme
 .TE
@@ -107,20 +118,22 @@ y	yazi (cwd-on-exit wrapper)
 cc	claude
 cx	codex
 gal	gcloud auth login
+spotify	open \-a Spotify (when installed)
 .TE
 .SH SHELL ALIASES
 .TS
 l l.
 Alias	Action
 _
-..	cd ..
+\&..	cd ..
 \&...	cd ../..
 \&....	cd ../../..
+\&.....	cd ../../../..
 cat	bat (when installed)
 ls	eza \-\-group\-directories\-first \-\-icons=auto
-ll	eza \-la \-\-git \-\-header \-\-time\-style=relative
-la	eza \-a (show hidden)
-lt	eza \-\-tree \-\-level=2 \-\-git \-\-git\-ignore
+ll	eza \-la \-\-group\-directories\-first \-\-icons=auto \-\-git \-\-header \-\-time\-style=relative
+la	eza \-a \-\-group\-directories\-first \-\-icons=auto
+lt	eza \-\-tree \-\-level=2 \-\-icons=auto \-\-git \-\-git\-ignore
 vim, vi	nvim
 l	ls \-lah
 .TE
@@ -140,6 +153,9 @@ Advanced glob patterns (#, ~, ^).
 .B correct
 Suggests corrections for mistyped commands.
 .TP
+.B append_history
+Append to history file instead of overwriting.
+.TP
 .B share_history
 Share history across all open shells.
 .TP
@@ -148,6 +164,9 @@ Skip duplicate history entries.
 .TP
 .B hist_ignore_space
 Commands starting with a space are not recorded.
+.TP
+.B hist_reduce_blanks
+Remove superfluous blanks from history entries.
 .SH ZELLIJ KEYBINDS
 Default zellij keybinds plus custom overrides.
 .SS Mode switching
@@ -247,9 +266,26 @@ Versions in
 node 22, python 3.13, ruby 3.4, go 1.24.
 Rust managed via
 .BR rustup .
+.SH ZSH PLUGINS
+.TP
+.B zsh-autosuggestions
+Fish-like inline suggestions based on history.
+.TP
+.B zsh-syntax-highlighting
+Real-time syntax highlighting at the prompt.
+.TP
+.B fzf-tab
+Replace zsh default completion menu with fzf.
+.SH AUTO-START ZELLIJ
+Interactive Ghostty shells automatically launch zellij.
+Opt out per-shell with:
+.B NO_AUTO_ZELLIJ=1 zsh
+.PP
+Only triggers when all of these are true: interactive shell, in Ghostty,
+not already inside zellij or tmux.
 .SH THEME
 Catppuccin Mocha everywhere: Ghostty, Zellij (zjstatus), Starship, Zed,
-Yazi, bat, lazygit.
+Yazi, bat, lazygit, eza, FZF.
 .SH FILES
 .TP
 .B ~/Workspace/mac-setup/
@@ -275,10 +311,10 @@ Zsh history file (50k lines)
 .SH COMMON TASKS
 .TP
 .B Re-run bootstrap
-./setup.sh
+\&./setup.sh
 .TP
 .B Dry run
-./setup.sh \-\-dry\-run
+\&./setup.sh \-\-dry\-run
 .TP
 .B Re-stow a package
 (cd stow && stow \-\-target="$HOME" \-\-restow git)
