@@ -48,6 +48,7 @@ Dry run:
 20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 21. Installs Rust via `rustup-init`
 22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
+23. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 
