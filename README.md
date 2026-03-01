@@ -133,7 +133,7 @@ Cargo tools: basalt-tui (Obsidian vault TUI)
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
-Shell completions: kubectl, docker, mise, gh, rustup, cargo, gcloud, fzf, yazi
+Shell completions: kubectl, docker, mise, gh, stern, rustup, cargo, gcloud, fzf, yazi
 
 ## Man Page
 

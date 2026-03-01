@@ -74,7 +74,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship init.
 - zoxide init.
 - fzf init with Catppuccin Mocha color scheme (`FZF_DEFAULT_OPTS`).
-- CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, rustup, cargo.
+- CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, stern, rustup, cargo.
 - History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
 - Shell options: `auto_cd`, `extended_glob`, `correct`.
 - `RIPGREP_CONFIG_PATH` set to `~/.ripgreprc`.

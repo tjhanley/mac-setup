@@ -35,7 +35,7 @@ Completions are initialized with `compinit` using a cached dump file at `~/.cach
 
 Tool-specific completions are generated once and cached to `~/.cache/zsh/completions/`:
 
-- kubectl, docker, mise, gh, rustup, cargo
+- kubectl, docker, mise, gh, stern, rustup, cargo
 
 Completions for gcloud, fzf, and yazi are sourced at shell startup from their respective SDK/plugin paths.
 

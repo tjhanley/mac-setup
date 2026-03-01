@@ -45,6 +45,9 @@ fi
 if command -v gh >/dev/null 2>&1; then
   [[ -f "$_comp_cache/_gh" ]] || gh completion -s zsh > "$_comp_cache/_gh"
 fi
+if command -v stern >/dev/null 2>&1; then
+  [[ -f "$_comp_cache/_stern" ]] || stern --completion zsh > "$_comp_cache/_stern"
+fi
 if command -v rustup >/dev/null 2>&1; then
   [[ -f "$_comp_cache/_rustup" ]] || rustup completions zsh > "$_comp_cache/_rustup"
   [[ -f "$_comp_cache/_cargo" ]] || rustup completions zsh cargo > "$_comp_cache/_cargo"
