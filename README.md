@@ -121,7 +121,7 @@ stow/
 
 Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
 tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
-bat, jq, zoxide, eza, yazi, kubectl, k9s, awscli, lazydocker, zellij, mise, rust,
+bat, jq, zoxide, eza, yazi, kubectl, k9s, stern, awscli, lazydocker, zellij, mise, rust,
 rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
 duf, fastfetch
 
