@@ -115,6 +115,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
+- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (lazygit, lazydocker, k9s, htop, yazi, fastfetch) in new floating panes.
 - zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
@@ -127,7 +128,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `ssh/` — `.ssh/config` (1Password SSH agent, `Include config.local` for machine-specific hosts)
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
-- `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery}.sh`
+- `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`
 - `nvim/` — `.config/nvim/lua/config/options.lua` (disable unused providers), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
