@@ -5,7 +5,7 @@ Opinionated macOS bootstrap using:
 - GNU Stow for dotfiles
 - `mise` for runtimes (node, python, ruby, go)
 - Rust + Cargo (Homebrew `rust`, with `rustup` toolchain management)
-- Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, and Yazi
+- Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, Yazi, bat, lazygit, eza, and FZF
 - Amethyst tiling window manager
 
 ## Disclaimer
@@ -82,6 +82,9 @@ stow/
     .config/zellij/config.kdl                # pane-mode r = rename (matches tab-mode r)
     .config/zellij/layouts/default.kdl       # zjstatus Catppuccin Mocha status bar
     .config/zellij/scripts/battery.sh        # dynamic battery glyph for zjstatus
+    .config/zellij/scripts/cpu.sh            # CPU usage for zjstatus
+    .config/zellij/scripts/mem.sh            # memory usage for zjstatus
+    .config/zellij/scripts/launcher.sh       # fzf app picker for Super+Shift+l
   mise/
     .config/mise/config.toml
   zed/
@@ -116,7 +119,7 @@ Cargo tools: basalt-tui (Obsidian vault TUI)
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
-Shell completions: kubectl, docker, mise, gh, rustup, cargo
+Shell completions: kubectl, docker, mise, gh, rustup, cargo, gcloud, fzf, yazi
 
 ## Man Page
 
