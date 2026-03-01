@@ -609,6 +609,35 @@ install_rust() {
   fi
 }
 
+install_cargo_tools() {
+  log "Installing Cargo tools"
+
+  local -a cargo_tools=(basalt-tui)
+
+  for tool in "${cargo_tools[@]}"; do
+    local bin_name="${tool%-*}"
+    [[ "$tool" == "basalt-tui" ]] && bin_name="basalt"
+
+    if need_cmd "$bin_name"; then
+      ok "$bin_name already installed"
+      continue
+    fi
+
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f cargo binstall -y $tool"
+      continue
+    fi
+
+    if need_cmd cargo-binstall; then
+      run_cmd cargo binstall -y "$tool" && ok "Installed $tool via cargo-binstall"
+    elif need_cmd cargo; then
+      run_cmd cargo install "$tool" && ok "Installed $tool via cargo install"
+    else
+      warn "cargo not found; skipping $tool"
+    fi
+  done
+}
+
 install_ghostty_shaders() {
   log "Installing Ghostty shaders"
 
@@ -945,6 +974,7 @@ main() {
   install_docker_desktop
   install_app_store_apps
   install_rust
+  install_cargo_tools
   post_notes
 
   ok "Bootstrap finished"

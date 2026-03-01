@@ -25,6 +25,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs `docker-desktop` separately (ensures `/usr/local/cli-plugins` exists for docker-compose linking).
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
+- Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
@@ -60,6 +61,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 ## Runtime management strategy
 - Selected manager: `mise` (instead of `asdf`) for Node/Python/Ruby/Go.
 - Rust managed via `rustup`.
+- Cargo tools installed via `cargo-binstall`: basalt-tui.
 - Shell activation for `mise` is in `.zshrc`.
 
 ## Shell config (`stow/zsh/.zshrc`)

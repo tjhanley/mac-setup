@@ -47,6 +47,7 @@ Dry run:
 19. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
 20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 21. Installs Rust via `rustup-init`
+22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
 
 ## Dotfiles Structure
 
@@ -103,6 +104,8 @@ duf, fastfetch
 Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
 font-jetbrains-mono-nerd-font, amethyst
+
+Cargo tools: basalt-tui (Obsidian vault TUI)
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
