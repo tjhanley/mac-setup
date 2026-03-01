@@ -53,7 +53,7 @@ See also: `man mac-setup` for the full system reference.
 6. Backs up existing configs to `~/config-backups/`
 7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 13)
 8. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
-9. Prompts for `git user.name` and `user.email` if not set (stored in `~/.gitconfig.local`)
+9. Prompts for `git user.name` and `user.email` only if missing from effective git config (stores entries in `~/.gitconfig.local`)
 10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
 11. Verifies git commit signing (1Password SSH agent, signing key)
 12. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
@@ -62,7 +62,7 @@ See also: `man mac-setup` for the full system reference.
 15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
 16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
 17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-18. Installs runtimes via `mise`
+18. Installs runtimes via `mise` (with extended remote-fetch timeout + one retry)
 19. Installs `gcloud-cli` using `mise` Python
 20. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
 21. Installs App Store apps (CopyLess 2, Magnet) via `mas`

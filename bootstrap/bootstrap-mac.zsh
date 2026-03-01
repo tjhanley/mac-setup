@@ -177,11 +177,24 @@ ensure_xcode_clt() {
     fi
   fi
 
-  # Accept license if needed (idempotent — exits 0 if already accepted)
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f sudo xcodebuild -license accept"
+  # Accept the Xcode license only when required.
+  local license_needs_accept=0
+  if need_cmd xcodebuild; then
+    if ! xcodebuild -license check >/dev/null 2>&1; then
+      license_needs_accept=1
+    fi
+  fi
+
+  if [[ "$license_needs_accept" -eq 1 ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f sudo xcodebuild -license accept"
+    else
+      warn "Xcode license requires acceptance; requesting sudo"
+      sudo xcodebuild -license accept
+      ok "Xcode license accepted"
+    fi
   else
-    sudo xcodebuild -license accept 2>/dev/null || true
+    ok "Xcode license already accepted"
   fi
 
   ok "Xcode CLT ready"
@@ -525,11 +538,25 @@ install_mise_tools() {
   fi
 
   log "Installing runtimes via mise"
+  local http_timeout="${MISE_HTTP_TIMEOUT:-120}"
+  local fetch_timeout="${MISE_FETCH_REMOTE_VERSIONS_TIMEOUT:-60}"
+  local retry_fetch_timeout="${MISE_FETCH_REMOTE_VERSIONS_TIMEOUT_RETRY:-120}"
+
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f mise install"
+    print -P "%F{yellow}dry-run:%f MISE_HTTP_TIMEOUT=$http_timeout MISE_FETCH_REMOTE_VERSIONS_TIMEOUT=$fetch_timeout mise install"
   else
-    MISE_HTTP_TIMEOUT=120 mise install
-    ok "mise install complete"
+    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$fetch_timeout" mise install; then
+      ok "mise install complete"
+      return
+    fi
+
+    warn "mise install failed; retrying once with extended remote fetch timeout"
+    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$retry_fetch_timeout" mise install; then
+      ok "mise install complete (after retry)"
+    else
+      warn "mise install failed after retry"
+      return 1
+    fi
   fi
 }
 
@@ -807,8 +834,8 @@ ensure_git_identity() {
   local local_config="$HOME/.gitconfig.local"
   local current_name=""
   local current_email=""
-  current_name="$(git config --global user.name 2>/dev/null || true)"
-  current_email="$(git config --global user.email 2>/dev/null || true)"
+  current_name="$(git config user.name 2>/dev/null || true)"
+  current_email="$(git config user.email 2>/dev/null || true)"
 
   if [[ -n "$current_name" && -n "$current_email" ]]; then
     ok "git identity already set: $current_name <$current_email>"
@@ -1061,9 +1088,6 @@ EOF_NOTES
 main() {
   log "Bootstrap starting"
   ok "Repo: $DOTFILES_DIR"
-
-  print -P "\n%F{yellow}sudo is required to accept the Xcode license and resolve Homebrew binary conflicts.%f"
-  sudo -v
 
   ensure_xcode_clt
   ensure_homebrew

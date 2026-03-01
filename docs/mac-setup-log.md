@@ -10,7 +10,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Dotfiles layout via GNU Stow under `stow/`
 
 ## Bootstrap behavior
-- Installs Xcode Command Line Tools if missing (waits for GUI installer, then accepts license).
+- Installs Xcode Command Line Tools if missing (waits for GUI installer, checks license status first, and only requests sudo license acceptance when needed).
 - Installs Homebrew if missing.
 - Runs `brew update` and `brew upgrade` on each run.
 - Installs Brewfile dependencies.
@@ -21,7 +21,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Moves stow conflicts into backup before stowing (avoids stow conflict aborts).
 - Handles known binary conflicts (Docker kubectl, codex cask).
 - Installs LazyVim starter only when safe.
-- Runs `mise install` for runtime tools.
+- Runs `mise install` for runtime tools with explicit timeout env and a one-time retry using a longer remote-version fetch timeout.
 - Installs `gcloud-cli` after mise python is available.
 - Installs `docker-desktop` separately (ensures `/usr/local/cli-plugins` exists for docker-compose linking).
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
@@ -33,7 +33,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Stows `nvim` package separately after LazyVim install (moves known plugin-file conflicts into backup first).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
 - Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`) into `~/Library/Fonts/`. Skips already-installed fonts.
-- Prompts for `git user.name` and `user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
+- Prompts for `git user.name` and `user.email` after stowing only if missing from effective git config; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
 - Generates SSH key (ed25519) if `~/.ssh/id_ed25519` is missing; uses git email as comment. Uploads public key to GitHub via `gh ssh-key add` (authenticates with `gh auth login` if needed, checks fingerprint to avoid duplicates).
 - Verifies git commit signing: checks `op-ssh-sign` binary, 1Password SSH agent socket, and signing key in gitconfig. Warns with setup instructions if anything is missing.
 
