@@ -737,37 +737,59 @@ install_docker_desktop() {
   fi
 }
 
-ensure_git_email() {
-  log "Checking git user.email"
+ensure_git_identity() {
+  log "Checking git user identity"
 
+  local local_config="$HOME/.gitconfig.local"
+  local current_name=""
   local current_email=""
+  current_name="$(git config --global user.name 2>/dev/null || true)"
   current_email="$(git config --global user.email 2>/dev/null || true)"
-  if [[ -n "$current_email" ]]; then
-    ok "git user.email already set: $current_email"
+
+  if [[ -n "$current_name" && -n "$current_email" ]]; then
+    ok "git identity already set: $current_name <$current_email>"
     return
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f would prompt for git user.email"
+    [[ -z "$current_name" ]]  && print -P "%F{yellow}dry-run:%f would prompt for git user.name"
+    [[ -z "$current_email" ]] && print -P "%F{yellow}dry-run:%f would prompt for git user.email"
     return
   fi
 
-  local local_config="$HOME/.gitconfig.local"
-  print -P "%F{cyan}No git user.email configured.%f"
-  print -n "Enter your git email (or press Enter to skip): "
-  local email=""
-  read -r email
-  if [[ -z "$email" ]]; then
-    warn "Skipped git user.email — set it later: git config --global user.email 'you@example.com'"
-    return
+  if [[ -z "$current_name" ]]; then
+    print -P "%F{cyan}No git user.name configured.%f"
+    print -n "Enter your git name (or press Enter to skip): "
+    local name=""
+    read -r name
+    if [[ -n "$name" ]]; then
+      if [[ ! -f "$local_config" ]]; then
+        printf '[user]\n  name = %s\n' "$name" > "$local_config"
+      else
+        git config --file "$local_config" user.name "$name"
+      fi
+      ok "git user.name set to $name (in ~/.gitconfig.local)"
+    else
+      warn "Skipped git user.name — set it later: git config --global user.name 'Your Name'"
+    fi
   fi
 
-  if [[ ! -f "$local_config" ]]; then
-    printf '[user]\n  email = %s\n' "$email" > "$local_config"
-  else
-    git config --file "$local_config" user.email "$email"
+  if [[ -z "$current_email" ]]; then
+    print -P "%F{cyan}No git user.email configured.%f"
+    print -n "Enter your git email (or press Enter to skip): "
+    local email=""
+    read -r email
+    if [[ -n "$email" ]]; then
+      if [[ ! -f "$local_config" ]]; then
+        printf '[user]\n  email = %s\n' "$email" > "$local_config"
+      else
+        git config --file "$local_config" user.email "$email"
+      fi
+      ok "git user.email set to $email (in ~/.gitconfig.local)"
+    else
+      warn "Skipped git user.email — set it later: git config --global user.email 'you@example.com'"
+    fi
   fi
-  ok "git user.email set to $email (in ~/.gitconfig.local)"
 }
 
 ensure_ssh_key() {
@@ -995,7 +1017,7 @@ main() {
   stow_dotfiles
   install_man_page
   install_icloud_fonts
-  ensure_git_email
+  ensure_git_identity
   ensure_ssh_key
   ensure_commit_signing
   install_ghostty_shaders

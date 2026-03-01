@@ -101,10 +101,11 @@ teardown() {
   [[ "$status" -eq 0 ]]
 }
 
-@test "ensure_git_email prints dry-run message when email unset" {
+@test "ensure_git_identity prints dry-run message when name/email unset" {
   local tmpdir="$(mktemp -d)"
-  run_zsh_fn "HOME='$tmpdir' ensure_git_email"
+  run_zsh_fn "HOME='$tmpdir' ensure_git_identity"
   [[ "$output" == *"dry-run:"* ]]
+  [[ "$output" == *"user.name"* ]]
   [[ "$output" == *"user.email"* ]]
   rm -rf "$tmpdir"
 }

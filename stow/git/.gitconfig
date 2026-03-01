@@ -1,7 +1,5 @@
 [init]
   defaultBranch = main
-[user]
-  name = Thomas Hanley
 [core]
   editor = nvim
   pager = delta

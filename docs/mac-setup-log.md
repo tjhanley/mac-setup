@@ -32,7 +32,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Stows `nvim` package separately after LazyVim install (avoids directory conflicts).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
 - Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`) into `~/Library/Fonts/`. Skips already-installed fonts.
-- Prompts for `git user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
+- Prompts for `git user.name` and `user.email` after stowing if not already set; writes to `~/.gitconfig.local` (included via `[include]` in stow-managed `.gitconfig`).
 - Generates SSH key (ed25519) if `~/.ssh/id_ed25519` is missing; uses git email as comment. Uploads public key to GitHub via `gh ssh-key add` (authenticates with `gh auth login` if needed, checks fingerprint to avoid duplicates).
 - Verifies git commit signing: checks `op-ssh-sign` binary, 1Password SSH agent socket, and signing key in gitconfig. Warns with setup instructions if anything is missing.
 
@@ -166,7 +166,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
 - docker-desktop is skipped in `brew bundle` and installed separately; bootstrap pre-creates `/usr/local/cli-plugins` (requires sudo) for docker-compose linking.
 - App Store installs prompt for authentication if not signed in.
-- Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.email` and `user.signingkey` are omitted from tracked config (set per-machine in `~/.gitconfig.local`). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
+- Git config uses `git-delta` as pager, 1Password SSH signing (`gpgSign`/`op-ssh-sign`), and Git LFS filters. `user.name`, `user.email`, and `user.signingkey` are omitted from tracked config (set per-machine in `~/.gitconfig.local`). `core.excludesfile` points to `~/.gitignore` (stow-managed global gitignore).
 
 ## Current state
 - Repo is pushing successfully to `origin/main`.

@@ -34,7 +34,7 @@ Dry run:
 6. Backs up existing configs to `~/config-backups/`
 7. Stows dotfiles from `stow/` into `$HOME` (nvim stowed separately — see step 13)
 8. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
-9. Prompts for `git user.email` if not set (stored in `~/.gitconfig.local`)
+9. Prompts for `git user.name` and `user.email` if not set (stored in `~/.gitconfig.local`)
 10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
 11. Verifies git commit signing (1Password SSH agent, signing key)
 12. Clones Ghostty shaders to `~/.config/ghostty/shaders/`
@@ -122,6 +122,10 @@ man mac-setup
 
 Covers bootstrap steps, stow packages, git/tool/shell aliases, completions,
 shell options, git config, runtimes, theme, files, and common tasks.
+
+## License
+
+[MIT](LICENSE)
 
 ## Notes
 
