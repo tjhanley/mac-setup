@@ -10,6 +10,12 @@ scrollback_editor "nvim";
 mouse_mode true;
 session_serialization false;
 
+keybinds {
+    pane {
+        bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0; }
+    }
+}
+
 ui {
     pane_frames {
         rounded_corners true;

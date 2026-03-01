@@ -71,7 +71,7 @@ stow/
   ghostty/
     .config/ghostty/config
   zellij/
-    .config/zellij/config.kdl
+    .config/zellij/config.kdl                # pane-mode r = rename (matches tab-mode r)
     .config/zellij/layouts/default.kdl       # zjstatus Catppuccin Mocha status bar
     .config/zellij/scripts/battery.sh        # dynamic battery glyph for zjstatus
   mise/
