@@ -39,7 +39,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - git, git-delta, git-lfs, gh, stow, neovim, tree-sitter-cli, typescript
 - starship, lazygit, ripgrep, fd, fzf, fzf-tab, bat, jq
 - zoxide, eza, yazi
-- kubectl, awscli
+- kubectl, k9s, awscli
 - zellij
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
