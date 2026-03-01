@@ -37,7 +37,7 @@ layout {
                 // -- Layout --
                 format_left   "#[bg=$surface0,fg=$sapphire]#[bg=$sapphire,fg=$crust,bold] {session} #[bg=$surface0,fg=$sapphire] {mode}#[bg=$surface0] {tabs}"
                 format_center "{notifications}"
-                format_right  "#[bg=$surface0,fg=$green]#[bg=$green,fg=$crust] #[bg=$surface1,fg=$green,bold] {command_cpu}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$teal]#[bg=$teal,fg=$crust]󰍛 #[bg=$surface1,fg=$teal,bold] {command_mem}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$flamingo]#[fg=$crust,bg=$flamingo]  #[bg=$surface1,fg=$flamingo,bold] {command_user}@{command_host}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$maroon]#[bg=$maroon,fg=$crust]󰃭 #[bg=$surface1,fg=$maroon,bold] {datetime}#[bg=$surface0,fg=$surface1]"
+                format_right  "#[bg=$surface0,fg=$green]#[bg=$green,fg=$crust] #[bg=$surface1,fg=$green,bold] {command_cpu}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$teal]#[bg=$teal,fg=$crust]󰍛 #[bg=$surface1,fg=$teal,bold] {command_mem}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$surface1]#[bg=$surface1,fg=$flamingo,bold] {command_battery}#[bg=$surface0,fg=$surface1]#[bg=$surface0,fg=$maroon]#[bg=$maroon,fg=$crust]󰃭 #[bg=$surface1,fg=$maroon,bold] {datetime}#[bg=$surface0,fg=$surface1]"
                 format_space  "#[bg=$surface0]"
                 format_hide_on_overlength "true"
                 format_precedence "lrc"
@@ -94,16 +94,11 @@ layout {
                 command_mem_interval   "10"
                 command_mem_rendermode "dynamic"
 
-                // -- Commands (user@host in status bar) --
-                command_host_command    "uname -n"
-                command_host_format     "{stdout}"
-                command_host_interval   "0"
-                command_host_rendermode "static"
-
-                command_user_command    "whoami"
-                command_user_format     "{stdout}"
-                command_user_interval   "0"
-                command_user_rendermode "static"
+                // -- Commands (battery) --
+                command_battery_command    "/Users/tom/.config/zellij/scripts/battery.sh"
+                command_battery_format     "{stdout}"
+                command_battery_interval   "30"
+                command_battery_rendermode "dynamic"
 
                 // -- Datetime --
                 datetime          "{format}"
