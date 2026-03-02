@@ -139,6 +139,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
 - `amethyst/` — `.config/amethyst/amethyst.yml`
+- `claude/` — `.claude/skills/{commit,pr,fix-issue,test}/SKILL.md` (global Claude Code skills: commit, PR, fix-issue, test)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 

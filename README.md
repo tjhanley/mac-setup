@@ -111,6 +111,11 @@ stow/
     .config/obsidian/obsidian.json
   amethyst/
     .config/amethyst/amethyst.yml
+  claude/
+    .claude/skills/commit/SKILL.md       # imperative commit with co-author
+    .claude/skills/pr/SKILL.md           # PR with summary + test plan
+    .claude/skills/fix-issue/SKILL.md    # read issue, fix, test, commit
+    .claude/skills/test/SKILL.md         # run tests, diagnose and fix failures
   eza/
     .config/eza/theme.yml                # Catppuccin Mocha theme
   yazi/
