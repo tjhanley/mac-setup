@@ -19,9 +19,6 @@ Icon
 *.tmp
 *~
 
-# Claude Code (project CLAUDE.md is tracked; session data is not)
-/.claude/
-
 # Local overrides
 .env
 .env.*
