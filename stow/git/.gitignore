@@ -11,6 +11,7 @@
 **/CLAUDE.md
 **/*.plan.md
 .specstory/
+.specstory/.what-is-this.md
 .cursorindexingignore
 cursor-chats/
 .todos/
@@ -27,3 +28,7 @@ cursor-chats/
 # Misc
 .overcommit*
 Pipfile
+**/pipeline-dev.yaml
+**/fastest-api/**
+**/tools/tom/**
+**/cdc-validation**
