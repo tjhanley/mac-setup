@@ -7,8 +7,6 @@
 **/svcacct.json
 
 # AI tooling
-**/.claude/
-**/CLAUDE.md
 **/*.plan.md
 .specstory/
 .specstory/.what-is-this.md
