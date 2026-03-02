@@ -6,10 +6,9 @@
   excludesfile = ~/.gitignore
 [pull]
   rebase = true
-[branch]
-  autoSetupMerge = always
 [push]
   autoSetupRemote = true
+  default = current
 [fetch]
   prune = true
 [alias]
