@@ -537,21 +537,57 @@ install_mise_tools() {
     return
   fi
 
-  log "Installing runtimes via mise"
+  local mise_config="$HOME/.config/mise/config.toml"
+  local tools_block=""
+  local line=""
+  local tool=""
+  local version=""
+  local -a tool_specs=()
+
+  if [[ ! -f "$mise_config" ]]; then
+    warn "mise config not found at $mise_config; skipping tool installs"
+    return
+  fi
+
+  tools_block="$(mise config get -f "$mise_config" tools 2>/dev/null || true)"
+  if [[ -z "$tools_block" ]]; then
+    warn "No [tools] entries found in $mise_config; skipping tool installs"
+    return
+  fi
+
+  while IFS= read -r line; do
+    [[ "$line" == *"="* ]] || continue
+    tool="${line%%=*}"
+    version="${line#*=}"
+    tool="${tool//[[:space:]]/}"
+    version="${version//\"/}"
+    version="${version//[[:space:]]/}"
+
+    if [[ -n "$tool" && -n "$version" ]]; then
+      tool_specs+=("${tool}@${version}")
+    fi
+  done <<< "$tools_block"
+
+  if [[ "${#tool_specs[@]}" -eq 0 ]]; then
+    warn "Unable to parse runtime tools from $mise_config; skipping tool installs"
+    return
+  fi
+
+  log "Installing runtimes via mise (stow-managed config only)"
   local http_timeout="${MISE_HTTP_TIMEOUT:-120}"
   local fetch_timeout="${MISE_FETCH_REMOTE_VERSIONS_TIMEOUT:-60}"
   local retry_fetch_timeout="${MISE_FETCH_REMOTE_VERSIONS_TIMEOUT_RETRY:-120}"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f MISE_HTTP_TIMEOUT=$http_timeout MISE_FETCH_REMOTE_VERSIONS_TIMEOUT=$fetch_timeout mise install"
+    print -P "%F{yellow}dry-run:%f MISE_HTTP_TIMEOUT=$http_timeout MISE_FETCH_REMOTE_VERSIONS_TIMEOUT=$fetch_timeout mise install ${tool_specs[*]}"
   else
-    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$fetch_timeout" mise install; then
+    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$fetch_timeout" mise install "${tool_specs[@]}"; then
       ok "mise install complete"
       return
     fi
 
     warn "mise install failed; retrying once with extended remote fetch timeout"
-    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$retry_fetch_timeout" mise install; then
+    if MISE_HTTP_TIMEOUT="$http_timeout" MISE_FETCH_REMOTE_VERSIONS_TIMEOUT="$retry_fetch_timeout" mise install "${tool_specs[@]}"; then
       ok "mise install complete (after retry)"
     else
       warn "mise install failed after retry"
@@ -715,6 +751,40 @@ install_cargo_tools() {
       warn "cargo not found; skipping $tool"
     fi
   done
+}
+
+configure_keyboard_repeat() {
+  if [[ "$OSTYPE" != darwin* ]]; then
+    return
+  fi
+
+  log "Configuring keyboard repeat speed"
+
+  local desired_initial="10"
+  local desired_repeat="1"
+  local desired_press_hold="0"
+
+  local current_initial=""
+  local current_repeat=""
+  local current_press_hold=""
+
+  current_initial="$(defaults read -g InitialKeyRepeat 2>/dev/null || true)"
+  current_repeat="$(defaults read -g KeyRepeat 2>/dev/null || true)"
+  current_press_hold="$(defaults read -g ApplePressAndHoldEnabled 2>/dev/null || true)"
+
+  if [[ "$current_initial" == "$desired_initial" \
+    && "$current_repeat" == "$desired_repeat" \
+    && "$current_press_hold" == "$desired_press_hold" ]]; then
+    ok "Keyboard repeat already configured"
+    return
+  fi
+
+  run_cmd defaults write -g InitialKeyRepeat -int "$desired_initial"
+  run_cmd defaults write -g KeyRepeat -int "$desired_repeat"
+  run_cmd defaults write -g ApplePressAndHoldEnabled -bool false
+
+  ok "Keyboard repeat configured (InitialKeyRepeat=$desired_initial, KeyRepeat=$desired_repeat)"
+  warn "Reopen terminal apps to pick up keyboard repeat changes"
 }
 
 install_ghostty_shaders() {
@@ -1122,6 +1192,7 @@ main() {
   install_app_store_apps
   install_rust
   install_cargo_tools
+  configure_keyboard_repeat
   prune_old_backups
   post_notes
 

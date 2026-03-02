@@ -62,13 +62,14 @@ See also: `man mac-setup` for the full system reference.
 15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
 16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
 17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-18. Installs runtimes via `mise` (with extended remote-fetch timeout + one retry)
+18. Installs runtimes via `mise` from stow-managed `~/.config/mise/config.toml` only (with extended remote-fetch timeout + one retry)
 19. Installs `gcloud-cli` using `mise` Python
 20. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
 21. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 22. Installs Rust via `rustup-init`
 23. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-24. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
+24. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
+25. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 

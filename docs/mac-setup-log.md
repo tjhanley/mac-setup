@@ -21,12 +21,13 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Moves stow conflicts into backup before stowing (avoids stow conflict aborts).
 - Handles known binary conflicts (Docker kubectl, codex cask).
 - Installs LazyVim starter only when safe.
-- Runs `mise install` for runtime tools with explicit timeout env and a one-time retry using a longer remote-version fetch timeout.
+- Runs `mise install` for runtime tools using explicit `tool@version` values from `~/.config/mise/config.toml` (stow-managed), with explicit timeout env and a one-time retry using a longer remote-version fetch timeout.
 - Installs `gcloud-cli` after mise python is available.
 - Installs `docker-desktop` separately (ensures `/usr/local/cli-plugins` exists for docker-compose linking).
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
+- Configures keyboard repeat speed via macOS defaults (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Ensures LazyVim `lua/config/options.lua` includes `pcall(require, "config.local")` to load repo-managed local options.

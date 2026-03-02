@@ -19,7 +19,7 @@ The script requires `sudo` early on for Xcode license acceptance and Homebrew bi
 
 ## Step-by-step breakdown
 
-The bootstrap runs 24 steps in order. Each step is idempotent -- it checks whether work has already been done before acting.
+The bootstrap runs 25 steps in order. Each step is idempotent -- it checks whether work has already been done before acting.
 
 ### 1. Xcode Command Line Tools
 
@@ -110,7 +110,7 @@ Downloads `zjstatus.wasm` from GitHub releases to `~/.config/zellij/plugins/`. T
 
 ### 20. Runtimes (mise)
 
-Runs `mise install` to install runtimes from `~/.config/mise/config.toml`: node 22, python 3.13, ruby 3.4, go 1.24. Uses an extended remote-fetch timeout with one retry.
+Parses runtimes from `~/.config/mise/config.toml` and runs `mise install <tool@version...>` so installs are limited to the stow-managed config (not global `~/.tool-versions`). Uses an extended remote-fetch timeout with one retry.
 
 ### 21. gcloud CLI
 
@@ -127,6 +127,15 @@ Installs CopyLess 2 and Magnet via `mas`. Prompts for App Store sign-in if not a
 ### 24. Rust and Cargo tools
 
 Installs Rust via `rustup-init` if not already present. Then installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
+
+### 25. Keyboard repeat speed
+
+Sets macOS keyboard repeat defaults:
+- `InitialKeyRepeat = 10`
+- `KeyRepeat = 1`
+- `ApplePressAndHoldEnabled = false`
+
+These settings make held arrow/backspace keys repeat faster in terminal and editor apps. Reopen terminal apps after setup to pick up changes.
 
 ### Cleanup
 
@@ -219,6 +228,7 @@ Dry-run is useful for understanding what the script does before committing to a 
 | `install_docker_desktop` | 22 | Install Docker Desktop |
 | `install_app_store_apps` | 23 | Install App Store apps |
 | `install_rust` / `install_cargo_tools` | 24 | Rust + Cargo tools |
+| `configure_keyboard_repeat` | 25 | Set keyboard repeat defaults |
 | `prune_old_backups` | -- | Keep 3 most recent backups |
 
 ## Troubleshooting
