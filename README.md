@@ -112,6 +112,7 @@ stow/
   amethyst/
     .config/amethyst/amethyst.yml
   claude/
+    .claude/CLAUDE.md                    # global Claude Code instructions
     .claude/skills/commit/SKILL.md       # imperative commit with co-author
     .claude/skills/pr/SKILL.md           # PR with summary + test plan
     .claude/skills/fix-issue/SKILL.md    # read issue, fix, test, commit
