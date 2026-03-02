@@ -760,8 +760,8 @@ configure_keyboard_repeat() {
 
   log "Configuring keyboard repeat speed"
 
-  local desired_initial="10"
-  local desired_repeat="1"
+  local desired_initial="15"
+  local desired_repeat="2"
   local desired_press_hold="0"
 
   local current_initial=""
