@@ -27,4 +27,7 @@ else
     icon="󰂎"
 fi
 
-printf "%s %d%%" "$icon" "$pct"
+case "${1:-pct}" in
+    icon) printf "%s" "$icon" ;;
+    *)    printf "%d%%" "$pct" ;;
+esac
