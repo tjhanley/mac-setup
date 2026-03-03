@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# label|command — fzf shows the label, we extract the command after |
-entries=(
-  "🌋 basalt|basalt"
-  "📊 btop|btop"
-  "🤖 claude|claude"
-  "🌳 claude --worktree|claude --worktree"
-  "📦 codex|codex"
-  "☸️  k9s|k9s"
-  "🐳 lazydocker|lazydocker"
-  "🔀 lazygit|lazygit"
-  "✏️  nvim|nvim"
-  "🏎️  sidecar|sidecar"
-  "📁 yazi|yazi"
+commands=(
+  "🌋 basalt"
+  "📊 btop"
+  "🤖 claude"
+  "🌳 claude --worktree"
+  "📦 codex"
+  "☸️  k9s"
+  "🐳 lazydocker"
+  "🔀 lazygit"
+  "✏️  nvim"
+  "🏎️  sidecar"
+  "📁 yazi"
 )
 
-selected=$(printf '%s\n' "${entries[@]}" | fzf --prompt="🚀 Launch > " --reverse --border=rounded --with-nth=1 --delimiter='|') || true
+selected=$(printf '%s\n' "${commands[@]}" | fzf --prompt="🚀 Launch > " --reverse --border=rounded) || true
 
 if [[ -n "$selected" ]]; then
-  # Word-splitting on $cmd is intentional (handles "claude --worktree")
-  cmd="${selected#*|}"
+  # Strip emoji prefix; second strip catches multi-codepoint emojis with extra spacing
+  cmd="${selected#* }"
+  cmd="${cmd# }"
+  # Word-splitting is intentional (handles "claude --worktree")
   zellij run -- $cmd
 fi
