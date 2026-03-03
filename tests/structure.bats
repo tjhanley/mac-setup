@@ -48,10 +48,6 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   git ls-files --error-unmatch stow/obsidian/.config/obsidian/obsidian.json >/dev/null 2>&1
 }
 
-@test "stow/amethyst contains config" {
-  [[ -f "$REPO_ROOT/stow/amethyst/.config/amethyst/amethyst.yml" ]]
-}
-
 @test "stow/yazi theme files are tracked in git" {
   # Files may be skip-worktree'd locally, so check git index
   cd "$REPO_ROOT"

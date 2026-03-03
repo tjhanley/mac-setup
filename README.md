@@ -6,7 +6,6 @@ Opinionated macOS bootstrap using:
 - `mise` for runtimes (node, python, ruby, go)
 - Rust + Cargo (Homebrew `rust`, with `rustup` toolchain management)
 - Catppuccin Mocha theming across Ghostty, Zellij, Starship, Zed, Yazi, bat, lazygit, eza, and FZF
-- Amethyst tiling window manager
 
 ## Disclaimer
 
@@ -111,8 +110,6 @@ stow/
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
   obsidian/
     .config/obsidian/obsidian.json
-  amethyst/
-    .config/amethyst/amethyst.yml
   claude/
     .claude/CLAUDE.md                    # global Claude Code instructions
     .claude/skills/commit/SKILL.md       # imperative commit with co-author
@@ -137,7 +134,7 @@ duf, fastfetch
 
 Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
-font-jetbrains-mono-nerd-font, amethyst
+font-jetbrains-mono-nerd-font
 
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
@@ -165,7 +162,6 @@ shell options, git config, runtimes, theme, files, and common tasks.
 - Re-running the script is safe and idempotent.
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
-- Open Amethyst once and grant Accessibility permissions when prompted.
 
 ## Tests
 
@@ -207,16 +203,3 @@ Use this when you want local app state in tracked files without committing it.
 # clear skip-worktree for managed paths
 ./scripts/skip-worktree.sh clear
 ```
-
-## Amethyst
-
-Amethyst is installed via Homebrew cask and configured from
-`stow/amethyst/.config/amethyst/amethyst.yml`. This repo enables
-`focus-follows-mouse: false` and leaves gaps/margins/keybindings at defaults.
-
-First run:
-- Launch Amethyst.
-- Grant Accessibility permissions (System Settings → Privacy & Security).
-
-If you want to exclude apps from tiling, add a floating list to
-`stow/amethyst/.config/amethyst/amethyst.yml` and re-run `./setup.sh` or `stow`.

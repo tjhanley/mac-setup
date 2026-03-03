@@ -54,7 +54,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - 1password, ghostty, raycast, zed, obsidian
 - brave-browser, spotify
 - docker-desktop, codex
-- gcloud-cli, amethyst
+- gcloud-cli
 - font-blex-mono-nerd-font, font-jetbrains-mono-nerd-font
 
 ### App Store (via mas)
@@ -139,7 +139,6 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
 - `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
-- `amethyst/` — `.config/amethyst/amethyst.yml`
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
