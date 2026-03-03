@@ -1,42 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-commands=(
-  basalt
-  btop
-  claude
-  "claude --worktree"
-  codex
-  k9s
-  lazydocker
-  lazygit
-  nvim
-  sidecar
-  yazi
+# label|command — fzf shows the label, we extract the command after |
+entries=(
+  "🌋 basalt|basalt"
+  "📊 btop|btop"
+  "🤖 claude|claude"
+  "🌳 claude --worktree|claude --worktree"
+  "📦 codex|codex"
+  "☸️  k9s|k9s"
+  "🐳 lazydocker|lazydocker"
+  "🔀 lazygit|lazygit"
+  "✏️  nvim|nvim"
+  "🏎️  sidecar|sidecar"
+  "📁 yazi|yazi"
 )
 
-declare -A icons=(
-  [basalt]="🌋"
-  [btop]="📊"
-  [claude]="🤖"
-  [claude --worktree]="🌳"
-  [codex]="📦"
-  [k9s]="☸️"
-  [lazydocker]="🐳"
-  [lazygit]="🔀"
-  [nvim]="✏️"
-  [sidecar]="🏎️"
-  [yazi]="📁"
-)
-
-selected=$(
-  for c in "${commands[@]}"; do
-    printf '%s %s\n' "${icons[$c]:-${icons[${c%% *}]:-}}" "$c"
-  done | fzf --prompt="🚀 Launch > " --reverse --border=rounded
-) || true
+selected=$(printf '%s\n' "${entries[@]}" | fzf --prompt="🚀 Launch > " --reverse --border=rounded --with-nth=1 --delimiter='|') || true
 
 if [[ -n "$selected" ]]; then
-  # Strip emoji prefix; word-splitting on $cmd is intentional (handles "claude --worktree")
-  cmd="${selected#* }"
+  # Word-splitting on $cmd is intentional (handles "claude --worktree")
+  cmd="${selected#*|}"
   zellij run -- $cmd
 fi
