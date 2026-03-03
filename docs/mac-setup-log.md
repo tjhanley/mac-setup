@@ -48,7 +48,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 - imagemagick (used by Snacks.image in Neovim)
-- tldr, htop, wget, trash, dust, duf, fastfetch
+- tldr, btop, wget, trash, dust, duf, fastfetch
 
 ### Casks/apps/fonts
 - 1password, ghostty, raycast, zed, obsidian
@@ -100,7 +100,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship: powerline-style with `catppuccin_mocha` palette.
 - Ghostty: `theme = "Catppuccin Mocha"`, BlexMono Nerd Font (IBM Plex Mono).
 - Zellij: `theme "catppuccin-mocha"` (built-in).
-- Zed: `Catppuccin Mocha` dark theme with catppuccin extensions and icon theme. Dank Mono buffer font (private, from iCloud), BlexMono Nerd Font for terminal. Auto-installs terraform, dockerfile, toml, make, env extensions. Claude (Anthropic) as default assistant model. Format on save, inlay hints enabled.
+- Zed: `Catppuccin Mocha` dark theme with catppuccin extensions and icon theme. Dank Mono buffer font (private, from iCloud), BlexMono Nerd Font for terminal. Auto-installs terraform, dockerfile, toml, make, env extensions. Claude (Anthropic) as default assistant model. Format on save, inlay hints enabled. Arrow keys disabled in vim normal/insert/visual modes (`keymap.json`).
 - Yazi: `catppuccin-mocha-blue` theme + Mocha tmTheme for syntax highlighting.
 
 ### Starship
@@ -114,13 +114,14 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Vim-like alt+hjkl keybinds.
 - Shaders available (cloned from `hackr-sh/ghostty-shaders` into `~/.local/share/ghostty/shaders`); commented-out examples in config.
 - Neovim integration: `ghostty.nvim` (config validation), `ghostty-theme-sync.nvim` (`:GhosttyTheme`), `tree-sitter-ghostty` (treesitter grammar).
+- Neovim arrow keys disabled in normal/insert/visual modes (`lua/config/keymaps.lua`, auto-loaded by LazyVim).
 - Zed extension auto-installed for Ghostty config syntax highlighting.
 
 ### Zellij
 - Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
-- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (lazygit, lazydocker, k9s, htop, yazi, fastfetch) in new floating panes.
+- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (lazygit, lazydocker, k9s, btop, yazi, fastfetch) in new floating panes.
 - zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
@@ -135,8 +136,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `ghostty/` — `.config/ghostty/config`
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`
 - `mise/` — `.config/mise/config.toml`
-- `zed/` — `.config/zed/settings.json`
-- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
+- `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
+- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
 - `amethyst/` — `.config/amethyst/amethyst.yml`
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test)
@@ -144,7 +145,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 
 ## macOS app config linking
-- Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`.
+- Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`. Zed keymap similarly linked (`keymap.json`).
 - Obsidian settings symlinked similarly. Config is seeded with `{}` if missing (required by basalt-tui).
 
 ## Repo hygiene

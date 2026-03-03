@@ -96,7 +96,7 @@ Current launcher apps:
 - claude
 - claude --worktree
 - codex
-- htop
+- btop
 - k9s
 - lazydocker
 - lazygit

@@ -329,6 +329,7 @@ stow_dotfiles() {
   backup_path "$HOME/.config/yazi"
   backup_path "$HOME/.config/raycast"
   backup_path "$HOME/Library/Application Support/Zed/settings.json"
+  backup_path "$HOME/Library/Application Support/Zed/keymap.json"
   backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
 
   log "Moving stow conflicts into backup"
@@ -345,6 +346,7 @@ stow_dotfiles() {
   move_conflict_target ".config/zellij/config.kdl"
   move_conflict_target ".config/mise/config.toml"
   move_conflict_target ".config/zed/settings.json"
+  move_conflict_target ".config/zed/keymap.json"
   move_conflict_target ".config/obsidian/obsidian.json"
   move_conflict_target ".config/yazi/theme.toml"
   move_conflict_target ".config/yazi/Catppuccin-mocha.tmTheme"
@@ -375,7 +377,8 @@ stow_nvim_plugins() {
     return
   fi
 
-  # Move known file-level plugin conflicts into backup before stowing.
+  # Move known file-level conflicts into backup before stowing.
+  move_conflict_target ".config/nvim/lua/config/keymaps.lua"
   move_conflict_target ".config/nvim/lua/plugins/ghostty.lua"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -467,6 +470,10 @@ configure_macos_app_links() {
     "$HOME/.config/zed/settings.json" \
     "$HOME/Library/Application Support/Zed/settings.json" \
     "Zed settings"
+  link_managed_file \
+    "$HOME/.config/zed/keymap.json" \
+    "$HOME/Library/Application Support/Zed/keymap.json" \
+    "Zed keymap"
   # Seed Obsidian config if it doesn't exist yet (basalt-tui needs it)
   local obsidian_cfg="$HOME/.config/obsidian/obsidian.json"
   if [[ ! -f "$obsidian_cfg" ]]; then

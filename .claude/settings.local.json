@@ -80,7 +80,10 @@
       "Bash(mkdir:*)",
       "Bash(rm:*)",
       "Bash(col:*)",
-      "Bash(mandoc:*)"
+      "Bash(mandoc:*)",
+      "Bash(/bin/cat:*)",
+      "WebFetch(domain:lazyvim-ambitious-devs.phillips.codes)",
+      "Bash(fd:*)"
     ]
   }
 }

@@ -57,7 +57,7 @@ See also: `man mac-setup` for the full system reference.
 10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
 11. Verifies git commit signing (1Password SSH agent, signing key)
 12. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
-13. Links macOS app configs (Zed, Obsidian) to stow-managed paths
+13. Links macOS app configs (Zed settings + keymap, Obsidian) to stow-managed paths
 14. Installs LazyVim starter (if no existing `~/.config/nvim`)
 15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
 16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
@@ -104,8 +104,10 @@ stow/
     .config/mise/config.toml
   zed/
     .config/zed/settings.json
+    .config/zed/keymap.json                    # arrow keys disabled in vim modes
   nvim/
     .config/nvim/lua/config/local.lua      # repo-managed local options (loaded by LazyVim options.lua)
+    .config/nvim/lua/config/keymaps.lua   # arrow keys disabled in n/i/v modes
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
   obsidian/
     .config/obsidian/obsidian.json
@@ -130,7 +132,7 @@ stow/
 Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
 tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
 bat, jq, zoxide, eza, yazi, kubectl, k9s, stern, awscli, lazydocker, zellij, mise, rust,
-rustup-init, cargo-binstall, imagemagick, mas, tldr, htop, wget, trash, dust,
+rustup-init, cargo-binstall, imagemagick, mas, tldr, btop, wget, trash, dust,
 duf, fastfetch
 
 Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
