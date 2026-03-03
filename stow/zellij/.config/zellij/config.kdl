@@ -22,6 +22,10 @@ keybinds {
     }
     pane {
         bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0; }
+        bind "H" { MovePane "Left"; }
+        bind "J" { MovePane "Down"; }
+        bind "K" { MovePane "Up"; }
+        bind "L" { MovePane "Right"; }
     }
 }
 
