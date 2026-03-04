@@ -6,39 +6,46 @@
 input=$(cat)
 
 # Catppuccin Mocha — truecolor ANSI
-BG_BLUE='\033[48;2;137;180;250m'
-BG_GREEN='\033[48;2;166;227;161m'
-BG_YELLOW='\033[48;2;249;226;175m'
-BG_MAUVE='\033[48;2;203;166;247m'
-FG_BASE='\033[38;2;30;30;46m'
-FG_DIM='\033[38;2;108;112;134m'   # Catppuccin Mocha overlay0 — for empty bar portion
+BG_BLUE='[48;2;137;180;250m'
+BG_GREEN='[48;2;166;227;161m'
+BG_YELLOW='[48;2;249;226;175m'
+BG_MAUVE='[48;2;203;166;247m'
+BG_TEAL='[48;2;148;226;213m'
+BG_PEACH='[48;2;250;179;135m'
+FG_BASE='[38;2;30;30;46m'
+FG_DIM='[38;2;108;112;134m'   # Catppuccin Mocha overlay0 — for empty bar portion
 
 # Foreground versions of segment bg colors — used for powerline arrow transitions
-FG_BLUE='\033[38;2;137;180;250m'
-FG_GREEN='\033[38;2;166;227;161m'
-FG_YELLOW='\033[38;2;249;226;175m'
-FG_MAUVE='\033[38;2;203;166;247m'
+FG_BLUE='[38;2;137;180;250m'
+FG_GREEN='[38;2;166;227;161m'
+FG_YELLOW='[38;2;249;226;175m'
+FG_MAUVE='[38;2;203;166;247m'
+FG_TEAL='[38;2;148;226;213m'
+FG_PEACH='[38;2;250;179;135m'
 
-BOLD='\033[1m'
-RESET='\033[0m'
+BOLD='[1m'
+RESET='[0m'
 
 # Nerd Font powerline glyphs (requires BlexMono Nerd Font)
-SEP=''   # U+E0B0 right-arrow: fg=prev_bg, bg=next_bg → seamless segment join
+SEP=''    # U+E0B0 right-arrow: fg=prev_bg, bg=next_bg → seamless segment join
 CAP_L='' # U+E0B6 left rounded cap: fg=first_seg_bg, bg=terminal
 CAP_R='' # U+E0B4 right rounded cap: fg=last_seg_bg, bg=terminal
 CHIP=''   # U+F2DB fa-microchip — model glyph
 BRANCH='' # U+E0A0 Powerline VCS branch glyph
+ROBOT=''  # U+F544 fa-robot — agent glyph
 
 # Extract all fields in one jq call
-IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS < <(
+IFS=$'\x1f' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS STYLE AGENT < <(
   echo "$input" | jq -r '[
     (.model.display_name // "claude"),
     (.workspace.current_dir // ""),
     ((.context_window.used_percentage // 0) | floor | tostring),
     (.cost.total_cost_usd // 0 | tostring),
     (.vim.mode // ""),
-    (.cost.total_duration_ms // 0 | tostring)
-  ] | @tsv'
+    (.cost.total_duration_ms // 0 | tostring),
+    (.output_style.name // "default"),
+    (.agent.name // "")
+  ] | join("\u001f")'
 )
 
 # Git status — cached to avoid lag on large repos
@@ -94,34 +101,44 @@ fi
 VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
 [ "$VIM_MODE" = "NORMAL" ] && VIM_BG="$BG_YELLOW" && VIM_FG="$FG_YELLOW"
 
-# Build line — each transition uses: fg=prev_bg, bg=next_bg, then SEP char
-# This creates seamless Nerd Font powerline arrows between colored segments
+# Build line — LAST_FG tracks the previous segment's bg color for seamless transitions
+# and is used for the final right rounded cap
 
 # — Left rounded cap + Model segment —
 LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD} ${CHIP} ${MODEL} "
+LAST_FG="$FG_BLUE"
 
 if [ "${IS_GIT:-0}" = "1" ]; then
     GIT_TEXT="${BRANCH} ${BRANCH_NAME}"
     [ "${STAGED:-0}"   -gt 0 ] && GIT_TEXT="${GIT_TEXT} +${STAGED}"
     [ "${MODIFIED:-0}" -gt 0 ] && GIT_TEXT="${GIT_TEXT} ~${MODIFIED}"
-
-    # Model → Git
-    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
-    # Git → Context
-    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
-else
-    # Model → Context
-    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
+    LINE="${LINE}${LAST_FG}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
+    LAST_FG="$GIT_FG"
 fi
 
+# Context + cost + duration segment
+LINE="${LINE}${LAST_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
+LAST_FG="$FG_MAUVE"
+
+# Output style — teal pill, hidden when style is "default"
+if [ -n "$STYLE" ] && [ "$STYLE" != "default" ]; then
+    LINE="${LINE}${LAST_FG}${BG_TEAL}${SEP}${FG_BASE}${BOLD} ${STYLE} "
+    LAST_FG="$FG_TEAL"
+fi
+
+# Agent — peach pill, only shown when --agent flag is active
+if [ -n "$AGENT" ]; then
+    LINE="${LINE}${LAST_FG}${BG_PEACH}${SEP}${FG_BASE}${BOLD} ${ROBOT} ${AGENT} "
+    LAST_FG="$FG_PEACH"
+fi
+
+# Vim mode — only shown when vim mode is enabled
 if [ -n "$VIM_MODE" ]; then
-    # Context → Vim
-    LINE="${LINE}${FG_MAUVE}${VIM_BG}${SEP}${FG_BASE}${BOLD} ${VIM_MODE} "
-    # Vim → right rounded cap
-    LINE="${LINE}${RESET}${VIM_FG}${CAP_R}${RESET}"
-else
-    # Context → right rounded cap
-    LINE="${LINE}${RESET}${FG_MAUVE}${CAP_R}${RESET}"
+    LINE="${LINE}${LAST_FG}${VIM_BG}${SEP}${FG_BASE}${BOLD} ${VIM_MODE} "
+    LAST_FG="$VIM_FG"
 fi
+
+# Right rounded cap using last segment's color
+LINE="${LINE}${RESET}${LAST_FG}${CAP_R}${RESET}"
 
 printf '%b\n' "$LINE"
