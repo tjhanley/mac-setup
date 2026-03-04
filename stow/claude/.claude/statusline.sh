@@ -23,9 +23,11 @@ BOLD='\033[1m'
 RESET='\033[0m'
 
 # Nerd Font powerline glyphs (requires BlexMono Nerd Font)
-SEP=''   # U+E0B0 right-arrow: fg=prev_bg, bg=next_bg → seamless segment join
-CAP_L='' # U+E0B6 left rounded cap: fg=first_seg_bg, bg=terminal
-CAP_R='' # U+E0B4 right rounded cap: fg=last_seg_bg, bg=terminal
+SEP=''   # U+E0B0 right-arrow: fg=prev_bg, bg=next_bg → seamless segment join
+CAP_L='' # U+E0B6 left rounded cap: fg=first_seg_bg, bg=terminal
+CAP_R='' # U+E0B4 right rounded cap: fg=last_seg_bg, bg=terminal
+CHIP=''   # U+F2DB fa-microchip — model glyph
+BRANCH='' # U+E0A0 Powerline VCS branch glyph
 
 # Extract all fields in one jq call
 IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
@@ -52,22 +54,22 @@ cache_is_stale() {
 
 if cache_is_stale; then
     if [ -n "$DIR" ] && git -C "$DIR" rev-parse --git-dir > /dev/null 2>&1; then
-        BRANCH=$(git -C "$DIR" branch --show-current 2>/dev/null)
+        BRANCH_NAME=$(git -C "$DIR" branch --show-current 2>/dev/null)
         STAGED=$(git -C "$DIR" diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
         MODIFIED=$(git -C "$DIR" diff --numstat 2>/dev/null | wc -l | tr -d ' ')
-        printf '1|%s|%s|%s\n' "$BRANCH" "$STAGED" "$MODIFIED" > "$CACHE_FILE"
+        printf '1|%s|%s|%s\n' "$BRANCH_NAME" "$STAGED" "$MODIFIED" > "$CACHE_FILE"
     else
         printf '0|||\n' > "$CACHE_FILE"
     fi
 fi
 
-IFS='|' read -r IS_GIT BRANCH STAGED MODIFIED < "$CACHE_FILE"
+IFS='|' read -r IS_GIT BRANCH_NAME STAGED MODIFIED < "$CACHE_FILE"
 
-# Context bar — thin ─ lines, dark fg for filled, dim fg for empty (no shading artifacts)
+# Context bar — ━ (heavy) for filled, ─ (light) for empty — clear contrast, no shading artifacts
 FILLED=$((PCT * 10 / 100))
 EMPTY=$((10 - FILLED))
 BAR=""
-[ "$FILLED" -gt 0 ] && BAR="${FG_BASE}$(printf "%${FILLED}s" | tr ' ' '─')"
+[ "$FILLED" -gt 0 ] && BAR="${FG_BASE}$(printf "%${FILLED}s" | tr ' ' '━')"
 [ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
 BAR="${BAR}${FG_BASE}"  # restore fg after bar
 
@@ -89,16 +91,16 @@ VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
 # Build line — each transition uses: fg=prev_bg, bg=next_bg, then SEP char
 # This creates seamless Nerd Font powerline arrows between colored segments
 
-# --- Left rounded cap + Model segment ---
-LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD}  ${MODEL} "
+# — Left rounded cap + Model segment —
+LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD} ${CHIP} ${MODEL} "
 
 if [ "${IS_GIT:-0}" = "1" ]; then
-    GIT_TEXT="${BRANCH}"
+    GIT_TEXT="${BRANCH} ${BRANCH_NAME}"
     [ "${STAGED:-0}"   -gt 0 ] && GIT_TEXT="${GIT_TEXT} +${STAGED}"
     [ "${MODIFIED:-0}" -gt 0 ] && GIT_TEXT="${GIT_TEXT} ~${MODIFIED}"
 
     # Model → Git
-    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD}  ${GIT_TEXT} "
+    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
     # Git → Context
     LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
 else
