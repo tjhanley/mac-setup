@@ -1,6 +1,7 @@
 #!/bin/bash
 # Claude Code status line — Catppuccin Mocha powerline style
 # Receives JSON session data on stdin, prints a single colored line
+# Requires a Nerd Font (BlexMono Nerd Font configured in Ghostty)
 
 input=$(cat)
 
@@ -10,8 +11,19 @@ BG_GREEN='\033[48;2;166;227;161m'
 BG_YELLOW='\033[48;2;249;226;175m'
 BG_MAUVE='\033[48;2;203;166;247m'
 FG_BASE='\033[38;2;30;30;46m'
+
+# Foreground versions of segment bg colors — used for powerline arrow transitions
+FG_BLUE='\033[38;2;137;180;250m'
+FG_GREEN='\033[38;2;166;227;161m'
+FG_YELLOW='\033[38;2;249;226;175m'
+FG_MAUVE='\033[38;2;203;166;247m'
+
 BOLD='\033[1m'
 RESET='\033[0m'
+
+# Nerd Font powerline right-arrow (U+E0B0)
+# Arrow fg = prev segment bg, arrow bg = next segment bg → seamless transition
+SEP=''
 
 # Extract all fields in one jq call
 IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
@@ -59,35 +71,46 @@ BAR=""
 # Cost formatting
 COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
 
-# Separator — reset colors then half-block
-SEP="${RESET}▌"
-
-# --- Model segment (always shown) ---
-LINE="${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
-
-# --- Git segment (only in git repos) ---
+# Determine git bg/fg colors based on dirty state
+GIT_BG="$BG_GREEN"; GIT_FG="$FG_GREEN"
 if [ "${IS_GIT:-0}" = "1" ]; then
-    GIT_BG="$BG_GREEN"
     GIT_DIRTY=0
     [ "${STAGED:-0}" -gt 0 ] || [ "${MODIFIED:-0}" -gt 0 ] && GIT_DIRTY=1
-    [ "$GIT_DIRTY" = "1" ] && GIT_BG="$BG_YELLOW"
+    [ "$GIT_DIRTY" = "1" ] && GIT_BG="$BG_YELLOW" && GIT_FG="$FG_YELLOW"
+fi
 
-    GIT_TEXT=" ${BRANCH}"
+# Determine vim bg/fg colors
+VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
+[ "$VIM_MODE" = "NORMAL" ] && VIM_BG="$BG_YELLOW" && VIM_FG="$FG_YELLOW"
+
+# Build line — each transition uses: fg=prev_bg, bg=next_bg, then SEP char
+# This creates seamless Nerd Font powerline arrows between colored segments
+
+# --- Model segment ---
+LINE="${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
+
+if [ "${IS_GIT:-0}" = "1" ]; then
+    GIT_TEXT="${BRANCH}"
     [ "${STAGED:-0}"   -gt 0 ] && GIT_TEXT="${GIT_TEXT} +${STAGED}"
     [ "${MODIFIED:-0}" -gt 0 ] && GIT_TEXT="${GIT_TEXT} ~${MODIFIED}"
 
-    LINE="${LINE}${SEP}${GIT_BG}${FG_BASE}${BOLD}${GIT_TEXT} "
+    # Model → Git
+    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
+    # Git → Context
+    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+else
+    # Model → Context
+    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
 fi
 
-# --- Context + cost segment (always shown) ---
-LINE="${LINE}${SEP}${BG_MAUVE}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
-
-# --- Vim mode segment (only when vim mode enabled) ---
 if [ -n "$VIM_MODE" ]; then
-    VIM_BG="$BG_GREEN"
-    [ "$VIM_MODE" = "NORMAL" ] && VIM_BG="$BG_YELLOW"
-    LINE="${LINE}${SEP}${VIM_BG}${FG_BASE}${BOLD} ${VIM_MODE} "
+    # Context → Vim
+    LINE="${LINE}${FG_MAUVE}${VIM_BG}${SEP}${FG_BASE}${BOLD} ${VIM_MODE} "
+    # Vim → terminal bg
+    LINE="${LINE}${RESET}${VIM_FG}${SEP}${RESET}"
+else
+    # Context → terminal bg
+    LINE="${LINE}${RESET}${FG_MAUVE}${SEP}${RESET}"
 fi
 
-LINE="${LINE}${RESET}"
 printf '%b\n' "$LINE"
