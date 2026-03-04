@@ -177,23 +177,6 @@ ensure_xcode_clt() {
     fi
   fi
 
-  # Accept the Xcode license only when full Xcode.app is installed.
-  # CLT-only installs have a xcodebuild stub that errors with "requires Xcode" —
-  # in that case there is no separate license to accept.
-  if [[ -d /Applications/Xcode.app ]]; then
-    if ! xcodebuild -license check >/dev/null 2>&1; then
-      if [[ "$DRY_RUN" -eq 1 ]]; then
-        print -P "%F{yellow}dry-run:%f sudo xcodebuild -license accept"
-      else
-        warn "Xcode license requires acceptance; requesting sudo"
-        sudo xcodebuild -license accept
-        ok "Xcode license accepted"
-      fi
-    else
-      ok "Xcode license already accepted"
-    fi
-  fi
-
   ok "Xcode CLT ready"
 }
 
