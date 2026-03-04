@@ -7,6 +7,7 @@
 **/svcacct.json
 
 # AI tooling
+settings.local.json
 **/*.plan.md
 .specstory/
 .specstory/.what-is-this.md
