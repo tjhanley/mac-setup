@@ -11,6 +11,7 @@ BG_GREEN='\033[48;2;166;227;161m'
 BG_YELLOW='\033[48;2;249;226;175m'
 BG_MAUVE='\033[48;2;203;166;247m'
 FG_BASE='\033[38;2;30;30;46m'
+FG_DIM='\033[38;2;108;112;134m'   # Catppuccin Mocha overlay0 — for empty bar portion
 
 # Foreground versions of segment bg colors — used for powerline arrow transitions
 FG_BLUE='\033[38;2;137;180;250m'
@@ -62,12 +63,13 @@ fi
 
 IFS='|' read -r IS_GIT BRANCH STAGED MODIFIED < "$CACHE_FILE"
 
-# Context bar (10 chars wide)
+# Context bar — thin ─ lines, dark fg for filled, dim fg for empty (no shading artifacts)
 FILLED=$((PCT * 10 / 100))
 EMPTY=$((10 - FILLED))
 BAR=""
-[ "$FILLED" -gt 0 ] && BAR=$(printf "%${FILLED}s" | tr ' ' '▓')
-[ "$EMPTY"  -gt 0 ] && BAR="${BAR}$(printf "%${EMPTY}s" | tr ' ' '░')"
+[ "$FILLED" -gt 0 ] && BAR="${FG_BASE}$(printf "%${FILLED}s" | tr ' ' '─')"
+[ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
+BAR="${BAR}${FG_BASE}"  # restore fg after bar
 
 # Cost formatting
 COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
@@ -88,7 +90,7 @@ VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
 # This creates seamless Nerd Font powerline arrows between colored segments
 
 # --- Left rounded cap + Model segment ---
-LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
+LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD}  ${MODEL} "
 
 if [ "${IS_GIT:-0}" = "1" ]; then
     GIT_TEXT="${BRANCH}"
@@ -96,12 +98,12 @@ if [ "${IS_GIT:-0}" = "1" ]; then
     [ "${MODIFIED:-0}" -gt 0 ] && GIT_TEXT="${GIT_TEXT} ~${MODIFIED}"
 
     # Model → Git
-    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
-    # Git → Context (numbers first so bar at end doesn't look like padding)
-    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${PCT}% ${COST_FMT} ${BAR} "
+    LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD}  ${GIT_TEXT} "
+    # Git → Context
+    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
 else
     # Model → Context
-    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${PCT}% ${COST_FMT} ${BAR} "
+    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
 fi
 
 if [ -n "$VIM_MODE" ]; then
