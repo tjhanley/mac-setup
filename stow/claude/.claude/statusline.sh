@@ -25,7 +25,9 @@ IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
 )
 
 # Git status — cached to avoid lag on large repos
-CACHE_FILE="/tmp/statusline-git-cache"
+# Key cache by directory so switching projects gets fresh git info
+CACHE_DIR_KEY=$(printf '%s' "$DIR" | tr '/' '_')
+CACHE_FILE="/tmp/statusline-git-cache-${CACHE_DIR_KEY}"
 CACHE_MAX_AGE=5  # seconds
 
 cache_is_stale() {
