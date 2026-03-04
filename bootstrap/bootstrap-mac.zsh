@@ -969,38 +969,32 @@ ensure_ssh_key() {
 
   if [[ -f "$key_path" ]]; then
     ok "SSH key already exists: $key_path"
-  else
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-      print -P "%F{yellow}dry-run:%f ssh-keygen -t ed25519 -> $key_path"
-    else
-      run_cmd mkdir -p "$HOME/.ssh"
-      chmod 700 "$HOME/.ssh"
-
-      local email=""
-      email="$(git config --global user.email 2>/dev/null || true)"
-
-      print -P "%F{cyan}Generating SSH key (ed25519)...%f"
-      if [[ -n "$email" ]]; then
-        ssh-keygen -t ed25519 -C "$email" -f "$key_path"
-      else
-        ssh-keygen -t ed25519 -f "$key_path"
-      fi
-      ok "SSH key generated: $key_path"
-    fi
-  fi
-
-  # Upload to GitHub via gh CLI
-  if [[ ! -f "$pub_path" ]]; then
-    return
-  fi
-
-  if ! need_cmd gh; then
-    warn "gh not found; install GitHub CLI to upload SSH key"
     return
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f ssh-keygen -t ed25519 -> $key_path"
     print -P "%F{yellow}dry-run:%f gh ssh-key add $pub_path"
+    return
+  fi
+
+  run_cmd mkdir -p "$HOME/.ssh"
+  chmod 700 "$HOME/.ssh"
+
+  local email=""
+  email="$(git config --global user.email 2>/dev/null || true)"
+
+  print -P "%F{cyan}Generating SSH key (ed25519)...%f"
+  if [[ -n "$email" ]]; then
+    ssh-keygen -t ed25519 -C "$email" -f "$key_path"
+  else
+    ssh-keygen -t ed25519 -f "$key_path"
+  fi
+  ok "SSH key generated: $key_path"
+
+  # Upload the newly created key to GitHub
+  if ! need_cmd gh; then
+    warn "gh not found — upload manually: gh ssh-key add $pub_path"
     return
   fi
 
@@ -1013,19 +1007,10 @@ ensure_ssh_key() {
   hostname="$(scutil --get LocalHostName 2>/dev/null || hostname -s)"
   local key_title="mac-setup ${hostname} $(date +%Y-%m-%d)"
 
-  # Check if this key is already uploaded
-  local pub_fingerprint=""
-  pub_fingerprint="$(ssh-keygen -lf "$pub_path" | awk '{print $2}')"
-  if gh ssh-key list 2>/dev/null | grep -q "$pub_fingerprint"; then
-    ok "SSH key already uploaded to GitHub"
-    return
-  fi
-
   if gh ssh-key add "$pub_path" --title "$key_title"; then
     ok "SSH key uploaded to GitHub as: $key_title"
   else
-    warn "Failed to upload SSH key to GitHub"
-    warn "Upload manually: gh ssh-key add $pub_path --title \"$key_title\""
+    warn "Failed to upload SSH key — run manually: gh ssh-key add $pub_path --title \"$key_title\""
   fi
 }
 
