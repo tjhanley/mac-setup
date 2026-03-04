@@ -159,6 +159,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `README.md` with usage, structure, and customization notes.
 - `CLAUDE.md` / `AGENTS.md` — agent instructions for Claude Code and Codex to keep docs in sync.
 - `scripts/export-zed-extensions.sh` for syncing installed Zed extensions.
+- `scripts/restow.sh` — re-applies all stow packages after a pull (`stow --restow` on every package under `stow/`).
 - `scripts/skip-worktree.sh` for managing local skip-worktree paths (stored in `.local/skip-worktree.paths`).
 - `tests/` — bats-core test suite (structure, syntax, bootstrap dry-run). CI via `.github/workflows/ci.yml` on push/PR to main.
 - `man/man7/mac-setup.7` — custom man page (`man mac-setup`); symlinked into Homebrew's man path during bootstrap. Includes zellij keybinds reference (resize, move, pane, custom).

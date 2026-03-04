@@ -179,6 +179,8 @@ bats tests/
 - Update runtime versions in `stow/mise/.config/mise/config.toml`
 - Export installed Zed extensions into `stow/zed/.config/zed/settings.json`:
   `./scripts/export-zed-extensions.sh`
+- Re-apply all stow packages after a pull:
+  `./scripts/restow.sh`
 - Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
   `./scripts/skip-worktree.sh --help`
 - Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)
