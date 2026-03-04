@@ -48,3 +48,46 @@ if cache_is_stale; then
 fi
 
 IFS='|' read -r IS_GIT BRANCH STAGED MODIFIED < "$CACHE_FILE"
+
+# Context bar (10 chars wide)
+FILLED=$((PCT * 10 / 100))
+EMPTY=$((10 - FILLED))
+BAR=""
+[ "$FILLED" -gt 0 ] && BAR=$(printf "%${FILLED}s" | tr ' ' '▓')
+[ "$EMPTY"  -gt 0 ] && BAR="${BAR}$(printf "%${EMPTY}s" | tr ' ' '░')"
+
+# Cost formatting
+COST_FMT=$(printf '$%.2f' "$COST")
+
+# Separator — reset colors then half-block
+SEP="${RESET}▌"
+
+# --- Model segment (always shown) ---
+LINE="${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
+
+# --- Git segment (only in git repos) ---
+if [ "${IS_GIT:-0}" = "1" ]; then
+    GIT_BG="$BG_GREEN"
+    GIT_DIRTY=0
+    [ "${STAGED:-0}" -gt 0 ] || [ "${MODIFIED:-0}" -gt 0 ] && GIT_DIRTY=1
+    [ "$GIT_DIRTY" = "1" ] && GIT_BG="$BG_YELLOW"
+
+    GIT_TEXT=" ${BRANCH}"
+    [ "${STAGED:-0}"   -gt 0 ] && GIT_TEXT="${GIT_TEXT} +${STAGED}"
+    [ "${MODIFIED:-0}" -gt 0 ] && GIT_TEXT="${GIT_TEXT} ~${MODIFIED}"
+
+    LINE="${LINE}${SEP}${GIT_BG}${FG_BASE}${BOLD}${GIT_TEXT} "
+fi
+
+# --- Context + cost segment (always shown) ---
+LINE="${LINE}${SEP}${BG_MAUVE}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+
+# --- Vim mode segment (only when vim mode enabled) ---
+if [ -n "$VIM_MODE" ]; then
+    VIM_BG="$BG_GREEN"
+    [ "$VIM_MODE" = "NORMAL" ] && VIM_BG="$BG_YELLOW"
+    LINE="${LINE}${SEP}${VIM_BG}${FG_BASE}${BOLD} ${VIM_MODE} "
+fi
+
+LINE="${LINE}${RESET}"
+printf '%b\n' "$LINE"
