@@ -139,9 +139,16 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
 - `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json`
-- `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test)
+- `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
+
+### Claude Code status line
+- File: `stow/claude/.claude/statusline.sh` (stowed to `~/.claude/statusline.sh`).
+- Activated via the `statusLine` key in `~/.claude/settings.json`.
+- Single powerline-style line with four segments: model name, git branch + dirty indicator, context usage bar + session cost, vim mode pill.
+- Colors: Catppuccin Mocha truecolor — Blue for model name, Green for clean git branch and INSERT mode pill, Yellow for dirty git branch and NORMAL mode pill, Mauve for context % bar and session cost. Vim mode pill is omitted when vim mode is not active.
+- Git status is cached per directory at `/tmp/statusline-git-cache-<dir>` with a 5-second TTL to avoid repeated subprocess calls on every render.
 
 ## macOS app config linking
 - Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`. Zed keymap similarly linked (`keymap.json`).

@@ -117,6 +117,7 @@ stow/
     .claude/skills/fix-issue/SKILL.md    # read issue, fix, test, commit
     .claude/skills/simplify/SKILL.md     # review changed code, simplify, fix issues
     .claude/skills/test/SKILL.md         # run tests, diagnose and fix failures
+    .claude/statusline.sh                # Catppuccin Mocha powerline status line for Claude Code
   eza/
     .config/eza/theme.yml                # Catppuccin Mocha theme
   yazi/
