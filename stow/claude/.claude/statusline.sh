@@ -21,9 +21,10 @@ FG_MAUVE='\033[38;2;203;166;247m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-# Nerd Font powerline right-arrow (U+E0B0)
-# Arrow fg = prev segment bg, arrow bg = next segment bg → seamless transition
-SEP=''
+# Nerd Font powerline glyphs (requires BlexMono Nerd Font)
+SEP=''   # U+E0B0 right-arrow: fg=prev_bg, bg=next_bg → seamless segment join
+CAP_L='' # U+E0B6 left rounded cap: fg=first_seg_bg, bg=terminal
+CAP_R='' # U+E0B4 right rounded cap: fg=last_seg_bg, bg=terminal
 
 # Extract all fields in one jq call
 IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
@@ -86,8 +87,8 @@ VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
 # Build line — each transition uses: fg=prev_bg, bg=next_bg, then SEP char
 # This creates seamless Nerd Font powerline arrows between colored segments
 
-# --- Model segment ---
-LINE="${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
+# --- Left rounded cap + Model segment ---
+LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD} ${MODEL} "
 
 if [ "${IS_GIT:-0}" = "1" ]; then
     GIT_TEXT="${BRANCH}"
@@ -96,21 +97,21 @@ if [ "${IS_GIT:-0}" = "1" ]; then
 
     # Model → Git
     LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
-    # Git → Context
-    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+    # Git → Context (numbers first so bar at end doesn't look like padding)
+    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${PCT}% ${COST_FMT} ${BAR} "
 else
     # Model → Context
-    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${PCT}% ${COST_FMT} ${BAR} "
 fi
 
 if [ -n "$VIM_MODE" ]; then
     # Context → Vim
     LINE="${LINE}${FG_MAUVE}${VIM_BG}${SEP}${FG_BASE}${BOLD} ${VIM_MODE} "
-    # Vim → terminal bg
-    LINE="${LINE}${RESET}${VIM_FG}${SEP}${RESET}"
+    # Vim → right rounded cap
+    LINE="${LINE}${RESET}${VIM_FG}${CAP_R}${RESET}"
 else
-    # Context → terminal bg
-    LINE="${LINE}${RESET}${FG_MAUVE}${SEP}${RESET}"
+    # Context → right rounded cap
+    LINE="${LINE}${RESET}${FG_MAUVE}${CAP_R}${RESET}"
 fi
 
 printf '%b\n' "$LINE"
