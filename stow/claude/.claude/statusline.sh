@@ -23,3 +23,26 @@ IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
     (.vim.mode // "")
   ] | @tsv'
 )
+
+# Git status — cached to avoid lag on large repos
+CACHE_FILE="/tmp/statusline-git-cache"
+CACHE_MAX_AGE=5  # seconds
+
+cache_is_stale() {
+    [ ! -f "$CACHE_FILE" ] && return 0
+    local age=$(( $(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || stat -c %Y "$CACHE_FILE" 2>/dev/null || echo 0) ))
+    [ "$age" -gt "$CACHE_MAX_AGE" ]
+}
+
+if cache_is_stale; then
+    if [ -n "$DIR" ] && git -C "$DIR" rev-parse --git-dir > /dev/null 2>&1; then
+        BRANCH=$(git -C "$DIR" branch --show-current 2>/dev/null)
+        STAGED=$(git -C "$DIR" diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
+        MODIFIED=$(git -C "$DIR" diff --numstat 2>/dev/null | wc -l | tr -d ' ')
+        printf '1|%s|%s|%s\n' "$BRANCH" "$STAGED" "$MODIFIED" > "$CACHE_FILE"
+    else
+        printf '0|||\n' > "$CACHE_FILE"
+    fi
+fi
+
+IFS='|' read -r IS_GIT BRANCH STAGED MODIFIED < "$CACHE_FILE"
