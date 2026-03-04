@@ -30,13 +30,14 @@ CHIP=''   # U+F2DB fa-microchip — model glyph
 BRANCH='' # U+E0A0 Powerline VCS branch glyph
 
 # Extract all fields in one jq call
-IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE < <(
+IFS=$'\t' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS < <(
   echo "$input" | jq -r '[
     (.model.display_name // "claude"),
     (.workspace.current_dir // ""),
     ((.context_window.used_percentage // 0) | floor | tostring),
     (.cost.total_cost_usd // 0 | tostring),
-    (.vim.mode // "")
+    (.vim.mode // ""),
+    (.cost.total_duration_ms // 0 | tostring)
   ] | @tsv'
 )
 
@@ -73,8 +74,13 @@ BAR=""
 [ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
 BAR="${BAR}${FG_BASE}"  # restore fg after bar
 
-# Cost formatting
+# Cost and duration formatting
 COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
+DURATION_FMT=$(awk -v ms="$DURATION_MS" 'BEGIN {
+    s = int(ms / 1000); m = int(s / 60); h = int(m / 60)
+    if (h > 0) printf "%dh%dm", h, m % 60
+    else        printf "%dm", m
+}')
 
 # Determine git bg/fg colors based on dirty state
 GIT_BG="$BG_GREEN"; GIT_FG="$FG_GREEN"
@@ -102,10 +108,10 @@ if [ "${IS_GIT:-0}" = "1" ]; then
     # Model → Git
     LINE="${LINE}${FG_BLUE}${GIT_BG}${SEP}${FG_BASE}${BOLD} ${GIT_TEXT} "
     # Git → Context
-    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+    LINE="${LINE}${GIT_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
 else
     # Model → Context
-    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} "
+    LINE="${LINE}${FG_BLUE}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
 fi
 
 if [ -n "$VIM_MODE" ]; then
