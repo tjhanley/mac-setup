@@ -349,6 +349,27 @@ stow_dotfiles() {
   ok "Dotfiles stowed"
 }
 
+configure_claude_settings() {
+  log "Configuring Claude Code settings"
+
+  local settings="$HOME/.claude/settings.json"
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f merge statusLine into $settings"
+    return
+  fi
+
+  mkdir -p "$HOME/.claude"
+  [[ -f "$settings" ]] || echo '{}' > "$settings"
+
+  local tmp
+  tmp=$(mktemp)
+  jq '.statusLine = {"type": "command", "command": "~/.claude/statusline.sh"}' "$settings" > "$tmp" \
+    && mv "$tmp" "$settings"
+
+  ok "Claude Code statusLine configured"
+}
+
 stow_nvim_plugins() {
   log "Stowing Neovim plugin configs"
 
@@ -1160,6 +1181,7 @@ main() {
   fi
 
   stow_dotfiles
+  configure_claude_settings
   install_man_page
   install_icloud_fonts
   ensure_git_identity
