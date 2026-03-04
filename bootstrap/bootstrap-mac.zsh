@@ -1029,52 +1029,6 @@ ensure_ssh_key() {
   fi
 }
 
-ensure_commit_signing() {
-  log "Checking git commit signing (1Password SSH)"
-
-  local op_sign="/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-  local agent_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-
-  if [[ ! -x "$op_sign" ]]; then
-    warn "1Password not found at $op_sign"
-    warn "Install 1Password and enable the SSH agent in Settings > Developer"
-    return
-  fi
-  ok "op-ssh-sign found"
-
-  if [[ ! -S "$agent_sock" ]]; then
-    warn "1Password SSH agent socket not found"
-    warn "Open 1Password > Settings > Developer > enable 'SSH Agent'"
-    return
-  fi
-  ok "1Password SSH agent is running"
-
-  local signing_key=""
-  signing_key="$(git config --global user.signingkey 2>/dev/null || true)"
-  if [[ -z "$signing_key" ]]; then
-    local pub_path="$HOME/.ssh/id_ed25519.pub"
-    if [[ -f "$pub_path" ]]; then
-      local pubkey
-      pubkey="$(cat "$pub_path")"
-      local local_config="$HOME/.gitconfig.local"
-      git config --file "$local_config" user.signingkey "$pubkey"
-      ok "Signing key set from $pub_path (in ~/.gitconfig.local)"
-      signing_key="$pubkey"
-    else
-      warn "No git signing key configured and no SSH public key found"
-      warn "Set one with: git config --global user.signingkey '<your-ssh-public-key>'"
-      return
-    fi
-  fi
-  ok "Signing key configured: ${signing_key:0:30}..."
-
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f would verify commit signing"
-    return
-  fi
-
-  ok "Git commit signing is ready (1Password SSH)"
-}
 
 install_icloud_fonts() {
   log "Installing fonts from iCloud Drive"
@@ -1186,7 +1140,6 @@ main() {
   install_icloud_fonts
   ensure_git_identity
   ensure_ssh_key
-  ensure_commit_signing
   install_ghostty_shaders
   configure_macos_app_links
   install_lazyvim
