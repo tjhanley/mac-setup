@@ -57,7 +57,7 @@ BAR=""
 [ "$EMPTY"  -gt 0 ] && BAR="${BAR}$(printf "%${EMPTY}s" | tr ' ' '░')"
 
 # Cost formatting
-COST_FMT=$(printf '$%.2f' "$COST")
+COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
 
 # Separator — reset colors then half-block
 SEP="${RESET}▌"
