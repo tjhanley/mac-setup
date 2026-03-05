@@ -2,28 +2,28 @@
   {
     "context": "vim_mode == normal",
     "bindings": {
-      "up": "workspace::NoOp",
-      "down": "workspace::NoOp",
-      "left": "workspace::NoOp",
-      "right": "workspace::NoOp"
+      "up": null,
+      "down": null,
+      "left": null,
+      "right": null
     }
   },
   {
     "context": "vim_mode == visual",
     "bindings": {
-      "up": "workspace::NoOp",
-      "down": "workspace::NoOp",
-      "left": "workspace::NoOp",
-      "right": "workspace::NoOp"
+      "up": null,
+      "down": null,
+      "left": null,
+      "right": null
     }
   },
   {
     "context": "vim_mode == insert",
     "bindings": {
-      "up": "workspace::NoOp",
-      "down": "workspace::NoOp",
-      "left": "workspace::NoOp",
-      "right": "workspace::NoOp"
+      "up": null,
+      "down": null,
+      "left": null,
+      "right": null
     }
   }
 ]
