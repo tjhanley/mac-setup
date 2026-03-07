@@ -25,6 +25,7 @@ Icon
 !.env.example
 .secrets
 .local/
+.claude/settings.local.json
 
 # Backups
 config-backups/

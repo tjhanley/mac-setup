@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./setup.sh:*)",
+      "Bash(MANPATH=\"/Users/tom/Workspace/mac-setup/man:\" man mac-setup:*)",
+      "Bash(MANPATH=\"$HOME/Workspace/mac-setup/man:\" man mac-setup:*)",
+      "Bash(printf n\\\\ny\\\\n:*)",
+      "Bash(echo TERM_PROGRAM=$TERM_PROGRAM ZELLIJ=$ZELLIJ:*)",
+      "Bash(/tmp/mailmap:*)",
+      "Bash(/Users/tom/.local/share/mise/installs/lazydocker/0.24.4/lazydocker:*)"
+    ]
+  }
+}
