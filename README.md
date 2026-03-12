@@ -134,6 +134,10 @@ stow/
   yazi/
     .config/yazi/theme.toml
     .config/yazi/Catppuccin-mocha.tmTheme
+  skhd/
+    .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
+  karabiner/
+    .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
 ```
 
 ## CLI Tools
