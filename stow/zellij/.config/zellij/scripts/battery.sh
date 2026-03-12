@@ -1,5 +1,8 @@
 #!/bin/sh
 batt_info=$(pmset -g batt)
+
+# No internal battery (desktop) — output nothing
+echo "$batt_info" | grep -q InternalBattery || exit 0
 pct=$(echo "$batt_info" | awk '/InternalBattery/{gsub(/;/,"");print $3+0}')
 charging=$(echo "$batt_info" | grep -q 'AC Power' && echo 1 || echo 0)
 
@@ -29,5 +32,6 @@ fi
 
 case "${1:-pct}" in
     icon) printf "%s" "$icon" ;;
+    pill) printf " #[bg=#313244,fg=#f2cdcd]#[bg=#f2cdcd,fg=#11111b]%s #[bg=#45475a,fg=#f2cdcd,bold] %d%%#[bg=#313244,fg=#45475a]#[bg=#313244]" "$icon" "$pct" ;;
     *)    printf "%d%%" "$pct" ;;
 esac

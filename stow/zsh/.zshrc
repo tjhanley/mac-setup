@@ -209,6 +209,11 @@ if command -v docker >/dev/null 2>&1; then
   alias d='docker'
 fi
 
+if command -v claude >/dev/null 2>&1; then
+  alias cc='claude'
+  alias ccw='claude --worktree'
+fi
+
 if command -v lazydocker >/dev/null 2>&1; then
   alias lzd='lazydocker'
 fi
