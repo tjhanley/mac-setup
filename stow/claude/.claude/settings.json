@@ -90,8 +90,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline.sh",
-    "padding": 0
+    "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
     "github@claude-plugins-official": true,
