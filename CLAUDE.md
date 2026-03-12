@@ -14,15 +14,16 @@ Files to keep in sync:
 |------|---------|
 | `README.md` | User-facing quick-start, "What It Does" steps, dotfiles structure, CLI tool lists, notes |
 | `docs/mac-setup-log.md` | Detailed implementation log — bootstrap behavior, stow packages, theme/terminal config, shell config, repo hygiene |
+| `man/man7/mac-setup.7` | Man page system reference — use `/update-man` skill to sync it |
 
 When changing:
 - **bootstrap functions** — update the numbered "What It Does" list in README and the "Bootstrap behavior" section in the log
-- **stow packages** (add/remove/rename) — update the `stow/` tree in README and the "Stow packages" section in the log
+- **stow packages** (add/remove/rename) — update the `stow/` tree in README, the "Stow packages" section in the log, and the STOW PACKAGES table in the man page
 - **Brewfile** — update the "CLI Tools" / "Casks" lists in README and the "Installed/managed tools" section in the log
 - **theme/terminal config** — update "Theme + terminal work" in the log
 - **shell config (.zshrc/.zprofile)** — update "Shell config" in the log
 - **scripts/** — update "Customize" in README and "Repo hygiene" in the log
-- **new tooling or plugins** — add to relevant sections in both files
+- **new tooling or plugins** — add to relevant sections in both files; run `/update-man` to sync the man page
 
 ## Code conventions
 
