@@ -16,9 +16,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs Brewfile dependencies.
 - Supports `--dry-run` mode.
 - `brew` verbosity is controlled by `DEBUG=true|1`.
-- Backs up existing target files into timestamped `~/config-backups/...`.
+- Default stow mode is **merge-first**: uses `stow --adopt --restow` to pull any local drift (real files at stow targets) into the repo, then commits the adoption and symlinks. Keeps app configs intact on re-runs.
+- `--hard-reset` flag enables pave mode: backs up existing configs to timestamped `~/config-backups/...`, moves stow conflicts into backup, then stows without `--adopt` (repo wins).
+- `link_managed_file` also adopts real-file targets in default mode: copies target content back to source before symlinking (handles Zed/Obsidian app-support paths where apps may have replaced symlinks with real files).
 - Prunes old backups at the end of each run, keeping the 3 most recent.
-- Moves stow conflicts into backup before stowing (avoids stow conflict aborts).
 - Handles known binary conflicts (Docker kubectl, codex cask).
 - Installs LazyVim starter only when safe.
 - Runs `mise install` for runtime tools using explicit `tool@version` values from `~/.config/mise/config.toml` (stow-managed), with explicit timeout env and a one-time retry using a longer remote-version fetch timeout.
@@ -138,7 +139,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
 - `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
-- `obsidian/` — `.config/obsidian/obsidian.json`
+- `obsidian/` — `.config/obsidian/obsidian.json` (vault registry); `necronomicon/.obsidian/` (vault config symlinked into `~/necronomicon`): all settings JSONs, `plugins/*/data.json` (plugin settings, not code), `themes/Catppuccin/` + `themes/AnuPpuccin/`, `snippets/settings-nav-contrast.css`. Plugin code (`main.js`, `manifest.json`, `styles.css`) is gitignored and re-downloaded by Obsidian.
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
@@ -168,12 +169,14 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 ## Commands used often
 - Run setup: `./setup.sh`
 - Dry run: `./setup.sh --dry-run`
+- Hard reset (repo wins): `./setup.sh --hard-reset`
 - Verbose brew: `DEBUG=true ./setup.sh`
 - Re-apply specific stow package: `(cd stow && stow --target="$HOME" --restow <package>)`
 
 ## Notable implementation notes
 - Stow conflicts happen when target files already exist and are not symlinks.
-- Bootstrap handles this by moving conflicts into backup before stowing.
+- Default mode handles this with `--adopt`: stow pulls the real file into the repo, bootstrap commits the drift, then the symlink is created. Existing configs are preserved.
+- `--hard-reset` mode handles this by moving conflicts into backup before stowing (old behavior).
 - Dry-run mode reports intended actions but does not perform filesystem moves.
 - gcloud-cli is installed in a separate step after mise python to set CLOUDSDK_PYTHON.
 - docker-desktop is skipped in `brew bundle` and installed separately; bootstrap pre-creates `/usr/local/cli-plugins` (requires sudo) for docker-compose linking.

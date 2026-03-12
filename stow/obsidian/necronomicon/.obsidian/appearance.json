@@ -1,0 +1,10 @@
+{
+  "cssTheme": "Catppuccin",
+  "theme": "obsidian",
+  "enabledCssSnippets": [
+    "settings-nav-contrast"
+  ],
+  "monospaceFontFamily": "BlexMono Nerd Font Mono",
+  "baseFontSizeAction": true,
+  "textFontFamily": "New York"
+}

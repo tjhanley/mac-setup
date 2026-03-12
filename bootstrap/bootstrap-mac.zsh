@@ -6,11 +6,15 @@ BREWFILE="$DOTFILES_DIR/brew/Brewfile"
 STOW_DIR="$DOTFILES_DIR/stow"
 BACKUP_DIR="${BACKUP_DIR:-$HOME/config-backups/dotfiles-$(date +%Y%m%d-%H%M%S)}"
 DRY_RUN=0
+HARD_RESET=0
 DEBUG="${DEBUG:-false}"
 
-if [[ "${1:-}" == "--dry-run" ]]; then
-  DRY_RUN=1
-fi
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run)    DRY_RUN=1 ;;
+    --hard-reset) HARD_RESET=1 ;;
+  esac
+done
 
 log() { print -P "\n%F{cyan}==>%f $1"; }
 ok()  { print -P "%F{green}✓%f $1"; }
@@ -132,6 +136,16 @@ link_managed_file() {
   if [[ ! -e "$source" ]]; then
     warn "$label source missing: $source"
     return
+  fi
+
+  # Adopt: if target is a real file, copy it back to source before linking
+  if [[ "$HARD_RESET" -eq 0 && -f "$target" && ! -L "$target" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f adopt $target -> $source"
+    else
+      cp "$target" "$source"
+      ok "Adopted $label: $target -> $source"
+    fi
   fi
 
   resolved_source="$(resolve_existing_path "$source" || true)"
@@ -289,47 +303,64 @@ ensure_local_env_file() {
   ok "Created .env from .env.example"
 }
 
-stow_dotfiles() {
-  log "Backing up pre-existing configs"
-  backup_path "$HOME/.zshrc"
-  backup_path "$HOME/.zprofile"
-  backup_path "$HOME/.gitconfig"
-  backup_path "$HOME/.gitignore"
-  backup_path "$HOME/.ssh/config"
-  backup_path "$HOME/.ripgreprc"
-  backup_path "$HOME/.config/bat"
-  backup_path "$HOME/.config/lazygit"
-  backup_path "$HOME/.config/nvim"
-  backup_path "$HOME/.config/starship.toml"
-  backup_path "$HOME/.config/ghostty"
-  backup_path "$HOME/.config/zellij"
-  backup_path "$HOME/.config/mise"
-  backup_path "$HOME/.config/zed"
-  backup_path "$HOME/.config/obsidian"
-  backup_path "$HOME/.config/yazi"
-  backup_path "$HOME/.config/raycast"
-  backup_path "$HOME/Library/Application Support/Zed/settings.json"
-  backup_path "$HOME/Library/Application Support/Zed/keymap.json"
-  backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
+commit_adopted_changes() {
+  if ! git -C "$DOTFILES_DIR" diff --quiet -- stow/ 2>/dev/null ||
+     ! git -C "$DOTFILES_DIR" diff --cached --quiet -- stow/ 2>/dev/null; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f git commit adopted config drift"
+      return
+    fi
+    git -C "$DOTFILES_DIR" add stow/ \
+      || { warn "git add failed; skipping adopted config commit"; return; }
+    git -C "$DOTFILES_DIR" commit -m "chore: adopt config drift from $(scutil --get ComputerName 2>/dev/null || hostname)" \
+      || warn "git commit failed; working tree may be dirty or HEAD detached"
+    ok "Committed adopted config changes"
+  fi
+}
 
-  log "Moving stow conflicts into backup"
-  move_conflict_target ".zshrc"
-  move_conflict_target ".zprofile"
-  move_conflict_target ".gitconfig"
-  move_conflict_target ".gitignore"
-  move_conflict_target ".ssh/config"
-  move_conflict_target ".ripgreprc"
-  move_conflict_target ".config/bat/config"
-  move_conflict_target ".config/lazygit/config.yml"
-  move_conflict_target ".config/starship.toml"
-  move_conflict_target ".config/ghostty/config"
-  move_conflict_target ".config/zellij/config.kdl"
-  move_conflict_target ".config/mise/config.toml"
-  move_conflict_target ".config/zed/settings.json"
-  move_conflict_target ".config/zed/keymap.json"
-  move_conflict_target ".config/obsidian/obsidian.json"
-  move_conflict_target ".config/yazi/theme.toml"
-  move_conflict_target ".config/yazi/Catppuccin-mocha.tmTheme"
+stow_dotfiles() {
+  if [[ "$HARD_RESET" -eq 1 ]]; then
+    log "Hard reset: backing up pre-existing configs"
+    backup_path "$HOME/.zshrc"
+    backup_path "$HOME/.zprofile"
+    backup_path "$HOME/.gitconfig"
+    backup_path "$HOME/.gitignore"
+    backup_path "$HOME/.ssh/config"
+    backup_path "$HOME/.ripgreprc"
+    backup_path "$HOME/.config/bat"
+    backup_path "$HOME/.config/lazygit"
+    backup_path "$HOME/.config/nvim"
+    backup_path "$HOME/.config/starship.toml"
+    backup_path "$HOME/.config/ghostty"
+    backup_path "$HOME/.config/zellij"
+    backup_path "$HOME/.config/mise"
+    backup_path "$HOME/.config/zed"
+    backup_path "$HOME/.config/obsidian"
+    backup_path "$HOME/.config/yazi"
+    backup_path "$HOME/.config/raycast"
+    backup_path "$HOME/Library/Application Support/Zed/settings.json"
+    backup_path "$HOME/Library/Application Support/Zed/keymap.json"
+    backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
+
+    log "Moving stow conflicts into backup"
+    move_conflict_target ".zshrc"
+    move_conflict_target ".zprofile"
+    move_conflict_target ".gitconfig"
+    move_conflict_target ".gitignore"
+    move_conflict_target ".ssh/config"
+    move_conflict_target ".ripgreprc"
+    move_conflict_target ".config/bat/config"
+    move_conflict_target ".config/lazygit/config.yml"
+    move_conflict_target ".config/starship.toml"
+    move_conflict_target ".config/ghostty/config"
+    move_conflict_target ".config/zellij/config.kdl"
+    move_conflict_target ".config/mise/config.toml"
+    move_conflict_target ".config/zed/settings.json"
+    move_conflict_target ".config/zed/keymap.json"
+    move_conflict_target ".config/obsidian/obsidian.json"
+    move_conflict_target ".config/yazi/theme.toml"
+    move_conflict_target ".config/yazi/Catppuccin-mocha.tmTheme"
+  fi
 
   log "Stowing dotfiles"
   if [[ ! -d "$STOW_DIR" ]]; then
@@ -339,6 +370,7 @@ stow_dotfiles() {
 
   # nvim is stowed separately after LazyVim install (see stow_nvim_plugins)
   local -a stow_args=(--target="$HOME" --restow)
+  [[ "$HARD_RESET" -eq 0 ]] && stow_args+=(--adopt)
   [[ "$DRY_RUN" -eq 1 ]] && stow_args+=(-n)
 
   (cd "$STOW_DIR" && for pkg in */; do
@@ -346,6 +378,7 @@ stow_dotfiles() {
     stow "${stow_args[@]}" "$pkg" || true
   done)
 
+  [[ "$HARD_RESET" -eq 0 ]] && commit_adopted_changes
   ok "Dotfiles stowed"
 }
 
@@ -490,6 +523,16 @@ configure_macos_app_links() {
     "$obsidian_cfg" \
     "$HOME/Library/Application Support/obsidian/obsidian.json" \
     "Obsidian settings"
+  # Ensure vault directory exists (stow links configs into it)
+  local vault_dir="$HOME/necronomicon"
+  if [[ ! -d "$vault_dir/.obsidian" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f mkdir $vault_dir/.obsidian"
+    else
+      mkdir -p "$vault_dir/.obsidian/plugins" "$vault_dir/.obsidian/themes" "$vault_dir/.obsidian/snippets"
+      ok "Created vault skeleton: $vault_dir"
+    fi
+  fi
 }
 
 install_lazyvim() {

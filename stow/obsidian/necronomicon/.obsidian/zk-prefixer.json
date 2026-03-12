@@ -1,0 +1,5 @@
+{
+  "folder": "Atlas/Journal",
+  "template": "Atlas/etc/templates/Note",
+  "format": "YYYY-MMM-DD HH:MM:SS"
+}

@@ -281,3 +281,6 @@ unset -f path_prepend_unique
 if [[ -f "$HOME/.secrets" ]]; then
   source "$HOME/.secrets"
 fi
+
+# OpenClaw Completion
+source "/Users/tom/.openclaw/completions/openclaw.zsh"

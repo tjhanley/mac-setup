@@ -1,0 +1,7 @@
+{
+  "remoteURL": "git@github.com:tjhanley/necronomicon.git",
+  "gitLocation": "",
+  "syncinterval": 120,
+  "isSyncOnLoad": true,
+  "checkStatusOnLoad": true
+}

@@ -1,0 +1,7 @@
+/* Fix active settings nav item text contrast.
+   Catppuccin sets --text-on-accent to --ctp-mantle (dark bg color),
+   causing dark-on-dark text when a settings nav item is selected. */
+.vertical-tab-nav-item.is-active,
+.vertical-tab-nav-item.is-active:hover {
+  color: var(--text-normal) !important;
+}
