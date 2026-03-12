@@ -25,7 +25,7 @@ Note: `asmvik` is the current GitHub username of the skhd author; `koekeishiya` 
 
 - `skhdrc` — app launcher bindings:
   ```
-  cmd + ctrl + alt + shift - g : open -a Ghostty
+  cmd + ctrl + alt + shift - t : open -a Ghostty
   cmd + ctrl + alt + shift - b : open -a "Brave Browser"
   cmd + ctrl + alt + shift - o : open -a Obsidian
   cmd + ctrl + alt + shift - s : open -a Spotify
