@@ -89,6 +89,18 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   grep -q 'brew "bats-core"' "$REPO_ROOT/brew/Brewfile"
 }
 
+@test "Brewfile includes koekeishiya/formulae tap" {
+  grep -q 'tap "koekeishiya/formulae"' "$REPO_ROOT/brew/Brewfile"
+}
+
+@test "Brewfile includes skhd" {
+  grep -q 'brew "koekeishiya/formulae/skhd"' "$REPO_ROOT/brew/Brewfile"
+}
+
+@test "Brewfile includes karabiner-elements" {
+  grep -q 'cask "karabiner-elements"' "$REPO_ROOT/brew/Brewfile"
+}
+
 # --- JSON configs -------------------------------------------------------------
 
 @test "zed settings.json is valid JSON" {

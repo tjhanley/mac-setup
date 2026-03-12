@@ -1,3 +1,5 @@
+tap "koekeishiya/formulae"
+
 # CLI
 brew "git"
 brew "git-delta"
@@ -42,6 +44,7 @@ brew "imagemagick"
 # Terminal + multiplexer
 cask "ghostty"
 brew "zellij"
+brew "koekeishiya/formulae/skhd"
 
 # Fonts
 cask "font-blex-mono-nerd-font"
@@ -55,6 +58,7 @@ brew "rustup-init"
 # Apps (optional)
 cask "1password"
 cask "raycast"
+cask "karabiner-elements"
 cask "zed"
 cask "obsidian"
 cask "brave-browser"
