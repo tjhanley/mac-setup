@@ -276,6 +276,8 @@ install_brew_bundle() {
 ensure_config_dir() {
   log "Ensuring ~/.config exists"
   run_cmd mkdir -p "$HOME/.config"
+  run_cmd mkdir -p "$HOME/.config/karabiner/assets/complex_modifications"
+  run_cmd mkdir -p "$HOME/.config/skhd"
   ok "~/.config ready"
 }
 
@@ -338,6 +340,8 @@ stow_dotfiles() {
     backup_path "$HOME/.config/obsidian"
     backup_path "$HOME/.config/yazi"
     backup_path "$HOME/.config/raycast"
+    backup_path "$HOME/.config/karabiner"
+    backup_path "$HOME/.config/skhd"
     backup_path "$HOME/Library/Application Support/Zed/settings.json"
     backup_path "$HOME/Library/Application Support/Zed/keymap.json"
     backup_path "$HOME/Library/Application Support/obsidian/obsidian.json"
@@ -360,6 +364,8 @@ stow_dotfiles() {
     move_conflict_target ".config/obsidian/obsidian.json"
     move_conflict_target ".config/yazi/theme.toml"
     move_conflict_target ".config/yazi/Catppuccin-mocha.tmTheme"
+    move_conflict_target ".config/karabiner/assets/complex_modifications/hyper.json"
+    move_conflict_target ".config/skhd/skhdrc"
   fi
 
   log "Stowing dotfiles"
@@ -1132,12 +1138,52 @@ prune_old_backups() {
   done
 }
 
+install_skhd_service() {
+  log "Installing skhd service"
+
+  local skhd_bin=""
+  if need_cmd skhd; then
+    skhd_bin="$(command -v skhd)"
+  elif [[ -x /opt/homebrew/bin/skhd ]]; then
+    skhd_bin="/opt/homebrew/bin/skhd"
+  elif [[ -x /usr/local/bin/skhd ]]; then
+    skhd_bin="/usr/local/bin/skhd"
+  fi
+
+  if [[ -z "$skhd_bin" ]]; then
+    warn "skhd not found; skipping service install"
+    return
+  fi
+
+  local service_target="gui/$(id -u)/com.asmvik.skhd"
+  if /bin/launchctl print "$service_target" >/dev/null 2>&1; then
+    ok "skhd service already running"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    print -P "%F{yellow}dry-run:%f $skhd_bin --start-service"
+    return
+  fi
+
+  # --start-service auto-installs the plist if missing, then bootstraps via launchd.
+  if "$skhd_bin" --start-service; then
+    ok "skhd service started"
+  else
+    warn "skhd --start-service failed; grant Accessibility permission and re-run"
+  fi
+}
+
 post_notes() {
   log "Next manual steps (optional)"
   cat <<'EOF_NOTES'
 
 - Open Ghostty once to grant permissions and confirm settings.
 - Open Raycast and Zed if you use them.
+- Karabiner-Elements: grant Input Monitoring + Accessibility in
+  System Settings > Privacy & Security, then enable the Hyper rule:
+  Complex Modifications > Add rule > Hyper.
+- skhd: grant Accessibility in System Settings > Privacy & Security.
 Tip:
 - Re-run this script anytime after changes; it's safe and idempotent.
 - Your backups are in ~/config-backups/ (timestamped).
@@ -1183,6 +1229,7 @@ main() {
   install_rust
   install_cargo_tools
   configure_keyboard_repeat
+  install_skhd_service
   prune_old_backups
   post_notes
 
