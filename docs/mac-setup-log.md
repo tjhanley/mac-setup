@@ -29,6 +29,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
 - Configures keyboard repeat speed via macOS defaults (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`).
+- Starts skhd as a launchd service (`skhd --start-service`) after `configure_keyboard_repeat`; idempotent (checks `launchctl print gui/<uid>/com.asmvik.skhd` before acting).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
 - Ensures LazyVim `lua/config/options.lua` includes `pcall(require, "config.local")` to load repo-managed local options.
@@ -48,11 +49,12 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zellij
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
+- skhd (via koekeishiya/formulae tap) — hotkey daemon
 - imagemagick (used by Snacks.image in Neovim)
 - tldr, btop, wget, trash, dust, duf, fastfetch
 
 ### Casks/apps/fonts
-- 1password, ghostty, raycast, zed, obsidian
+- 1password, ghostty, raycast, karabiner-elements, zed, obsidian
 - brave-browser, spotify
 - docker-desktop, codex
 - gcloud-cli
@@ -143,6 +145,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
+- `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
+- `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 
 ### Claude Code status line
 - File: `stow/claude/.claude/statusline.sh` (stowed to `~/.claude/statusline.sh`).
