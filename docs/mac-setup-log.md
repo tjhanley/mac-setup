@@ -28,6 +28,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
+- Installs npm global tools (`@mariozechner/pi-coding-agent`) via `npm install -g`; skips if `npm` not found.
 - Configures keyboard repeat speed via macOS defaults (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`).
 - Starts skhd as a launchd service (`skhd --start-service`) after `configure_keyboard_repeat`; idempotent (checks `launchctl print gui/<uid>/com.asmvik.skhd` before acting).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
@@ -68,6 +69,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Selected manager: `mise` (instead of `asdf`) for Node/Python/Ruby/Go.
 - Rust managed via `rustup`.
 - Cargo tools installed via `cargo-binstall`: basalt-tui.
+- npm global tools installed via `npm install -g`: @mariozechner/pi-coding-agent.
 - Shell activation for `mise` is in `.zshrc`.
 
 ## Shell config (`stow/zsh/.zshrc`)

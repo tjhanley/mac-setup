@@ -810,6 +810,31 @@ install_cargo_tools() {
   done
 }
 
+install_npm_tools() {
+  log "Installing npm global tools"
+
+  if ! need_cmd npm; then
+    warn "npm not found; skipping npm global tools (is mise node installed?)"
+    return
+  fi
+
+  local -a npm_tools=(@mariozechner/pi-coding-agent)
+
+  for pkg in "${npm_tools[@]}"; do
+    if npm list -g --depth=0 "$pkg" 2>/dev/null | grep -q "$pkg"; then
+      ok "$pkg already installed"
+      continue
+    fi
+
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f npm install -g $pkg"
+      continue
+    fi
+
+    run_cmd npm install -g "$pkg" && ok "Installed $pkg"
+  done
+}
+
 configure_keyboard_repeat() {
   if [[ "$OSTYPE" != darwin* ]]; then
     return
@@ -1228,6 +1253,7 @@ main() {
   install_app_store_apps
   install_rust
   install_cargo_tools
+  install_npm_tools
   configure_keyboard_repeat
   install_skhd_service
   prune_old_backups

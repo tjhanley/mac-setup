@@ -72,9 +72,10 @@ See also: `man mac-setup` for the full system reference.
 20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 21. Installs Rust via `rustup-init`
 22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-23. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
-24. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
-25. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
+23. Installs npm global tools (`@mariozechner/pi-coding-agent`)
+24. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
+25. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
+26. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 
@@ -153,6 +154,8 @@ docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
 font-jetbrains-mono-nerd-font
 
 Cargo tools: basalt-tui (Obsidian vault TUI)
+
+npm global tools: @mariozechner/pi-coding-agent
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
