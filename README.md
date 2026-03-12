@@ -73,7 +73,8 @@ See also: `man mac-setup` for the full system reference.
 21. Installs Rust via `rustup-init`
 22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
 23. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
-24. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
+24. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
+25. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 
@@ -139,11 +140,11 @@ stow/
 
 Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
 tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
-bat, jq, zoxide, eza, yazi, kubectl, k9s, stern, awscli, lazydocker, zellij, mise, rust,
+bat, jq, zoxide, eza, yazi, kubectl, k9s, stern, awscli, lazydocker, zellij, skhd (koekeishiya/formulae tap), mise, rust,
 rustup-init, cargo-binstall, imagemagick, mas, tldr, btop, wget, trash, dust,
 duf, fastfetch
 
-Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
+Casks: 1password, ghostty, raycast, karabiner-elements, zed, obsidian, brave-browser, spotify,
 docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
 font-jetbrains-mono-nerd-font
 
