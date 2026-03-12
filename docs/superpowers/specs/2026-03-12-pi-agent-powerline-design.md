@@ -31,6 +31,10 @@ stow/pi/
 
 Pi-agent loads TypeScript extensions directly — no compile step required. The stow target is `$HOME`, so `stow/pi/.pi/agent/` symlinks to `~/.pi/agent/`.
 
+**Implementation note:** Exact `package.json` fields, module format, and hook registration API must be confirmed against pi-agent source/docs during implementation. ANSI support in `setStatus` footer must be verified. Git subprocess method (Node `child_process` vs pi-agent shell utility) must be confirmed in extension context.
+
+**Stow collisions:** If `~/.pi/agent/extensions/powerline/` or `~/.pi/agent/agents/` already exist as non-symlinks, stow will skip them (default no-adopt behavior). The bootstrap stow call uses standard conflict detection — pre-existing files must be manually removed or stow run with `--adopt`.
+
 ## Powerline Extension
 
 ### Segments
@@ -62,6 +66,11 @@ interface State {
 
 Single state object mutated by hooks. Every mutation calls `render(state)` → `ctx.ui.setStatus("powerline", ansiString)`.
 
+`durationMs` is computed by recording a `turnStartedAt` timestamp on `turn_start` and diffing against `Date.now()` on `turn_end`. Accumulated across all turns in the session.
+
+`activeTool` is set to the tool name on `tool_call` and explicitly reset to `null` on `tool_result`.
+`activeAgent` is set to the agent name on `before_agent_start` and explicitly reset to `null` on `agent_end`.
+
 ### Rendering
 
 `render()` iterates segments, tracks previous segment color for powerline arrow transitions, and skips null/conditional segments — identical logic to `statusline.sh` but in TypeScript. Catppuccin Mocha hex values are top-level constants.
@@ -78,7 +87,18 @@ All hooks wrapped in try/catch. Extension errors are logged silently and never p
 
 ## Subagents
 
-Four declarative markdown agents. YAML frontmatter specifies name, model, and tools. System prompt is the markdown body.
+Four declarative markdown agents. YAML frontmatter specifies name, model, and tools. System prompt is the markdown body. Exact frontmatter field names and valid values must be confirmed against pi-agent's agent schema during implementation.
+
+Example structure (field names to be verified):
+```yaml
+---
+name: explore
+description: Read-only codebase navigator
+model: claude-haiku-4-5
+tools: [read, glob, grep]
+---
+System prompt body here...
+```
 
 ### `explore.md`
 - **Tools:** `read`, `glob`, `grep` (no write, no bash)
@@ -106,7 +126,7 @@ Four declarative markdown agents. YAML frontmatter specifies name, model, and to
 explore → planner → worker → reviewer
 ```
 
-Each agent's output feeds the next. The powerline subagent segment shows which is active at any moment.
+The chain is **manually orchestrated by the user** — invoke each agent in sequence, passing the previous agent's output as context for the next. There is no automatic pipeline. The powerline subagent segment shows which is active at any moment.
 
 ## What This Is Not
 
