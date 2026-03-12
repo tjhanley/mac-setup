@@ -1133,7 +1133,7 @@ install_skhd_service() {
     return
   fi
 
-  local service_target="gui/$(id -u)/com.asmvik.skhd"
+  local service_target="gui/$(id -u)/com.koekeishiya.skhd"
   if /bin/launchctl print "$service_target" >/dev/null 2>&1; then
     ok "skhd service already running"
     return
