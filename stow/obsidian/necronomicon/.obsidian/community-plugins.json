@@ -18,5 +18,7 @@
   "rainbow-colored-sidebar",
   "homepage",
   "file-explorer-note-count",
-  "file-explorer-plus"
+  "file-explorer-plus",
+  "templater-obsidian",
+  "obsidian-leaflet-plugin"
 ]

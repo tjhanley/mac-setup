@@ -5,18 +5,26 @@
   "showAttachments": true,
   "hideUnresolved": true,
   "showOrphans": true,
-  "collapse-color-groups": true,
-  "colorGroups": [],
-  "collapse-display": false,
-  "showArrow": false,
-  "textFadeMultiplier": 0,
-  "nodeSizeMultiplier": 1,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Atlas/D&D  ",
+      "color": {
+        "a": 1,
+        "rgb": 2442202
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": true,
+  "textFadeMultiplier": 0.5,
+  "nodeSizeMultiplier": 1.17230034722222,
   "lineSizeMultiplier": 1,
-  "collapse-forces": false,
-  "centerStrength": 0.518713248970312,
-  "repelStrength": 10,
-  "linkStrength": 1,
-  "linkDistance": 250,
+  "collapse-forces": true,
+  "centerStrength": 0.425347222222222,
+  "repelStrength": 8.52083333333333,
+  "linkStrength": 0.628298611111111,
+  "linkDistance": 236,
   "scale": 0.15698202138003683,
   "close": true
 }

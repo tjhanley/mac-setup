@@ -1,5 +1,6 @@
 {
   "alwaysUpdateLinks": true,
   "attachmentFolderPath": "Files and Links",
-  "promptDelete": false
+  "promptDelete": false,
+  "newFileLocation": "current"
 }

@@ -6,5 +6,6 @@
   ],
   "monospaceFontFamily": "BlexMono Nerd Font Mono",
   "baseFontSizeAction": true,
-  "textFontFamily": "New York"
+  "textFontFamily": "SF Pro",
+  "interfaceFontFamily": "SF Pro Rounded"
 }
