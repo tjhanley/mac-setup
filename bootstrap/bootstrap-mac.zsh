@@ -1116,28 +1116,6 @@ install_man_page() {
     "mac-setup man page"
 }
 
-prune_old_backups() {
-  local backup_parent="$HOME/config-backups"
-  local keep=3
-
-  [[ -d "$backup_parent" ]] || return 0
-
-  local -a all_backups=("$backup_parent"/dotfiles-*(N/On))
-  (( ${#all_backups[@]} <= keep )) && return 0
-
-  local -a stale=("${all_backups[@]:$keep}")
-  log "Pruning old backups (keeping $keep most recent)"
-
-  for dir in "${stale[@]}"; do
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-      print -P "%F{yellow}dry-run:%f rm -rf $dir"
-    else
-      rm -rf "$dir"
-      ok "Removed $dir"
-    fi
-  done
-}
-
 install_skhd_service() {
   log "Installing skhd service"
 
@@ -1172,6 +1150,28 @@ install_skhd_service() {
   else
     warn "skhd --start-service failed; grant Accessibility permission and re-run"
   fi
+}
+
+prune_old_backups() {
+  local backup_parent="$HOME/config-backups"
+  local keep=3
+
+  [[ -d "$backup_parent" ]] || return 0
+
+  local -a all_backups=("$backup_parent"/dotfiles-*(N/On))
+  (( ${#all_backups[@]} <= keep )) && return 0
+
+  local -a stale=("${all_backups[@]:$keep}")
+  log "Pruning old backups (keeping $keep most recent)"
+
+  for dir in "${stale[@]}"; do
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f rm -rf $dir"
+    else
+      rm -rf "$dir"
+      ok "Removed $dir"
+    fi
+  done
 }
 
 post_notes() {
