@@ -137,15 +137,14 @@ stow/
 
 ## CLI Tools
 
-Installed via Homebrew: git, git-delta, git-lfs, gh, stow, neovim,
-tree-sitter-cli, typescript, starship, lazygit, ripgrep, fd, fzf, fzf-tab,
-bat, jq, zoxide, eza, yazi, kubectl, k9s, stern, awscli, lazydocker, zellij, mise, rust,
-rustup-init, cargo-binstall, imagemagick, mas, tldr, btop, wget, trash, dust,
-duf, fastfetch
+Installed via Homebrew: awscli, bat, bats-core, btop, cargo-binstall, duf, dust, eza,
+fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jq, k9s,
+kubectl, lazydocker, lazygit, mas, mise, neovim, ripgrep, rust, rustup-init, starship,
+stern, stow, tldr, trash, tree-sitter-cli, typescript, wget, yazi, zellij, zoxide,
+zsh-autosuggestions, zsh-syntax-highlighting
 
-Casks: 1password, ghostty, raycast, zed, obsidian, brave-browser, spotify,
-docker-desktop, codex, gcloud-cli, font-blex-mono-nerd-font,
-font-jetbrains-mono-nerd-font
+Casks: 1password, brave-browser, codex, docker-desktop, gcloud-cli, ghostty, obsidian,
+raycast, spotify, zed, font-blex-mono-nerd-font, font-jetbrains-mono-nerd-font
 
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
