@@ -83,6 +83,14 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 
 # --- Stow package mirrors $HOME structure ------------------------------------
 
+@test "stow/skhd contains skhdrc" {
+  [[ -f "$REPO_ROOT/stow/skhd/.config/skhd/skhdrc" ]]
+}
+
+@test "stow/karabiner contains hyper complex modification" {
+  [[ -f "$REPO_ROOT/stow/karabiner/.config/karabiner/assets/complex_modifications/hyper.json" ]]
+}
+
 @test "no stow package contains absolute paths" {
   local bad=""
   for pkg in "$REPO_ROOT"/stow/*/; do

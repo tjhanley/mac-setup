@@ -126,3 +126,9 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 @test "mise config defines python runtime" {
   grep -q 'python' "$REPO_ROOT/stow/mise/.config/mise/config.toml"
 }
+
+@test "hyper.json is valid JSON" {
+  python3 -m json.tool \
+    "$REPO_ROOT/stow/karabiner/.config/karabiner/assets/complex_modifications/hyper.json" \
+    >/dev/null
+}

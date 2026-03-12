@@ -1,0 +1,6 @@
+# Hyper key app launchers
+# Hyper = cmd + ctrl + alt + shift (mapped from Caps Lock via Karabiner-Elements)
+cmd + ctrl + alt + shift - t : open -a Ghostty
+cmd + ctrl + alt + shift - b : open -a "Brave Browser"
+cmd + ctrl + alt + shift - o : open -a Obsidian
+cmd + ctrl + alt + shift - s : open -a Spotify
