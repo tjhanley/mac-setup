@@ -11,6 +11,8 @@ commands=(
   "🐳 lazydocker"
   "🔀 lazygit"
   "✏️  nvim"
+  "⚡ opencode"
+  "🥧 pi"
   "🏎️  sidecar"
   "📁 yazi"
 )

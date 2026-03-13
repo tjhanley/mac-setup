@@ -231,6 +231,10 @@ if command -v opencode >/dev/null 2>&1; then
   alias oc='opencode'
 fi
 
+if command -v pi >/dev/null 2>&1; then
+  alias pi='pi'
+fi
+
 if command -v claude >/dev/null 2>&1; then
   alias cc='claude'
 fi

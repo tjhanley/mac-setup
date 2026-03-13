@@ -94,7 +94,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
-- AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `k` (kubectl), `gal` (gcloud auth login).
+- AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `pi` (pi), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
 - `~/.local/bin` added to PATH (mise shims, pipx, user scripts).
@@ -127,7 +127,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
-- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (lazygit, lazydocker, k9s, btop, yazi, fastfetch) in new floating panes.
+- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (basalt, btop, claude, codex, k9s, lazydocker, lazygit, nvim, opencode, pi, sidecar, yazi) in new floating panes.
 - zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
