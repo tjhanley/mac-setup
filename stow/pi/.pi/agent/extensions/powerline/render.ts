@@ -22,7 +22,8 @@ export interface State {
   model: string
   thinking: string | null      // null = off/hidden (e.g. "medium", "high")
   branch: string | null
-  dirty: boolean
+  staged: number
+  modified: number
   activeTool: string | null    // null = segment hidden
   activeAgent: string | null   // null = segment hidden
   activeCommand: string | null // null = segment hidden (e.g. "/effort", "/chain")
@@ -69,8 +70,11 @@ export function render(state: State): string {
 
   // Git — conditional on branch being known
   if (state.branch !== null) {
-    const color   = state.dirty ? C.yellow : C.green
-    const text    = state.dirty ? `\uE0A0 ${state.branch} ~` : `\uE0A0 ${state.branch}`
+    const dirty = state.staged > 0 || state.modified > 0
+    const color = dirty ? C.yellow : C.green
+    let text = `\uE0A0 ${state.branch}`
+    if (state.staged   > 0) text += ` +${state.staged}`
+    if (state.modified > 0) text += ` ~${state.modified}`
     const [s, fg] = seg(lastFg, color, text)
     line += s; lastFg = fg
   }
