@@ -27,6 +27,7 @@ Icon
 .local/
 .claude/settings.local.json
 .claude/worktrees/
+.worktrees/
 
 # Backups
 config-backups/
