@@ -1,3 +1,6 @@
+# Taps
+tap "anomalyco/tap"
+
 # CLI
 brew "awscli"
 brew "bat"
@@ -23,6 +26,7 @@ brew "lazydocker"
 brew "lazygit"
 brew "mas"
 brew "neovim"
+brew "anomalyco/tap/opencode"
 brew "ripgrep"
 brew "starship"
 brew "stern"
