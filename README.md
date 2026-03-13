@@ -169,7 +169,7 @@ Cargo tools: basalt-tui (Obsidian vault TUI)
 
 npm global tools: @mariozechner/pi-coding-agent
 
-opencode: installed via Homebrew tap (anomalyco/tap). Alias: `oc`.
+opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
