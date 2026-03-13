@@ -14,6 +14,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs Homebrew if missing.
 - Runs `brew update` and `brew upgrade` on each run.
 - Installs Brewfile dependencies.
+- Calls `ensure_env_schema()` — detects `.env.schema` (varlock format); hints `varlock run -- <command>` if no `.env` present; warns if neither exists.
 - Supports `--dry-run` mode.
 - `brew` verbosity is controlled by `DEBUG=true|1`.
 - Default stow mode is **merge-first**: uses `stow --adopt --restow` to pull any local drift (real files at stow targets) into the repo, then commits the adoption and symlinks. Keeps app configs intact on re-runs.
@@ -99,6 +100,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
 - `~/.local/bin` added to PATH (mise shims, pipx, user scripts).
 - Conditional `source ~/.secrets` for machine-specific tokens/keys (not tracked in git).
+- `refresh-secrets` function: reads `~/.secrets-config` (KEY=Dashlane/path mappings), calls `dcli secret get` per key, writes `~/.secrets` atomically (tempfile → mv). Requires `dcli` authenticated.
+- `.env.schema` (varlock format) replaces `.env.example` — sensitive vars use `exec('dcli secret get "..."')`, resolved at `varlock run` time.
 - zsh plugins loaded last: autosuggestions, syntax-highlighting.
 
 ## Theme + terminal work

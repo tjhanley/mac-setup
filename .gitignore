@@ -22,8 +22,9 @@ Icon
 # Local overrides
 .env
 .env.*
-!.env.example
+!.env.schema
 .secrets
+.secrets-config
 .local/
 .claude/settings.local.json
 .claude/worktrees/

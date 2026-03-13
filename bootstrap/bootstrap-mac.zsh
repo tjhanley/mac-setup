@@ -281,28 +281,25 @@ ensure_config_dir() {
   ok "~/.config ready"
 }
 
-ensure_local_env_file() {
-  local env_example="$DOTFILES_DIR/.env.example"
-  local env_file="$DOTFILES_DIR/.env"
-
-  log "Ensuring local .env file exists"
-  if [[ ! -f "$env_example" ]]; then
-    warn "Missing template file: $env_example"
+function ensure_env_schema() {
+  log "Env schema"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    print -P "%F{yellow}dry-run:%f ensure_env_schema"
     return
   fi
 
-  if [[ -f "$env_file" ]]; then
+  if [[ -f .env ]]; then
     ok ".env already exists"
     return
   fi
 
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    print -P "%F{yellow}dry-run:%f cp $env_example $env_file"
+  if [[ -f .env.schema ]]; then
+    log ".env.schema found — project uses varlock"
+    print -P "%F{cyan}hint:%f run: varlock run -- <command>"
     return
   fi
 
-  cp "$env_example" "$env_file"
-  ok "Created .env from .env.example"
+  warn "No .env.schema found"
 }
 
 commit_adopted_changes() {
@@ -1224,7 +1221,7 @@ main() {
   ensure_homebrew
   refresh_homebrew
   ensure_config_dir
-  ensure_local_env_file
+  ensure_env_schema
   prepare_brew_binary_conflicts
   install_brew_bundle
 
