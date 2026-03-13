@@ -17,6 +17,7 @@ Practical how-to documentation for people who fork or adopt this mac-setup.
 | [Theming](theming.md) | Catppuccin Mocha setup, re-theming with Claude Code |
 | [Customization](customization.md) | Adding packages, stow modules, runtimes, aliases |
 | [Bootstrap](bootstrap.md) | Understanding and troubleshooting setup.sh |
+| [Secrets](secrets.md) | Dashlane + varlock setup, refresh-secrets, .env.schema |
 
 ## Other Documentation
 
