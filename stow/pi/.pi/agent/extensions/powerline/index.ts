@@ -20,6 +20,8 @@ export default function powerlineExtension(pi: ExtensionAPI) {
     dirty: false,
     activeTool: null,
     activeAgent: null,
+    tokensIn: 0,
+    tokensOut: 0,
     cost: 0,
     contextPct: 0,
     durationMs: 0,
@@ -56,13 +58,17 @@ export default function powerlineExtension(pi: ExtensionAPI) {
             if (usage?.percent != null) state.contextPct = Math.round(usage.percent)
             // Cost — accumulate from session branch messages
             try {
-              let cost = 0
+              let cost = 0, tokensIn = 0, tokensOut = 0
               for (const entry of (ctx as any).sessionManager.getBranch()) {
                 if (entry.type === "message" && entry.message?.role === "assistant") {
-                  cost += entry.message.usage?.cost?.total ?? 0
+                  cost      += entry.message.usage?.cost?.total ?? 0
+                  tokensIn  += entry.message.usage?.input       ?? 0
+                  tokensOut += entry.message.usage?.output      ?? 0
                 }
               }
-              state.cost = cost
+              state.cost      = cost
+              state.tokensIn  = tokensIn
+              state.tokensOut = tokensOut
             } catch { /* ignore if branch not available */ }
             return [powerline(state)]
           },

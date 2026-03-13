@@ -23,6 +23,8 @@ export interface State {
   dirty: boolean
   activeTool: string | null   // null = segment hidden
   activeAgent: string | null  // null = segment hidden
+  tokensIn: number
+  tokensOut: number
   cost: number
   contextPct: number
   durationMs: number
@@ -44,6 +46,10 @@ function formatDuration(ms: number): string {
   const h = Math.floor(m / 60)
   if (h > 0) return `${h}h${m % 60}m`
   return `${m}m`
+}
+
+function formatTokens(n: number): string {
+  return n < 1000 ? `${n}` : `${(n / 1000).toFixed(1)}k`
 }
 
 function bar(pct: number): string {
@@ -79,8 +85,8 @@ export function render(state: State): string {
     line += s; lastFg = fg
   }
 
-  // Cost + context bar + duration
-  const cost = `${bar(state.contextPct)} ${state.contextPct}% ${formatCost(state.cost)} ${formatDuration(state.durationMs)}`
+  // Tokens + context bar + cost + duration
+  const cost = `${formatTokens(state.tokensIn)}↓ ${formatTokens(state.tokensOut)}↑ ${bar(state.contextPct)} ${state.contextPct}% ${formatCost(state.cost)} ${formatDuration(state.durationMs)}`
   const [s, fg] = seg(lastFg, C.mauve, cost)
   line += s; lastFg = fg
 

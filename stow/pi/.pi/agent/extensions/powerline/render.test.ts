@@ -9,6 +9,8 @@ const baseState: State = {
   dirty: false,
   activeTool: null,
   activeAgent: null,
+  tokensIn: 2100,
+  tokensOut: 800,
   cost: 0.04,
   contextPct: 42,
   durationMs: 183000,  // 3m 3s → formats as "3m"
@@ -73,4 +75,16 @@ test("render produces different output when dirty", () => {
   const clean = render(baseState)
   const dirty = render({ ...baseState, dirty: true })
   assert.notEqual(clean, dirty)
+})
+
+test("render includes token counts", () => {
+  const result = render(baseState)
+  assert.ok(result.includes("2.1k↓"))
+  assert.ok(result.includes("800↑"))
+})
+
+test("render formats sub-1k tokens without suffix", () => {
+  const result = render({ ...baseState, tokensIn: 500, tokensOut: 42 })
+  assert.ok(result.includes("500↓"))
+  assert.ok(result.includes("42↑"))
 })
