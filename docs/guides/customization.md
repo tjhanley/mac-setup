@@ -170,7 +170,7 @@ To populate it from Dashlane, copy `.secrets-config.example` to `~/.secrets-conf
 refresh-secrets
 ```
 
-This calls `dcli secret get` for each key and regenerates `~/.secrets` atomically. Re-run whenever your vault changes or you set up a new machine.
+This calls `dcli read` for each key and regenerates `~/.secrets` atomically. Re-run whenever your vault changes or you set up a new machine.
 
 To add a secret manually:
 
@@ -230,6 +230,6 @@ Sensitive vars are declared in `.env.schema` (varlock format). To inject them in
 varlock run -- <command>
 ```
 
-Varlock resolves each `exec('dcli secret get "..."')` value at runtime via Dashlane CLI. Non-secret vars can be set to plain values directly in `.env.schema`.
+Varlock resolves each `exec('dcli read "..."')` value at runtime via Dashlane CLI. Non-secret vars can be set to plain values directly in `.env.schema`.
 
 For a local `.env` override (not tracked), create `.env` in the project root — the bootstrap detects it and skips the varlock hint.

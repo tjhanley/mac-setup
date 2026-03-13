@@ -100,8 +100,8 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
 - `~/.local/bin` added to PATH (mise shims, pipx, user scripts).
 - Conditional `source ~/.secrets` for machine-specific tokens/keys (not tracked in git).
-- `refresh-secrets` function: reads `~/.secrets-config` (KEY=Dashlane/path mappings), calls `dcli secret get` per key, writes `~/.secrets` atomically (tempfile → mv). Requires `dcli` authenticated.
-- `.env.schema` (varlock format) replaces `.env.example` — sensitive vars use `exec('dcli secret get "..."')`, resolved at `varlock run` time.
+- `refresh-secrets` function: reads `~/.secrets-config` (KEY=dl://title/field mappings), calls `dcli read` per key, writes `~/.secrets` atomically (tempfile → mv). Requires `dcli` authenticated.
+- `.env.schema` (varlock format) replaces `.env.example` — sensitive vars use `exec('dcli read "..."')`, resolved at `varlock run` time.
 - zsh plugins loaded last: autosuggestions, syntax-highlighting.
 
 ## Theme + terminal work
