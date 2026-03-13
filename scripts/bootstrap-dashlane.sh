@@ -38,8 +38,8 @@ if ! command -v dcli &>/dev/null; then
   exit 1
 fi
 
-if ! dcli account whoami &>/dev/null; then
-  print_error "dcli not authenticated — run: dcli login"
+if ! dcli accounts whoami &>/dev/null; then
+  print_error "dcli not authenticated — run: dcli accounts whoami"
   exit 1
 fi
 

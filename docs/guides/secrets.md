@@ -27,7 +27,7 @@ Managing API keys, tokens, and environment variables — both machine-local and 
 
 2. Authenticate with Dashlane CLI:
    ```sh
-   dcli login
+   dcli accounts whoami
    ```
 
 3. Pull secrets from the vault:
@@ -43,18 +43,23 @@ Managing API keys, tokens, and environment variables — both machine-local and 
 refresh-secrets
 ```
 
-Re-runs the full fetch — reads `~/.secrets-config`, calls `dcli secret get` for each key, writes `~/.secrets` atomically (tempfile → mv), and sources it in the current shell.
+Re-runs the full fetch — reads `~/.secrets-config`, calls `dcli read` for each path, writes `~/.secrets` atomically (tempfile → mv), and sources it in the current shell.
 
 ### How `~/.secrets-config` works
 
 ```sh
-# ~/.secrets-config — maps env var names to Dashlane secret paths
-ANTHROPIC_API_KEY=Personal/mac-setup/anthropic-api-key
-GITHUB_TOKEN=Personal/mac-setup/github-token
-OPENAI_API_KEY=Personal/mac-setup/openai-api-key
+# ~/.secrets-config — maps env var names to Dashlane item paths
+ANTHROPIC_API_KEY=dl://anthropic-api-key/password
+GITHUB_TOKEN=dl://github-token/password
+OPENAI_API_KEY=dl://openai-api-key/password
 ```
 
-Each line is `KEY=path/in/dashlane`. Blank lines and `#` comments are ignored.
+Each line is `KEY=dl://<item-title>/<field>`. The field is `password` for password items, `note` for secure notes. Blank lines and `#` comments are ignored.
+
+To find the right title and fields for an item:
+```sh
+dcli secret -o json
+```
 
 The example template is at `.secrets-config.example` in the repo root — copy it and update the paths to match your vault structure.
 
@@ -63,7 +68,7 @@ The example template is at `.secrets-config.example` in the repo root — copy i
 1. Add the secret to your Dashlane vault
 2. Add the mapping to `~/.secrets-config`:
    ```sh
-   NEW_TOKEN=Personal/mac-setup/new-token
+   NEW_TOKEN=dl://new-token/password
    ```
 3. Run `refresh-secrets`
 
@@ -77,10 +82,10 @@ The repo root `.env.schema` is the template:
 
 ```sh
 # @sensitive @required @type=string(startsWith=sk-ant-)
-ANTHROPIC_API_KEY=exec('dcli secret get "Personal/mac-setup/anthropic-api-key"')
+ANTHROPIC_API_KEY=exec('dcli read "dl://anthropic-api-key/password"')
 
 # @sensitive @required
-GITHUB_TOKEN=exec('dcli secret get "Personal/mac-setup/github-token"')
+GITHUB_TOKEN=exec('dcli read "dl://github-token/password"')
 
 # @type=string
 AWS_PROFILE=
@@ -145,5 +150,6 @@ The script reads `~/.secrets-config` for paths, authenticates via dcli, and crea
 |---|---|
 | `refresh-secrets` | Regenerate `~/.secrets` from Dashlane |
 | `varlock run -- <cmd>` | Run command with per-project secrets injected |
-| `dcli login` | Authenticate Dashlane CLI |
-| `dcli secret list` | List secrets in your vault |
+| `dcli accounts whoami` | Authenticate / show current account |
+| `dcli secret -o json` | List all secrets with fields (useful for finding paths) |
+| `dcli read "dl://<title>/<field>"` | Read a single secret value |
