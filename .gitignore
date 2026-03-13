@@ -8,6 +8,7 @@ Icon
 # Editor/IDE
 .vscode/
 .idea/
+stow/zed/.config/zed/prompts/
 
 # Neovim
 .stylua.toml
