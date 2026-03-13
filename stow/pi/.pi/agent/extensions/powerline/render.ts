@@ -56,7 +56,7 @@ export function render(state: State): string {
   let lastFg = C.blue.fg
 
   // Left cap + Model (+ thinking level when active)
-  const modelText = state.thinking ? `${state.model} • ${state.thinking}` : state.model
+  const modelText = state.thinking ? `π ${state.model} • ${state.thinking}` : `π ${state.model}`
   line += `${C.reset}${C.blue.fg}${CAP_L}${C.blue.bg}${C.crust}${C.bold} ${modelText} `
 
   // Git — conditional on branch being known
