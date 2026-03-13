@@ -1,6 +1,6 @@
 # One-time PATH and tool initialisation — guarded so source ~/.zshrc is safe
 if [[ -z "$_ZSHRC_INITIALIZED" ]]; then
-  export _ZSHRC_INITIALIZED=1
+  _ZSHRC_INITIALIZED=1
 
   # Homebrew env (Apple Silicon default)
   if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -85,7 +85,7 @@ unset _fzf_tab
 
 # mise runtime manager
 if [[ -z "$_MISE_INITIALIZED" ]] && command -v mise >/dev/null 2>&1; then
-  export _MISE_INITIALIZED=1
+  _MISE_INITIALIZED=1
   eval "$(mise activate zsh)"
 fi
 
