@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Read-only code reviewer. Returns structured feedback on diffs or file sets.
-model: claude-sonnet
+model: claude-sonnet-4-6
 tools: read, grep, find, ls
 ---
 

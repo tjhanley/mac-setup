@@ -1,7 +1,7 @@
 ---
 name: worker
 description: Full-access implementation agent. Executes plans produced by the planner.
-model: claude-sonnet
+model: claude-sonnet-4-6
 tools: read, grep, find, ls, bash
 ---
 
