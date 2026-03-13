@@ -1,5 +1,5 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent"
-import { render, State } from "./render.ts"
+import { render as powerline, State } from "./render.ts"
 import { execSync } from "node:child_process"
 
 function gitInfo(dir: string): { branch: string | null; dirty: boolean } {
@@ -25,83 +25,101 @@ export default function powerlineExtension(pi: ExtensionAPI) {
     durationMs: 0,
   }
 
+  // Captured from setFooter factory — used to trigger re-renders from event handlers
+  let tui: { requestRender: () => void } | null = null
   // Not part of render State — used only for duration accumulation
   let turnStartedAt: number | null = null
 
-  function update(ctx: { ui: { setStatus: (key: string, value: string) => void } }) {
-    ctx.ui.setStatus("powerline", render(state))
+  function requestRender() {
+    tui?.requestRender()
   }
 
   pi.on("session_start", async (_event, ctx) => {
     try {
-      const session = (ctx as any).session
-      state.model    = session?.state?.model?.id ?? "pi"
-      const level    = session?.state?.thinkingLevel
+      state.model    = ctx.model?.id ?? "pi"
+      const level    = (ctx as any).session?.state?.thinkingLevel
       state.thinking = (level && level !== "off") ? String(level) : null
-      const dir      = session?.directory ?? process.cwd()
+      const dir      = (ctx as any).session?.directory ?? process.cwd()
       const git      = gitInfo(dir)
       state.branch   = git.branch
       state.dirty    = git.dirty
-      update(ctx)
+
+      // Replace the native footer entirely
+      ctx.ui.setFooter((tuiArg, _theme, _footerData) => {
+        tui = tuiArg
+        return {
+          dispose: () => { tui = null },
+          invalidate() {},
+          render(_width: number): string[] {
+            // Context usage — always fresh from TUI render cycle
+            const usage = ctx.getContextUsage()
+            if (usage?.percent != null) state.contextPct = Math.round(usage.percent)
+            // Cost — accumulate from session branch messages
+            try {
+              let cost = 0
+              for (const entry of (ctx as any).sessionManager.getBranch()) {
+                if (entry.type === "message" && entry.message?.role === "assistant") {
+                  cost += entry.message.usage?.cost?.total ?? 0
+                }
+              }
+              state.cost = cost
+            } catch { /* ignore if branch not available */ }
+            return [powerline(state)]
+          },
+        }
+      })
     } catch { /* never crash the session */ }
   })
 
   pi.on("turn_start", async (event, ctx) => {
     try {
-      turnStartedAt = (event as any).timestamp ?? Date.now()
-      // Refresh thinking level — user may have toggled it with Ctrl+T
+      turnStartedAt  = (event as any).timestamp ?? Date.now()
+      // Refresh thinking — user may have toggled it with Ctrl+T
       const level    = (ctx as any).session?.state?.thinkingLevel
       state.thinking = (level && level !== "off") ? String(level) : null
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 
-  pi.on("turn_end", async (event, ctx) => {
+  pi.on("turn_end", async (_event, ctx) => {
     try {
       if (turnStartedAt !== null) {
         state.durationMs += Date.now() - turnStartedAt
         turnStartedAt = null
       }
-      // Adjust these field paths if cost/context don't update in practice
-      const usage = (event as any).message?.usage
-      if (usage) {
-        state.contextPct = usage.contextWindowUsedPercentage ?? state.contextPct
-        state.cost       = usage.totalCostUsd               ?? state.cost
-      }
       const dir  = (ctx as any).session?.directory ?? process.cwd()
       const git  = gitInfo(dir)
       state.branch = git.branch
       state.dirty  = git.dirty
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 
-  pi.on("tool_execution_start", async (event, ctx) => {
+  pi.on("tool_execution_start", async (event, _ctx) => {
     try {
       state.activeTool = (event as any).toolName ?? null
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 
-  pi.on("tool_execution_end", async (_event, ctx) => {
+  pi.on("tool_execution_end", async (_event, _ctx) => {
     try {
       state.activeTool = null
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 
-  pi.on("before_agent_start", async (event, ctx) => {
+  pi.on("before_agent_start", async (event, _ctx) => {
     try {
-      // Fall back to null (hides segment) rather than a generic placeholder
       state.activeAgent = (event as any).agentName ?? null
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 
-  pi.on("agent_end", async (_event, ctx) => {
+  pi.on("agent_end", async (_event, _ctx) => {
     try {
       state.activeAgent = null
-      update(ctx)
+      requestRender()
     } catch { /* never crash the session */ }
   })
 }
