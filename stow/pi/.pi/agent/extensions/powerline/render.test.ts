@@ -1,12 +1,14 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { render, State } from "./render.ts"
+import { render } from "./render.ts"
+import type { State } from "./render.ts"
 
 const baseState: State = {
   model: "Sonnet 4.6",
   thinking: null,
   branch: "main",
-  dirty: false,
+  staged: 0,
+  modified: 0,
   activeTool: null,
   activeAgent: null,
   activeCommand: null,
@@ -74,8 +76,26 @@ test("render hides git segment when branch is null", () => {
 
 test("render produces different output when dirty", () => {
   const clean = render(baseState)
-  const dirty = render({ ...baseState, dirty: true })
+  const dirty = render({ ...baseState, staged: 2, modified: 3 })
   assert.notEqual(clean, dirty)
+})
+
+test("render shows staged and modified counts when dirty", () => {
+  const result = render({ ...baseState, staged: 2, modified: 3 })
+  assert.ok(result.includes("+2"))
+  assert.ok(result.includes("~3"))
+})
+
+test("render shows only staged count when no modified", () => {
+  const result = render({ ...baseState, staged: 1, modified: 0 })
+  assert.ok(result.includes("+1"))
+  assert.ok(!result.includes("~"))
+})
+
+test("render shows only modified count when no staged", () => {
+  const result = render({ ...baseState, staged: 0, modified: 4 })
+  assert.ok(!result.includes("+"))
+  assert.ok(result.includes("~4"))
 })
 
 test("render includes token counts", () => {

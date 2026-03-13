@@ -1,14 +1,20 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent"
-import { render as powerline, State } from "./render.ts"
+import { render as powerline } from "./render.ts"
+import type { State } from "./render.ts"
 import { execSync } from "node:child_process"
 
-function gitInfo(dir: string): { branch: string | null; dirty: boolean } {
+function gitInfo(dir: string): { branch: string | null; staged: number; modified: number } {
   try {
-    const branch = execSync("git branch --show-current", { cwd: dir, encoding: "utf8" }).trim()
-    const status = execSync("git status --porcelain",    { cwd: dir, encoding: "utf8" }).trim()
-    return { branch: branch || null, dirty: status.length > 0 }
+    const branch   = execSync("git branch --show-current",      { cwd: dir, encoding: "utf8" }).trim()
+    const stagedRaw = execSync("git diff --cached --numstat",   { cwd: dir, encoding: "utf8" }).trim()
+    const modRaw    = execSync("git diff --numstat",            { cwd: dir, encoding: "utf8" }).trim()
+    return {
+      branch:   branch || null,
+      staged:   stagedRaw  ? stagedRaw.split("\n").length  : 0,
+      modified: modRaw     ? modRaw.split("\n").length     : 0,
+    }
   } catch {
-    return { branch: null, dirty: false }
+    return { branch: null, staged: 0, modified: 0 }
   }
 }
 
@@ -17,7 +23,8 @@ export default function powerlineExtension(pi: ExtensionAPI) {
     model: "",
     thinking: null,
     branch: null,
-    dirty: false,
+    staged: 0,
+    modified: 0,
     activeTool: null,
     activeAgent: null,
     activeCommand: null,
@@ -43,9 +50,10 @@ export default function powerlineExtension(pi: ExtensionAPI) {
       const level    = (ctx as any).session?.state?.thinkingLevel
       state.thinking = (level && level !== "off") ? String(level) : null
       const dir      = (ctx as any).session?.directory ?? process.cwd()
-      const git      = gitInfo(dir)
+      const git        = gitInfo(dir)
       state.branch   = git.branch
-      state.dirty    = git.dirty
+      state.staged   = git.staged
+      state.modified = git.modified
 
       // Replace the native footer entirely
       ctx.ui.setFooter((tuiArg, _theme, _footerData) => {
@@ -96,9 +104,10 @@ export default function powerlineExtension(pi: ExtensionAPI) {
       }
       state.activeCommand = null  // command completed with this turn
       const dir  = (ctx as any).session?.directory ?? process.cwd()
-      const git  = gitInfo(dir)
-      state.branch = git.branch
-      state.dirty  = git.dirty
+      const git      = gitInfo(dir)
+      state.branch   = git.branch
+      state.staged   = git.staged
+      state.modified = git.modified
       requestRender()
     } catch { /* never crash the session */ }
   })
