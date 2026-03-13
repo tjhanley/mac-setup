@@ -227,6 +227,10 @@ if command -v codex >/dev/null 2>&1; then
   alias cx='codex'
 fi
 
+if command -v opencode >/dev/null 2>&1; then
+  alias oc='opencode'
+fi
+
 if command -v claude >/dev/null 2>&1; then
   alias cc='claude'
 fi

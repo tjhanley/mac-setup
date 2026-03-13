@@ -149,6 +149,9 @@ stow/
     .pi/agent/agents/planner.md                        # subagent: sonnet, produces implementation plans
     .pi/agent/agents/worker.md                         # subagent: sonnet, full tools, executes plans
     .pi/agent/agents/reviewer.md                       # subagent: sonnet, read-only code reviewer
+  opencode/
+    .config/opencode/opencode.json               # model + autoupdate config
+    .config/opencode/tui.json                    # Catppuccin theme
 ```
 
 ## CLI Tools
@@ -166,6 +169,8 @@ font-jetbrains-mono-nerd-font
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
 npm global tools: @mariozechner/pi-coding-agent
+
+opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 

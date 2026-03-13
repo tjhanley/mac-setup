@@ -1,4 +1,5 @@
 tap "koekeishiya/formulae"
+tap "opencode-ai/tap"
 
 # CLI
 brew "git"
@@ -37,6 +38,7 @@ brew "trash"
 brew "dust"
 brew "duf"
 brew "fastfetch"
+brew "opencode-ai/tap/opencode"
 
 # Image processing (used by Snacks.image in Neovim)
 brew "imagemagick"
