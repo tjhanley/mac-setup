@@ -321,7 +321,7 @@ function refresh-secrets() {
     return 1
   }
 
-  local tmp
+  local tmp val
   tmp=$(mktemp)
 
   {
@@ -330,12 +330,15 @@ function refresh-secrets() {
     echo ""
     while IFS='=' read -r key vault_path; do
       [[ -z "$key" || "$key" == \#* ]] && continue
-      local val
       val=$("$dcli_bin" read "$vault_path") || {
         print -P "%F{red}error:%f failed to get $key from Dashlane (path: $vault_path)" >&2
         /bin/rm -f "$tmp"
         return 1
       }
+      # dcli read sometimes returns full JSON — extract password field if so
+      if [[ "$val" == \{* ]]; then
+        val=$(echo "$val" | /usr/bin/sed -n 's/.*"password":"\([^"]*\)".*/\1/p')
+      fi
       echo "export $key=\"$val\""
     done < "$config"
   } > "$tmp"
