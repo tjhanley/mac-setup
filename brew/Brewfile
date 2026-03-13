@@ -1,9 +1,14 @@
+# Taps
+tap "anomalyco/tap"
+tap "dashlane/tap"
+
 # CLI
 brew "awscli"
 brew "bat"
 brew "bats-core"
 brew "btop"
 brew "cargo-binstall"
+brew "dashlane/tap/dashlane-cli"
 brew "duf"
 brew "dust"
 brew "eza"
@@ -23,6 +28,7 @@ brew "lazydocker"
 brew "lazygit"
 brew "mas"
 brew "neovim"
+brew "anomalyco/tap/opencode"
 brew "ripgrep"
 brew "starship"
 brew "stern"
