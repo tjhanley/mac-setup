@@ -2,6 +2,39 @@
 
 How to extend and adapt this setup for your own use.
 
+## Editing config files and tracking changes in git
+
+All config files managed by this repo live under `stow/<package>/` and are **symlinked** into `$HOME`. Editing the file at its `$HOME` path (e.g. `~/.zshrc`) edits the source in the repo — they are the same file.
+
+The workflow for any config change:
+
+1. Edit the file (via either path):
+   ```sh
+   # via $HOME symlink — convenient, same result
+   nvim ~/.zshrc
+   nvim ~/.config/opencode/opencode.json
+
+   # or directly in the repo
+   nvim stow/zsh/.zshrc
+   nvim stow/opencode/.config/opencode/opencode.json
+   ```
+
+2. Stage and commit from the repo root:
+   ```sh
+   cd ~/Workspace/mac-setup
+   git add stow/zsh/.zshrc
+   git commit -m "chore(zsh): add alias for foo"
+   ```
+
+That's it — no re-stowing needed, the symlink is already live.
+
+**Finding the repo path for a config file:**
+```sh
+# readlink resolves the symlink to its source in the repo
+readlink ~/.zshrc
+readlink ~/.config/opencode/opencode.json
+```
+
 ## Adding Homebrew packages
 
 1. Edit `brew/Brewfile` and add your package:
