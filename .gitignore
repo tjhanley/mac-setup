@@ -24,6 +24,7 @@ Icon
 .env.*
 !.env.example
 .secrets
+.secrets-config
 .local/
 .claude/settings.local.json
 .claude/worktrees/
