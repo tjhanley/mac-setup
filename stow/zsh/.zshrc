@@ -2,6 +2,12 @@
 if [[ -z "$_ZSHRC_INITIALIZED" ]]; then
   _ZSHRC_INITIALIZED=1
 
+  # Build system PATH from /etc/paths + /etc/paths.d/ (normally done by
+  # /etc/zprofile for login shells — zellij/tmux spawn non-login shells)
+  if [[ -x /usr/libexec/path_helper ]]; then
+    eval "$(/usr/libexec/path_helper -s)"
+  fi
+
   # Homebrew env (Apple Silicon default)
   if [[ -x /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
