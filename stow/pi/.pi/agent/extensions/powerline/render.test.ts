@@ -4,6 +4,7 @@ import { render, State } from "./render.ts"
 
 const baseState: State = {
   model: "Sonnet 4.6",
+  thinking: null,
   branch: "main",
   dirty: false,
   activeTool: null,

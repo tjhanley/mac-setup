@@ -15,6 +15,7 @@ function gitInfo(dir: string): { branch: string | null; dirty: boolean } {
 export default function powerlineExtension(pi: ExtensionAPI) {
   const state: State = {
     model: "",
+    thinking: null,
     branch: null,
     dirty: false,
     activeTool: null,
@@ -33,20 +34,25 @@ export default function powerlineExtension(pi: ExtensionAPI) {
 
   pi.on("session_start", async (_event, ctx) => {
     try {
-      state.model = (ctx as any).session?.model?.displayName ?? "pi"
-      const dir   = (ctx as any).session?.directory ?? process.cwd()
-      const git   = gitInfo(dir)
-      state.branch = git.branch
-      state.dirty  = git.dirty
+      const session = (ctx as any).session
+      state.model    = session?.state?.model?.id ?? "pi"
+      const level    = session?.state?.thinkingLevel
+      state.thinking = (level && level !== "off") ? String(level) : null
+      const dir      = session?.directory ?? process.cwd()
+      const git      = gitInfo(dir)
+      state.branch   = git.branch
+      state.dirty    = git.dirty
       update(ctx)
     } catch { /* never crash the session */ }
   })
 
-  pi.on("turn_start", async (event, _ctx) => {
+  pi.on("turn_start", async (event, ctx) => {
     try {
-      // TurnStartEvent.timestamp is a Unix ms timestamp
-      // No visible state changes here — turnStartedAt is not rendered
       turnStartedAt = (event as any).timestamp ?? Date.now()
+      // Refresh thinking level — user may have toggled it with Ctrl+T
+      const level    = (ctx as any).session?.state?.thinkingLevel
+      state.thinking = (level && level !== "off") ? String(level) : null
+      update(ctx)
     } catch { /* never crash the session */ }
   })
 

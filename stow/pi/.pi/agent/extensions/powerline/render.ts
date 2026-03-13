@@ -18,6 +18,7 @@ const CAP_R = "\uE0B4"  // right rounded cap
 
 export interface State {
   model: string
+  thinking: string | null     // null = off/hidden (e.g. "medium", "high")
   branch: string | null
   dirty: boolean
   activeTool: string | null   // null = segment hidden
@@ -54,8 +55,9 @@ export function render(state: State): string {
   let line = ""
   let lastFg = C.blue.fg
 
-  // Left cap + Model
-  line += `${C.reset}${C.blue.fg}${CAP_L}${C.blue.bg}${C.crust}${C.bold} ${state.model} `
+  // Left cap + Model (+ thinking level when active)
+  const modelText = state.thinking ? `${state.model} • ${state.thinking}` : state.model
+  line += `${C.reset}${C.blue.fg}${CAP_L}${C.blue.bg}${C.crust}${C.bold} ${modelText} `
 
   // Git — conditional on branch being known
   if (state.branch !== null) {
