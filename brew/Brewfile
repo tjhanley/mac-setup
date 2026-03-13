@@ -1,5 +1,6 @@
 # Taps
 tap "anomalyco/tap"
+tap "dashlane/tap"
 
 # CLI
 brew "awscli"
@@ -7,6 +8,7 @@ brew "bat"
 brew "bats-core"
 brew "btop"
 brew "cargo-binstall"
+brew "dashlane/tap/dashlane-cli"
 brew "duf"
 brew "dust"
 brew "eza"
