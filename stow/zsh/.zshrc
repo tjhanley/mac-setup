@@ -291,7 +291,7 @@ unset _zsh_syntax
 unset -f path_prepend_unique
 
 # Refresh ~/.secrets from Dashlane vault.
-# Requires: dcli authenticated, ~/.secrets-config with KEY=dashlane/path lines.
+# Requires: dcli authenticated, ~/.secrets-config with KEY=dl://title/field lines.
 # Copy .secrets-config.example to ~/.secrets-config to get started.
 function refresh-secrets() {
   local config="$HOME/.secrets-config"
@@ -318,7 +318,7 @@ function refresh-secrets() {
     while IFS='=' read -r key path; do
       [[ -z "$key" || "$key" == \#* ]] && continue
       local val
-      val=$(dcli secret get "$path" 2>/dev/null) || {
+      val=$(dcli read "$path" 2>/dev/null) || {
         print -P "%F{red}error:%f failed to get $key from Dashlane (path: $path)" >&2
         rm -f "$tmp"
         return 1
