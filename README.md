@@ -139,6 +139,16 @@ stow/
     .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
   karabiner/
     .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
+  pi/
+    .pi/agent/themes/catppuccin-mocha.json             # Catppuccin Mocha theme for pi-agent UI
+    .pi/agent/extensions/powerline/index.ts            # powerline extension entry point (lifecycle hooks + state)
+    .pi/agent/extensions/powerline/render.ts           # pure render function: state → ANSI footer string
+    .pi/agent/extensions/powerline/render.test.ts      # unit tests (tsx --test)
+    .pi/agent/extensions/powerline/package.json        # ES module marker
+    .pi/agent/agents/explore.md                        # subagent: haiku, read-only codebase navigator
+    .pi/agent/agents/planner.md                        # subagent: sonnet, produces implementation plans
+    .pi/agent/agents/worker.md                         # subagent: sonnet, full tools, executes plans
+    .pi/agent/agents/reviewer.md                       # subagent: sonnet, read-only code reviewer
 ```
 
 ## CLI Tools

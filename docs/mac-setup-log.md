@@ -149,6 +149,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 - `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
+- `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
 
 ### Claude Code status line
 - File: `stow/claude/.claude/statusline.sh` (stowed to `~/.claude/statusline.sh`).
@@ -156,6 +157,15 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Single powerline-style line with four segments: model name, git branch + dirty indicator, context usage bar + session cost, vim mode pill.
 - Colors: Catppuccin Mocha truecolor — Blue for model name, Green for clean git branch and INSERT mode pill, Yellow for dirty git branch and NORMAL mode pill, Mauve for context % bar and session cost. Vim mode pill is omitted when vim mode is not active.
 - Git status is cached per directory at `/tmp/statusline-git-cache-<dir>` with a 5-second TTL to avoid repeated subprocess calls on every render.
+
+### Pi-agent (`stow/pi/`)
+- Theme: `~/.pi/agent/themes/catppuccin-mocha.json` — 51-token Catppuccin Mocha theme for pi-agent TUI; activated via `theme: "catppuccin-mocha"` in `~/.pi/agent/settings.json`.
+- Powerline extension: `~/.pi/agent/extensions/powerline/` — TypeScript extension (no build step) with five segments: model name (blue), git branch + dirty indicator (green/yellow), active tool name (teal, hidden when idle), active subagent name (peach, hidden when idle), cost + context bar + duration (mauve). All hooks wrapped in try/catch; extension errors never propagate to the session.
+- Subagents: four declarative markdown agents with YAML frontmatter; invoked manually in sequence:
+  - `explore.md` — claude-haiku-4-5, tools: read/grep/find/ls, read-only codebase navigator
+  - `planner.md` — claude-sonnet-4-6, tools: read/grep/find/ls/bash, produces structured implementation plans
+  - `worker.md` — claude-sonnet-4-6, full tools, executes plans produced by planner
+  - `reviewer.md` — claude-sonnet-4-6, tools: read/grep/find/ls, read-only code reviewer; returns structured verdict
 
 ## macOS app config linking
 - Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`. Zed keymap similarly linked (`keymap.json`).
