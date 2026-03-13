@@ -68,7 +68,7 @@ export function render(state: State): string {
   // Git — conditional on branch being known
   if (state.branch !== null) {
     const color   = state.dirty ? C.yellow : C.green
-    const text    = state.dirty ? `${state.branch} ~` : state.branch
+    const text    = state.dirty ? `\uE0A0 ${state.branch} ~` : `\uE0A0 ${state.branch}`
     const [s, fg] = seg(lastFg, color, text)
     line += s; lastFg = fg
   }
