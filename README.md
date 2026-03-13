@@ -54,7 +54,7 @@ See also: `man mac-setup` for the full system reference.
 2. Installs Homebrew (if missing)
 3. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` and `docker-desktop` in initial pass)
 4. Ensures `~/.config` exists
-5. Creates `.env` from `.env.example` if missing
+5. Checks for `.env.schema` (varlock format) — hints to use `varlock run -- <command>` if no `.env` present
 6. Stows dotfiles from `stow/` into `$HOME` using merge-first mode: adopts any local drift into the repo and commits it, then symlinks (nvim stowed separately — see step 13); use `--hard-reset` to get the old pave behavior (backup + overwrite)
 7. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
 8. Prompts for `git user.name` and `user.email` only if missing from effective git config (stores entries in `~/.gitconfig.local`)
@@ -159,7 +159,7 @@ stow/
 Installed via Homebrew: awscli, bat, bats-core, btop, cargo-binstall, dashlane-cli, duf, dust, eza,
 fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jq, k9s,
 kubectl, lazydocker, lazygit, mas, mise, neovim, opencode, ripgrep, rust, rustup-init, skhd
-(koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, wget,
+(koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, varlock, wget,
 yazi, zellij, zoxide, zsh-autosuggestions, zsh-syntax-highlighting
 
 Casks: 1password, brave-browser, codex, docker-desktop, gcloud-cli, ghostty, karabiner-elements,
@@ -216,7 +216,7 @@ bats tests/
 - Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
   `./scripts/skip-worktree.sh --help`
 - Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)
-- Add shared env vars to `.env` (generated from `.env.example`)
+- Declare shared env vars in `.env.schema` (varlock format); run `varlock run -- <command>` to inject
 
 ## Local Skip-Worktree
 
