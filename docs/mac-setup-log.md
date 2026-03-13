@@ -70,7 +70,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Rust managed via `rustup`.
 - Cargo tools installed via `cargo-binstall`: basalt-tui.
 - npm global tools installed via `npm install -g`: @mariozechner/pi-coding-agent.
-- opencode: installed via Homebrew tap (opencode-ai/tap). TUI coding agent with built-in Catppuccin theme. Alias: `oc`.
+- opencode: installed via Homebrew tap (anomalyco/tap). TUI coding agent with built-in Catppuccin theme. Alias: `oc`.
 - Shell activation for `mise` is in `.zshrc`.
 
 ## Shell config (`stow/zsh/.zshrc`)
