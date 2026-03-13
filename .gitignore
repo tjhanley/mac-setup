@@ -22,7 +22,7 @@ Icon
 # Local overrides
 .env
 .env.*
-!.env.example
+!.env.schema
 .secrets
 .secrets-config
 .local/
