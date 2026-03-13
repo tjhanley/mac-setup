@@ -1,8 +1,13 @@
-# Homebrew env (Apple Silicon default)
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+# One-time PATH and tool initialisation — guarded so source ~/.zshrc is safe
+if [[ -z "$_ZSHRC_INITIALIZED" ]]; then
+  export _ZSHRC_INITIALIZED=1
+
+  # Homebrew env (Apple Silicon default)
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
 fi
 
 # History
@@ -79,7 +84,8 @@ done
 unset _fzf_tab
 
 # mise runtime manager
-if command -v mise >/dev/null 2>&1; then
+if [[ -z "$_MISE_INITIALIZED" ]] && command -v mise >/dev/null 2>&1; then
+  export _MISE_INITIALIZED=1
   eval "$(mise activate zsh)"
 fi
 
@@ -318,9 +324,9 @@ function refresh-secrets() {
     while IFS='=' read -r key path; do
       [[ -z "$key" || "$key" == \#* ]] && continue
       local val
-      val=$(dcli read "$path" 2>/dev/null) || {
+      val=$(dcli read "$path") || {
         print -P "%F{red}error:%f failed to get $key from Dashlane (path: $path)" >&2
-        rm -f "$tmp"
+        /bin/rm -f "$tmp"
         return 1
       }
       echo "export $key=\"$val\""
