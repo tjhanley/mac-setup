@@ -162,16 +162,23 @@ Managed paths are stored in `.local/skip-worktree.paths`.
 
 ## Machine-specific secrets
 
-Create `~/.secrets` for tokens, API keys, or machine-specific environment variables:
+`~/.secrets` holds machine-specific tokens and API keys. It is sourced at the end of `.zshrc` if present, and is covered by `.gitignore`.
+
+To populate it from Dashlane, copy `.secrets-config.example` to `~/.secrets-config`, fill in your Dashlane vault paths, and run:
+
+```sh
+refresh-secrets
+```
+
+This calls `dcli secret get` for each key and regenerates `~/.secrets` atomically. Re-run whenever your vault changes or you set up a new machine.
+
+To add a secret manually:
 
 ```sh
 # ~/.secrets (not tracked in git)
 export GITHUB_TOKEN="ghp_..."
-export AWS_PROFILE="work"
 export ANTHROPIC_API_KEY="sk-ant-..."
 ```
-
-This file is sourced at the end of `.zshrc` if it exists. It is covered by `.gitignore` and will never be committed.
 
 ## Git config overrides
 
@@ -217,11 +224,12 @@ The bootstrap copies them to `~/Library/Fonts/` on each run, skipping fonts that
 
 ## Shared environment variables
 
-For non-secret environment variables shared across machines, edit `.env` (generated from `.env.example` by the bootstrap):
+Sensitive vars are declared in `.env.schema` (varlock format). To inject them into a process:
 
 ```sh
-# .env
-MY_VAR=value
+varlock run -- <command>
 ```
 
-This file is in `.gitignore`. The `.env.example` template is tracked and can serve as documentation for expected variables.
+Varlock resolves each `exec('dcli secret get "..."')` value at runtime via Dashlane CLI. Non-secret vars can be set to plain values directly in `.env.schema`.
+
+For a local `.env` override (not tracked), create `.env` in the project root — the bootstrap detects it and skips the varlock hint.
