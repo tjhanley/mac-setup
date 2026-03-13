@@ -10,7 +10,7 @@ commands=(
   "☸️  k9s"
   "🐳 lazydocker"
   "🔀 lazygit"
-  "✏️  nvim"
+  "🌿 nvim"
   "⚡ opencode"
   "🥧 pi"
   "🏎️  sidecar"
