@@ -315,10 +315,11 @@ function refresh-secrets() {
     return 1
   fi
 
-  if ! command -v dcli &>/dev/null; then
+  local dcli_bin
+  dcli_bin=$(command -v dcli 2>/dev/null) || {
     print -P "%F{red}error:%f dcli not found — run: brew install dashlane/tap/dashlane-cli"
     return 1
-  fi
+  }
 
   local tmp
   tmp=$(mktemp)
@@ -330,7 +331,7 @@ function refresh-secrets() {
     while IFS='=' read -r key path; do
       [[ -z "$key" || "$key" == \#* ]] && continue
       local val
-      val=$(dcli read "$path") || {
+      val=$("$dcli_bin" read "$path") || {
         print -P "%F{red}error:%f failed to get $key from Dashlane (path: $path)" >&2
         /bin/rm -f "$tmp"
         return 1
