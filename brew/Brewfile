@@ -1,6 +1,6 @@
 # Taps
-tap "anomalyco/tap"
 tap "dashlane/tap"
+tap "opencode-ai/tap"
 tap "koekeishiya/formulae"
 
 # CLI
@@ -29,7 +29,7 @@ brew "lazydocker"
 brew "lazygit"
 brew "mas"
 brew "neovim"
-brew "anomalyco/tap/opencode"
+brew "opencode-ai/tap/opencode"
 brew "ripgrep"
 brew "starship"
 brew "stern"
