@@ -12,7 +12,7 @@ function gitInfo(dir: string): { branch: string | null; dirty: boolean } {
   }
 }
 
-export default function (pi: ExtensionAPI) {
+export default function powerlineExtension(pi: ExtensionAPI) {
   const state: State = {
     model: "",
     branch: null,
@@ -27,7 +27,7 @@ export default function (pi: ExtensionAPI) {
   // Not part of render State — used only for duration accumulation
   let turnStartedAt: number | null = null
 
-  function update(ctx: any) {
+  function update(ctx: { ui: { setStatus: (key: string, value: string) => void } }) {
     ctx.ui.setStatus("powerline", render(state))
   }
 
@@ -42,12 +42,12 @@ export default function (pi: ExtensionAPI) {
     } catch { /* never crash the session */ }
   })
 
-  pi.on("turn_start", async (event, ctx) => {
+  pi.on("turn_start", async (event, _ctx) => {
     try {
       // TurnStartEvent.timestamp is a Unix ms timestamp
+      // No visible state changes here — turnStartedAt is not rendered
       turnStartedAt = (event as any).timestamp ?? Date.now()
-      update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 
   pi.on("turn_end", async (event, ctx) => {
@@ -67,21 +67,21 @@ export default function (pi: ExtensionAPI) {
       state.branch = git.branch
       state.dirty  = git.dirty
       update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 
   pi.on("tool_execution_start", async (event, ctx) => {
     try {
       state.activeTool = (event as any).toolName ?? null
       update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 
   pi.on("tool_execution_end", async (_event, ctx) => {
     try {
       state.activeTool = null
       update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 
   pi.on("before_agent_start", async (event, ctx) => {
@@ -89,13 +89,13 @@ export default function (pi: ExtensionAPI) {
       // Fall back to null (hides segment) rather than a generic placeholder
       state.activeAgent = (event as any).agentName ?? null
       update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 
   pi.on("agent_end", async (_event, ctx) => {
     try {
       state.activeAgent = null
       update(ctx)
-    } catch { /* silent */ }
+    } catch { /* never crash the session */ }
   })
 }
