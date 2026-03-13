@@ -35,7 +35,7 @@ BRANCH='' # U+E0A0 Powerline VCS branch glyph
 ROBOT=''  # U+F544 fa-robot — agent glyph
 
 # Extract all fields in one jq call
-IFS=$'\x1f' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS STYLE AGENT < <(
+IFS=$'\x1f' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS STYLE AGENT TOKENS_IN TOKENS_OUT < <(
   echo "$input" | jq -r '[
     (.model.display_name // "claude"),
     (.workspace.current_dir // ""),
@@ -44,7 +44,9 @@ IFS=$'\x1f' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS STYLE AGENT < <(
     (.vim.mode // ""),
     (.cost.total_duration_ms // 0 | tostring),
     (.output_style.name // "default"),
-    (.agent.name // "")
+    (.agent.name // ""),
+    (.context_window.total_input_tokens // 0 | tostring),
+    (.context_window.total_output_tokens // 0 | tostring)
   ] | join("\u001f")'
 )
 
@@ -81,12 +83,20 @@ BAR=""
 [ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
 BAR="${BAR}${FG_BASE}"  # restore fg after bar
 
-# Cost and duration formatting
+# Cost, duration, and token formatting
 COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
 DURATION_FMT=$(awk -v ms="$DURATION_MS" 'BEGIN {
     s = int(ms / 1000); m = int(s / 60); h = int(m / 60)
     if (h > 0) printf "%dh%dm", h, m % 60
     else        printf "%dm", m
+}')
+TOKENS_IN_FMT=$(awk -v n="$TOKENS_IN" 'BEGIN {
+    if (n+0 < 1000) printf "%d", n+0
+    else            printf "%.1fk", (n+0)/1000
+}')
+TOKENS_OUT_FMT=$(awk -v n="$TOKENS_OUT" 'BEGIN {
+    if (n+0 < 1000) printf "%d", n+0
+    else            printf "%.1fk", (n+0)/1000
 }')
 
 # Determine git bg/fg colors based on dirty state
@@ -117,7 +127,7 @@ if [ "${IS_GIT:-0}" = "1" ]; then
 fi
 
 # Context + cost + duration segment
-LINE="${LINE}${LAST_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
+LINE="${LINE}${LAST_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${TOKENS_IN_FMT}↓ ${TOKENS_OUT_FMT}↑ ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
 LAST_FG="$FG_MAUVE"
 
 # Output style — teal pill, hidden when style is "default"

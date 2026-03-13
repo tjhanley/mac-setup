@@ -1,14 +1,16 @@
 // Catppuccin Mocha truecolor ANSI
 const C = {
-  blue:    { bg: "\x1b[48;2;137;180;250m", fg: "\x1b[38;2;137;180;250m" },
-  green:   { bg: "\x1b[48;2;166;227;161m", fg: "\x1b[38;2;166;227;161m" },
-  yellow:  { bg: "\x1b[48;2;249;226;175m", fg: "\x1b[38;2;249;226;175m" },
-  teal:    { bg: "\x1b[48;2;148;226;213m", fg: "\x1b[38;2;148;226;213m" },
-  peach:   { bg: "\x1b[48;2;250;179;135m", fg: "\x1b[38;2;250;179;135m" },
-  mauve:   { bg: "\x1b[48;2;203;166;247m", fg: "\x1b[38;2;203;166;247m" },
-  crust:   "\x1b[38;2;17;17;27m",
-  reset:   "\x1b[0m",
-  bold:    "\x1b[1m",
+  blue:     { bg: "\x1b[48;2;137;180;250m", fg: "\x1b[38;2;137;180;250m" },
+  green:    { bg: "\x1b[48;2;166;227;161m", fg: "\x1b[38;2;166;227;161m" },
+  yellow:   { bg: "\x1b[48;2;249;226;175m", fg: "\x1b[38;2;249;226;175m" },
+  teal:     { bg: "\x1b[48;2;148;226;213m", fg: "\x1b[38;2;148;226;213m" },
+  sky:      { bg: "\x1b[48;2;137;220;235m", fg: "\x1b[38;2;137;220;235m" },
+  peach:    { bg: "\x1b[48;2;250;179;135m", fg: "\x1b[38;2;250;179;135m" },
+  flamingo: { bg: "\x1b[48;2;242;205;205m", fg: "\x1b[38;2;242;205;205m" },
+  mauve:    { bg: "\x1b[48;2;203;166;247m", fg: "\x1b[38;2;203;166;247m" },
+  crust:    "\x1b[38;2;17;17;27m",
+  reset:    "\x1b[0m",
+  bold:     "\x1b[1m",
 }
 
 // Powerline Nerd Font glyphs
@@ -18,11 +20,12 @@ const CAP_R = "\uE0B4"  // right rounded cap
 
 export interface State {
   model: string
-  thinking: string | null     // null = off/hidden (e.g. "medium", "high")
+  thinking: string | null      // null = off/hidden (e.g. "medium", "high")
   branch: string | null
   dirty: boolean
-  activeTool: string | null   // null = segment hidden
-  activeAgent: string | null  // null = segment hidden
+  activeTool: string | null    // null = segment hidden
+  activeAgent: string | null   // null = segment hidden
+  activeCommand: string | null // null = segment hidden (e.g. "/effort", "/chain")
   tokensIn: number
   tokensOut: number
   cost: number
@@ -61,9 +64,8 @@ export function render(state: State): string {
   let line = ""
   let lastFg = C.blue.fg
 
-  // Left cap + Model (+ thinking level when active)
-  const modelText = state.thinking ? `π ${state.model} • ${state.thinking}` : `π ${state.model}`
-  line += `${C.reset}${C.blue.fg}${CAP_L}${C.blue.bg}${C.crust}${C.bold} ${modelText} `
+  // Left cap + Model
+  line += `${C.reset}${C.blue.fg}${CAP_L}${C.blue.bg}${C.crust}${C.bold} π ${state.model} `
 
   // Git — conditional on branch being known
   if (state.branch !== null) {
@@ -82,6 +84,18 @@ export function render(state: State): string {
   // Active subagent — conditional
   if (state.activeAgent !== null) {
     const [s, fg] = seg(lastFg, C.peach, state.activeAgent)
+    line += s; lastFg = fg
+  }
+
+  // Thinking level — conditional, sky segment
+  if (state.thinking !== null) {
+    const [s, fg] = seg(lastFg, C.sky, state.thinking)
+    line += s; lastFg = fg
+  }
+
+  // Active command — conditional, flamingo segment (e.g. "/effort", "/chain")
+  if (state.activeCommand !== null) {
+    const [s, fg] = seg(lastFg, C.flamingo, state.activeCommand)
     line += s; lastFg = fg
   }
 

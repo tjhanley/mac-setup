@@ -9,6 +9,7 @@ const baseState: State = {
   dirty: false,
   activeTool: null,
   activeAgent: null,
+  activeCommand: null,
   tokensIn: 2100,
   tokensOut: 800,
   cost: 0.04,
@@ -87,4 +88,25 @@ test("render formats sub-1k tokens without suffix", () => {
   const result = render({ ...baseState, tokensIn: 500, tokensOut: 42 })
   assert.ok(result.includes("500↓"))
   assert.ok(result.includes("42↑"))
+})
+
+test("render hides command segment when activeCommand is null", () => {
+  const result = render(baseState)
+  assert.ok(!result.includes("/effort"))
+})
+
+test("render shows command segment when activeCommand is set", () => {
+  const result = render({ ...baseState, activeCommand: "/effort" })
+  assert.ok(result.includes("/effort"))
+})
+
+test("render shows thinking segment when thinking is set", () => {
+  const result = render({ ...baseState, thinking: "high" })
+  assert.ok(result.includes("high"))
+})
+
+test("render hides thinking segment when thinking is null", () => {
+  const result = render({ ...baseState, thinking: null })
+  // "high" appears nowhere else in baseState
+  assert.ok(!result.includes(" high "))
 })

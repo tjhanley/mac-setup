@@ -20,6 +20,7 @@ export default function powerlineExtension(pi: ExtensionAPI) {
     dirty: false,
     activeTool: null,
     activeAgent: null,
+    activeCommand: null,
     tokensIn: 0,
     tokensOut: 0,
     cost: 0,
@@ -93,6 +94,7 @@ export default function powerlineExtension(pi: ExtensionAPI) {
         state.durationMs += Date.now() - turnStartedAt
         turnStartedAt = null
       }
+      state.activeCommand = null  // command completed with this turn
       const dir  = (ctx as any).session?.directory ?? process.cwd()
       const git  = gitInfo(dir)
       state.branch = git.branch
@@ -115,9 +117,22 @@ export default function powerlineExtension(pi: ExtensionAPI) {
     } catch { /* never crash the session */ }
   })
 
-  pi.on("before_agent_start", async (event, _ctx) => {
+  // input event: track slash commands as they're submitted
+  pi.on("input", async (event, _ctx) => {
     try {
-      state.activeAgent = (event as any).agentName ?? null
+      const text = (event as any).text?.trimStart() ?? ""
+      if (text.startsWith("/")) {
+        state.activeCommand = text.split(/\s+/)[0]  // e.g. "/effort", "/chain"
+        requestRender()
+      }
+    } catch { /* never crash the session */ }
+    return { action: "continue" as const }
+  })
+
+  pi.on("before_agent_start", async (_event, _ctx) => {
+    try {
+      // BeforeAgentStartEvent has no agentName — show generic label
+      state.activeAgent = "agent"
       requestRender()
     } catch { /* never crash the session */ }
   })
