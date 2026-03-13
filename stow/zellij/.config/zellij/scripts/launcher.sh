@@ -7,7 +7,7 @@ commands=(
   "🤖 claude"
   "🌳 claude --worktree"
   "📦 codex"
-  "☸️  k9s"
+  "🐕 k9s"
   "🐳 lazydocker"
   "🔀 lazygit"
   "🌿 nvim"
