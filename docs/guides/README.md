@@ -9,6 +9,7 @@ Practical how-to documentation for people who fork or adopt this mac-setup.
 | [Zellij](zellij.md) | Keybinds, launcher, zjstatus bar, custom scripts |
 | [Shell](shell.md) | Aliases, completions, fzf, navigation, plugins |
 | [Git](git.md) | Aliases, delta pager, 1Password signing, config split |
+| [JiraTUI](jiratui.md) | API setup, CLI commands, saved JQL queries |
 
 ## Workflow Guides
 

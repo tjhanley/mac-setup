@@ -337,6 +337,7 @@ stow_dotfiles() {
     backup_path "$HOME/.config/obsidian"
     backup_path "$HOME/.config/yazi"
     backup_path "$HOME/.config/raycast"
+    backup_path "$HOME/.config/jiratui"
     backup_path "$HOME/.config/karabiner"
     backup_path "$HOME/.config/skhd"
     backup_path "$HOME/Library/Application Support/Zed/settings.json"

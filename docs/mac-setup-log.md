@@ -51,6 +51,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zellij
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
+- jiratui — Jira TUI client
 - skhd (via koekeishiya/formulae tap) — hotkey daemon
 - imagemagick (used by Snacks.image in Neovim)
 - tldr, btop, wget, trash, dust, duf, fastfetch
@@ -130,7 +131,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
-- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (basalt, btop, claude, codex, k9s, lazydocker, lazygit, nvim, opencode, pi, sidecar, yazi) in new floating panes.
+- Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (basalt, btop, claude, codex, jiratui, k9s, lazydocker, lazygit, nvim, opencode, pi, sidecar, yazi) in new floating panes.
 - zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 
@@ -148,9 +149,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
 - `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json` (vault registry); `necronomicon/.obsidian/` (vault config symlinked into `~/necronomicon`): all settings JSONs, `plugins/*/data.json` (plugin settings, not code), `themes/Catppuccin/` + `themes/AnuPpuccin/`, `snippets/settings-nav-contrast.css`. Plugin code (`main.js`, `manifest.json`, `styles.css`) is gitignored and re-downloaded by Obsidian.
-- `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
+- `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,gh-roadmap,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, gh-roadmap, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
+- `jiratui/` — `.config/jiratui/config.yaml` (Catppuccin Mocha theme, search defaults; API credentials commented out — set per machine)
 - `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)

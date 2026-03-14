@@ -42,6 +42,7 @@ Practical usage guides live in [`docs/guides/`](docs/guides/):
 - [Zellij](docs/guides/zellij.md) -- keybinds, launcher, zjstatus bar, scripts
 - [Shell](docs/guides/shell.md) -- aliases, completions, fzf, navigation, plugins
 - [Git](docs/guides/git.md) -- delta pager, 1Password signing, config split
+- [JiraTUI](docs/guides/jiratui.md) -- API setup, CLI commands, saved JQL queries
 - [Theming](docs/guides/theming.md) -- Catppuccin Mocha setup, re-theming with Claude Code
 - [Customization](docs/guides/customization.md) -- adding packages, stow modules, runtimes
 - [Bootstrap](docs/guides/bootstrap.md) -- understanding and troubleshooting setup.sh
@@ -127,6 +128,7 @@ stow/
     .claude/skills/commit/SKILL.md       # imperative commit with co-author
     .claude/skills/pr/SKILL.md           # PR with summary + test plan
     .claude/skills/fix-issue/SKILL.md    # read issue, fix, test, commit
+    .claude/skills/gh-roadmap/SKILL.md   # create GitHub milestones, issues, and Projects board from a plan
     .claude/skills/simplify/SKILL.md     # review changed code, simplify, fix issues
     .claude/skills/test/SKILL.md         # run tests, diagnose and fix failures
     .claude/statusline.sh                # Catppuccin Mocha powerline status line for Claude Code
@@ -135,6 +137,8 @@ stow/
   yazi/
     .config/yazi/theme.toml
     .config/yazi/Catppuccin-mocha.tmTheme
+  jiratui/
+    .config/jiratui/config.yaml              # Catppuccin Mocha theme, search defaults
   skhd/
     .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
   karabiner/
@@ -157,7 +161,7 @@ stow/
 ## CLI Tools
 
 Installed via Homebrew: awscli, bat, bats-core, btop, cargo-binstall, dashlane-cli, duf, dust, eza,
-fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jq, k9s,
+fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jiratui, jq, k9s,
 kubectl, lazydocker, lazygit, mas, mise, neovim, opencode, ripgrep, rust, rustup-init, skhd
 (koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, varlock, wget,
 yazi, zellij, zoxide, zsh-autosuggestions, zsh-syntax-highlighting
