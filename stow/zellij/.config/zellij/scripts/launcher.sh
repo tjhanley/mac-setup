@@ -7,6 +7,7 @@ commands=(
   "🤖 claude"
   "🌳 claude --worktree"
   "📦 codex"
+  "🎫 jiratui ui"
   "🐕 k9s"
   "🐳 lazydocker"
   "🔀 lazygit"
