@@ -163,7 +163,7 @@ stow/
 Installed via Homebrew: awscli, bat, bats-core, btop, cargo-binstall, dashlane-cli, duf, dust, eza,
 fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jiratui, jq, k9s,
 kubectl, lazydocker, lazygit, mas, mise, neovim, opencode, ripgrep, rust, rustup-init, skhd
-(koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, varlock, wget,
+(koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, uv, varlock, wget,
 yazi, zellij, zoxide, zsh-autosuggestions, zsh-syntax-highlighting
 
 Casks: 1password, brave-browser, codex, docker-desktop, gcloud-cli, ghostty, karabiner-elements,
@@ -177,7 +177,7 @@ opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 
-Shell completions: kubectl, docker, mise, gh, stern, rustup, cargo, gcloud, fzf, yazi
+Shell completions: kubectl, docker, mise, gh, stern, rustup, cargo, gcloud, fzf, uv, yazi
 
 ## Man Page
 

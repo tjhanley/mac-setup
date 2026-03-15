@@ -52,6 +52,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 - jiratui — Jira TUI client
+- uv — fast Python package installer and resolver (Astral)
 - skhd (via koekeishiya/formulae tap) — hotkey daemon
 - imagemagick (used by Snacks.image in Neovim)
 - tldr, btop, wget, trash, dust, duf, fastfetch
@@ -83,7 +84,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starship init.
 - zoxide init.
 - fzf init with Catppuccin Mocha color scheme (`FZF_DEFAULT_OPTS`).
-- CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, stern, rustup, cargo.
+- CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, stern, rustup, cargo. uv completions provided via Homebrew site-functions.
 - History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
 - Shell options: `auto_cd`, `extended_glob`, `correct`.
 - `RIPGREP_CONFIG_PATH` set to `~/.ripgreprc`.
