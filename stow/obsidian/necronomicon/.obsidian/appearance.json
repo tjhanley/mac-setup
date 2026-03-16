@@ -1,11 +1,5 @@
 {
   "cssTheme": "Catppuccin",
   "theme": "obsidian",
-  "enabledCssSnippets": [
-    "settings-nav-contrast"
-  ],
-  "monospaceFontFamily": "BlexMono Nerd Font Mono",
-  "baseFontSizeAction": true,
-  "textFontFamily": "SF Pro",
-  "interfaceFontFamily": "SF Pro Rounded"
+  "monospaceFontFamily": "BlexMono Nerd Font Mono"
 }

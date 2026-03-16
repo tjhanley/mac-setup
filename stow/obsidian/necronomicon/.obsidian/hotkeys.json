@@ -7,32 +7,5 @@
       "key": "O"
     }
   ],
-  "switcher:open": [],
-  "canvas:new-file": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "C"
-    }
-  ],
-  "zk-prefixer": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "N"
-    }
-  ],
-  "file-explorer:new-file": [],
-  "templater-obsidian:create-Atlas/etc/templates/D&D Session.md": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "D"
-    }
-  ]
+  "switcher:open": []
 }
