@@ -355,4 +355,5 @@ if [[ -f "$HOME/.secrets" ]]; then
 fi
 
 # OpenClaw Completion
-source "/Users/tom/.openclaw/completions/openclaw.zsh"
+# source "/Users/tom/.openclaw/completions/openclaw.zsh"
+export PATH="$HOME/.local/bin:$PATH"
