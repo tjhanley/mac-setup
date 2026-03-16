@@ -31,6 +31,13 @@ stow/zed/.config/zed/prompts/
 .claude/worktrees/
 .worktrees/
 
+# Claude Code runtime state (keep only settings.json)
+stow/claude/.claude/*
+!stow/claude/.claude/settings.json
+
+# Zellij compiled plugins (installed at runtime)
+stow/zellij/.config/zellij/plugins/
+
 # Backups
 config-backups/
 
