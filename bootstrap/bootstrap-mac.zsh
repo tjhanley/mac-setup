@@ -982,6 +982,9 @@ install_docker_desktop() {
     # Stale completion symlinks from previous Docker installs
     rm -f /opt/homebrew/etc/bash_completion.d/docker-compose 2>/dev/null || true
     rm -f /opt/homebrew/etc/bash_completion.d/docker 2>/dev/null || true
+    # Docker Desktop no longer ships zsh completions; docker CLI generates them via `docker completion zsh`
+    rm -f /opt/homebrew/share/zsh/site-functions/_docker-compose 2>/dev/null || true
+    rm -f /opt/homebrew/share/zsh/site-functions/_docker 2>/dev/null || true
   fi
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
