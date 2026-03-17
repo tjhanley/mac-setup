@@ -34,8 +34,6 @@ Prompt for git user.name and user.email (stored in ~/.gitconfig.local)
 .IP 10. 4
 Generate SSH key (ed25519) if missing; upload to GitHub via gh
 .IP 11. 4
-Verify git commit signing (1Password SSH agent, signing key)
-.IP 12. 4
 Install Ghostty shaders, link macOS app configs (Zed, Obsidian)
 .IP 13. 4
 Install LazyVim, stow Neovim plugin configs, download zjstatus
@@ -255,9 +253,6 @@ Key settings:
 .B core.pager
 delta (with navigate mode)
 .TP
-.B commit.gpgSign
-SSH signing via 1Password (op-ssh-sign)
-.TP
 .B core.excludesfile
 ~/.gitignore (stow-managed global gitignore)
 .TP
@@ -367,7 +362,7 @@ Keybinds, launcher, zjstatus bar, custom scripts
 Aliases, completions, fzf, navigation, plugins
 .TP
 .B git.md
-Delta pager, 1Password signing, config split, custom aliases
+Delta pager, config split, custom aliases
 .TP
 .B theming.md
 Catppuccin Mocha setup, re-theming with Claude Code

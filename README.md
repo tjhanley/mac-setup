@@ -41,7 +41,7 @@ Practical usage guides live in [`docs/guides/`](docs/guides/):
 
 - [Zellij](docs/guides/zellij.md) -- keybinds, launcher, zjstatus bar, scripts
 - [Shell](docs/guides/shell.md) -- aliases, completions, fzf, navigation, plugins
-- [Git](docs/guides/git.md) -- delta pager, 1Password signing, config split
+- [Git](docs/guides/git.md) -- delta pager, config split, aliases
 - [JiraTUI](docs/guides/jiratui.md) -- API setup, CLI commands, saved JQL queries
 - [Theming](docs/guides/theming.md) -- Catppuccin Mocha setup, re-theming with Claude Code
 - [Customization](docs/guides/customization.md) -- adding packages, stow modules, runtimes
@@ -61,8 +61,7 @@ See also: `man mac-setup` for the full system reference.
 8. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
 9. Prompts for `git user.name` and `user.email` only if missing from effective git config (stores entries in `~/.gitconfig.local`)
 10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
-11. Verifies git commit signing (1Password SSH agent, signing key)
-12. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
+11. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
 13. Links macOS app configs (Zed settings + keymap, Obsidian) to stow-managed paths
 14. Installs LazyVim starter (if no existing `~/.config/nvim`)
 15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)

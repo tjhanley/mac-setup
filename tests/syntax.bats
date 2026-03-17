@@ -48,12 +48,6 @@ REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   [[ "$inc" == "~/.gitconfig.local" ]]
 }
 
-@test ".gitconfig enables commit signing" {
-  local sign
-  sign="$(git config --file "$REPO_ROOT/stow/git/.gitconfig" commit.gpgSign)"
-  [[ "$sign" == "true" ]]
-}
-
 # --- Global gitignore ---------------------------------------------------------
 
 @test ".gitignore contains .DS_Store" {
