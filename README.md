@@ -56,27 +56,28 @@ See also: `man mac-setup` for the full system reference.
 3. Installs packages/apps from `brew/Brewfile` (except `gcloud-cli` and `docker-desktop` in initial pass)
 4. Ensures `~/.config` exists
 5. Checks for `.env.schema` (varlock format) — hints to use `varlock run -- <command>` if no `.env` present
-6. Stows dotfiles from `stow/` into `$HOME` using merge-first mode: adopts any local drift into the repo and commits it, then symlinks (nvim stowed separately — see step 13); use `--hard-reset` to get the old pave behavior (backup + overwrite)
-7. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
-8. Prompts for `git user.name` and `user.email` only if missing from effective git config (stores entries in `~/.gitconfig.local`)
-9. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
-10. Verifies git commit signing (1Password SSH agent, signing key)
-11. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
-12. Links macOS app configs (Zed settings + keymap, Obsidian) to stow-managed paths
-13. Installs LazyVim starter (if no existing `~/.config/nvim`)
-14. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
-15. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
-16. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
-17. Installs runtimes via `mise` from stow-managed `~/.config/mise/config.toml` only (with extended remote-fetch timeout + one retry)
-18. Installs `gcloud-cli` using `mise` Python
-19. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
-20. Installs App Store apps (CopyLess 2, Magnet) via `mas`
-21. Installs Rust via `rustup-init`
-22. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-23. Installs npm global tools (`@mariozechner/pi-coding-agent`)
-24. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
-25. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
-26. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
+6. Loads host feature flags from `~/.mac-setup.local` (if present); unset flags default to enabled
+7. Stows dotfiles from `stow/` into `$HOME` using merge-first mode: adopts any local drift into the repo and commits it, then symlinks (nvim stowed separately — see step 14); use `--hard-reset` to get the old pave behavior (backup + overwrite)
+8. Installs private fonts from iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/fonts/`)
+9. Prompts for `git user.name` and `user.email` only if missing from effective git config (stores entries in `~/.gitconfig.local`)
+10. Generates SSH key (ed25519) if missing and uploads to GitHub via `gh`
+11. Verifies git commit signing (1Password SSH agent, signing key)
+12. Clones Ghostty shaders to `~/.local/share/ghostty/shaders/` (avoids writing into stow-managed repo paths)
+13. Links macOS app configs (Zed settings + keymap, Obsidian) to stow-managed paths
+14. Installs LazyVim starter (if no existing `~/.config/nvim`)
+15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
+16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
+17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+18. Installs runtimes via `mise` from stow-managed `~/.config/mise/config.toml` only (with extended remote-fetch timeout + one retry)
+19. Installs `gcloud-cli` using `mise` Python
+20. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
+21. Installs App Store apps (CopyLess 2, Magnet) via `mas`
+22. Installs Rust via `rustup-init`
+23. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
+24. Installs npm global tools (`@mariozechner/pi-coding-agent`)
+25. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
+26. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
+27. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
 
 ## Dotfiles Structure
 
@@ -221,6 +222,7 @@ bats tests/
   `./scripts/skip-worktree.sh --help`
 - Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)
 - Declare shared env vars in `.env.schema` (varlock format); run `varlock run -- <command>` to inject
+- Toggle per-machine features in `~/.mac-setup.local` (copy from `.mac-setup.local.example`)
 
 ## Local Skip-Worktree
 

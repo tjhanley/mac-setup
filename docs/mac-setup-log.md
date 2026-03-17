@@ -15,6 +15,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Runs `brew update` and `brew upgrade` on each run.
 - Installs Brewfile dependencies.
 - Calls `ensure_env_schema()` — detects `.env.schema` (varlock format); hints `varlock run -- <command>` if no `.env` present; warns if neither exists.
+- Loads per-machine feature flags from `~/.mac-setup.local` via `load_host_config()`. File is plain shell vars sourced directly. Absent file means all features enabled (opt-out). `feature_enabled()` checks strict truthy (`1`/`true`); unset defaults to enabled.
 - Supports `--dry-run` mode.
 - `brew` verbosity is controlled by `DEBUG=true|1`.
 - Default stow mode is **merge-first**: uses `stow --adopt --restow` to pull any local drift (real files at stow targets) into the repo, then commits the adoption and symlinks. Keeps app configs intact on re-runs.

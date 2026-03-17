@@ -26,6 +26,7 @@ stow/zed/.config/zed/prompts/
 !.env.schema
 .secrets
 .secrets-config
+.mac-setup.local
 .local/
 .claude/settings.local.json
 .claude/worktrees/

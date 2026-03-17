@@ -1,0 +1,13 @@
+# Host feature flags for mac-setup bootstrap
+# Copy to ~/.mac-setup.local and uncomment to override defaults.
+# Unset flags default to enabled (opt-out).
+# Valid values: 1, true (enabled) / anything else (disabled)
+
+# Tiling window manager (yabai)
+# FEATURE_YABAI=1
+
+# Hotkey daemon service (skhd)
+# FEATURE_SKHD=1
+
+# App Store installs (CopyLess 2, Magnet)
+# FEATURE_APP_STORE=1
