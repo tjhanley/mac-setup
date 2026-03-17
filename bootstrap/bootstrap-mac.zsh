@@ -23,6 +23,25 @@ warn(){ print -P "%F{yellow}⚠%f $1"; }
 need_cmd() { command -v "$1" >/dev/null 2>&1; }
 is_debug() { [[ "$DEBUG" == "true" || "$DEBUG" == "1" ]]; }
 
+feature_enabled() {
+  local val="${(P)1-1}"
+  [[ "$val" == "1" || "$val" == "true" ]]
+}
+
+load_host_config() {
+  local config="$HOME/.mac-setup.local"
+  if [[ -f "$config" ]]; then
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f source $config"
+      return
+    fi
+    source "$config"
+    ok "Host config loaded: $config"
+  else
+    ok "No host config found; using defaults"
+  fi
+}
+
 run_cmd() {
   if [[ "$DRY_RUN" -eq 1 ]]; then
     print -P "%F{yellow}dry-run:%f $*"
@@ -1223,6 +1242,7 @@ main() {
   refresh_homebrew
   ensure_config_dir
   ensure_env_schema
+  load_host_config
   prepare_brew_binary_conflicts
   install_brew_bundle
 
