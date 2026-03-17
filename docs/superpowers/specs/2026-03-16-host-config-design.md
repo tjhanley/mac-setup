@@ -27,7 +27,7 @@ No mechanism to toggle optional bootstrap features per machine. Features like ya
 # Host feature flags for mac-setup bootstrap
 # Copy to ~/.mac-setup.local and uncomment to override defaults.
 # Unset flags default to enabled (opt-out).
-# Valid values: 1, true (enabled) / 0, false (disabled)
+# Valid values: 1, true (enabled) / anything else (disabled)
 
 # FEATURE_YABAI=1
 # FEATURE_SKHD=1
@@ -38,7 +38,7 @@ No mechanism to toggle optional bootstrap features per machine. Features like ya
 
 ### load_host_config()
 
-Sources `~/.mac-setup.local` if present. No-op if absent. Supports `DRY_RUN`. Wired into `main()` after `ensure_config_dir`, before `install_brew_bundle`.
+Sources `~/.mac-setup.local` if present. No-op if absent. Supports `DRY_RUN` (prints what would be loaded, does not source). Wired into `main()` after `ensure_env_schema`, before `prepare_brew_binary_conflicts`.
 
 ```zsh
 load_host_config() {
@@ -46,6 +46,7 @@ load_host_config() {
   if [[ -f "$config" ]]; then
     if [[ "$DRY_RUN" -eq 1 ]]; then
       print -P "%F{yellow}dry-run:%f source $config"
+      return
     fi
     source "$config"
     ok "Host config loaded: $config"
@@ -57,16 +58,17 @@ load_host_config() {
 
 ### feature_enabled()
 
-Returns 0 if flag is `1` or `true`, 1 otherwise. Unset variables default to `1` (enabled) for opt-out semantics.
+Returns 0 if flag is `1` or `true`, 1 otherwise. Unset variables default to `1` (enabled) for opt-out semantics. Empty strings are treated as disabled.
 
 ```zsh
 feature_enabled() {
-  local val="${(P)1:-1}"
+  local val="${(P)1}"
+  [[ -z "$val" && -z "${(P)1+x}" ]] && val="1"
   [[ "$val" == "1" || "$val" == "true" ]]
 }
 ```
 
-`(P)` is zsh parameter indirection -- expands the variable whose name is in `$1`.
+`(P)` is zsh parameter indirection -- expands the variable whose name is in `$1`. The unset check uses `${(P)1+x}` which expands to `x` only if the variable is set (even to empty), distinguishing unset (default enabled) from `FEATURE_X=""` (disabled).
 
 ## Gating
 
@@ -102,6 +104,7 @@ The mechanism is ready for future gating of `FEATURE_SKHD`, `FEATURE_APP_STORE`,
 | `FEATURE_X=0` | Disabled (return 1) |
 | `FEATURE_X=false` | Disabled |
 | `FEATURE_X=yes` | Disabled (strict) |
+| `FEATURE_X=""` | Disabled (empty string) |
 | Unset | Enabled (opt-out default) |
 
 All tests use temp files. No side effects on `~/.mac-setup.local`.
