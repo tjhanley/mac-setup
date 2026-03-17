@@ -5,3 +5,4 @@ cmd + ctrl + alt + shift - b : open -a "Brave Browser"
 cmd + ctrl + alt + shift - o : open -a Obsidian
 cmd + ctrl + alt + shift - m : open -a Spotify
 cmd + ctrl + alt + shift - s : open -a Slack
+cmd + ctrl + alt + shift - f : open -a Safari

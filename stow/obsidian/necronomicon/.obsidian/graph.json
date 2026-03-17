@@ -1,5 +1,5 @@
 {
-  "collapse-filter": true,
+  "collapse-filter": false,
   "search": "",
   "showTags": true,
   "showAttachments": true,
@@ -13,9 +13,23 @@
         "a": 1,
         "rgb": 2442202
       }
+    },
+    {
+      "query": "path:Atlas/Sonatus/Repos",
+      "color": {
+        "a": 1,
+        "rgb": 13305350
+      }
+    },
+    {
+      "query": "path:Atlas/Sonatus  ",
+      "color": {
+        "a": 1,
+        "rgb": 4833721
+      }
     }
   ],
-  "collapse-display": true,
+  "collapse-display": false,
   "showArrow": true,
   "textFadeMultiplier": 0.5,
   "nodeSizeMultiplier": 1.17230034722222,
@@ -26,5 +40,5 @@
   "linkStrength": 0.628298611111111,
   "linkDistance": 236,
   "scale": 0.15698202138003683,
-  "close": true
+  "close": false
 }
