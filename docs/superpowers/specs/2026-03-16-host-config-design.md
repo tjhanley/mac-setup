@@ -62,13 +62,12 @@ Returns 0 if flag is `1` or `true`, 1 otherwise. Unset variables default to `1` 
 
 ```zsh
 feature_enabled() {
-  local val="${(P)1}"
-  [[ -z "$val" && -z "${(P)1+x}" ]] && val="1"
+  local val="${(P)1-1}"
   [[ "$val" == "1" || "$val" == "true" ]]
 }
 ```
 
-`(P)` is zsh parameter indirection -- expands the variable whose name is in `$1`. The unset check uses `${(P)1+x}` which expands to `x` only if the variable is set (even to empty), distinguishing unset (default enabled) from `FEATURE_X=""` (disabled).
+`(P)` is zsh parameter indirection -- expands the variable whose name is in `$1`. The `-1` default (dash, not colon-dash) only triggers when the variable is truly unset, not when set to empty string. This is safe under `set -u` (nounset).
 
 ## Gating
 
