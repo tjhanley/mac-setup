@@ -6,6 +6,7 @@ commands=(
   "📊 btop"
   "🤖 claude"
   "🌳 claude --worktree"
+  "🔓 claude --dangerously-skip-permissions"
   "📦 codex"
   "🎫 jiratui ui"
   "🐕 k9s"
