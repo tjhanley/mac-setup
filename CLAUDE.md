@@ -44,3 +44,8 @@ When changing:
 - Shell: zsh with `set -euo pipefail`
 - Theme: Catppuccin Mocha everywhere
 - No emojis in code or docs (unicode symbols like checkmarks in log output are fine)
+
+## GitHub
+
+- This repo uses the `tjhanley` personal GitHub account (SSH alias `github.com-personal`)
+- `gh auth switch --user tjhanley` before running `gh` commands against this repo

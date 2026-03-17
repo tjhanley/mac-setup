@@ -215,6 +215,7 @@ fi
 if command -v zellij >/dev/null 2>&1; then
   alias zj='zellij'
   alias zja='zellij attach -c main'
+  alias zka='zellij kill-all-sessions'
 fi
 
 if command -v docker >/dev/null 2>&1; then
