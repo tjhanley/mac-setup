@@ -35,6 +35,9 @@ stow/zed/.config/zed/prompts/
 stow/claude/.claude/*
 !stow/claude/.claude/settings.json
 
+# JiraTUI config (contains API credentials)
+stow/jiratui/.config/jiratui/config.yaml
+
 # Zellij compiled plugins (installed at runtime)
 stow/zellij/.config/zellij/plugins/
 

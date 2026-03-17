@@ -11,6 +11,9 @@ mouse_mode true;
 session_serialization true;
 
 keybinds {
+    shared_except "locked" {
+        unbind "Ctrl q"
+    }
     shared {
         bind "Super k" { Clear; Write 12; }
         bind "Super Shift l" {
