@@ -231,6 +231,9 @@ if command -v lazydocker >/dev/null 2>&1; then
   alias lzd='lazydocker'
 fi
 
+# Re-stow a single package from mac-setup
+restow() { stow -R "$1" -d ~/Workspace/mac-setup/stow -t ~; }
+
 if [[ -d "/Applications/Spotify.app" ]]; then
   alias spotify='open -a Spotify'
 fi
