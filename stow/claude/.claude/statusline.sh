@@ -5,6 +5,9 @@
 
 input=$(cat)
 
+# Source host config for feature flags (opt-out: unset = enabled)
+[ -f "$HOME/.mac-setup.local" ] && . "$HOME/.mac-setup.local"
+
 # Catppuccin Mocha — truecolor ANSI
 BG_BLUE='[48;2;137;180;250m'
 BG_GREEN='[48;2;166;227;161m'
@@ -12,6 +15,7 @@ BG_YELLOW='[48;2;249;226;175m'
 BG_MAUVE='[48;2;203;166;247m'
 BG_TEAL='[48;2;148;226;213m'
 BG_PEACH='[48;2;250;179;135m'
+BG_SKY='[48;2;137;220;235m'
 FG_BASE='[38;2;30;30;46m'
 FG_DIM='[38;2;108;112;134m'   # Catppuccin Mocha overlay0 — for empty bar portion
 
@@ -22,6 +26,7 @@ FG_YELLOW='[38;2;249;226;175m'
 FG_MAUVE='[38;2;203;166;247m'
 FG_TEAL='[38;2;148;226;213m'
 FG_PEACH='[38;2;250;179;135m'
+FG_SKY='[38;2;137;220;235m'
 
 BOLD='[1m'
 RESET='[0m'
@@ -33,6 +38,7 @@ CAP_R='' # U+E0B4 right rounded cap: fg=last_seg_bg, bg=terminal
 CHIP=''   # U+F2DB fa-microchip — model glyph
 BRANCH='' # U+E0A0 Powerline VCS branch glyph
 ROBOT=''  # U+F544 fa-robot — agent glyph
+FOLDER='' # U+F07B fa-folder — project glyph
 
 # Extract all fields in one jq call
 IFS=$'\x1f' read -r MODEL DIR PCT COST VIM_MODE DURATION_MS STYLE AGENT TOKENS_IN TOKENS_OUT < <(
@@ -67,21 +73,27 @@ if cache_is_stale; then
         BRANCH_NAME=$(git -C "$DIR" branch --show-current 2>/dev/null)
         STAGED=$(git -C "$DIR" diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
         MODIFIED=$(git -C "$DIR" diff --numstat 2>/dev/null | wc -l | tr -d ' ')
-        printf '1|%s|%s|%s\n' "$BRANCH_NAME" "$STAGED" "$MODIFIED" > "$CACHE_FILE"
+        REPO_NAME=$(basename "$(git -C "$DIR" rev-parse --show-toplevel 2>/dev/null)")
+        printf '1|%s|%s|%s|%s\n' "$BRANCH_NAME" "$STAGED" "$MODIFIED" "$REPO_NAME" > "$CACHE_FILE"
     else
-        printf '0|||\n' > "$CACHE_FILE"
+        printf '0||||\n' > "$CACHE_FILE"
     fi
 fi
 
-IFS='|' read -r IS_GIT BRANCH_NAME STAGED MODIFIED < "$CACHE_FILE"
+IFS='|' read -r IS_GIT BRANCH_NAME STAGED MODIFIED REPO_NAME < "$CACHE_FILE"
 
-# Context bar — ━ (heavy) for filled, ─ (light) for empty — clear contrast, no shading artifacts
-FILLED=$((PCT * 10 / 100))
-EMPTY=$((10 - FILLED))
+# Context bar — ━ (heavy) for filled, ─ (light) for empty — gated by host config
 BAR=""
-[ "$FILLED" -gt 0 ] && BAR="${FG_BASE}$(printf "%${FILLED}s" | tr ' ' '━')"
-[ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
-BAR="${BAR}${FG_BASE}"  # restore fg after bar
+_CTX_BAR="${FEATURE_STATUSLINE_CONTEXT_BAR:-1}"
+if [ "$_CTX_BAR" = "1" ] || [ "$_CTX_BAR" = "true" ]; then
+    FILLED=$((PCT * 10 / 100))
+    EMPTY=$((10 - FILLED))
+    [ "$FILLED" -gt 0 ] && BAR="${FG_BASE}$(printf "%${FILLED}s" | tr ' ' '━')"
+    [ "$EMPTY"  -gt 0 ] && BAR="${BAR}${FG_DIM}$(printf "%${EMPTY}s" | tr ' ' '─')"
+    BAR="${BAR}${FG_BASE}"
+fi
+BAR_SEG=""
+[ -n "$BAR" ] && BAR_SEG=" ${BAR}"
 
 # Cost, duration, and token formatting
 COST_FMT=$(awk -v c="$COST" 'BEGIN { printf "$%.2f\n", c+0 }')
@@ -118,6 +130,12 @@ VIM_BG="$BG_GREEN"; VIM_FG="$FG_GREEN"
 LINE="${RESET}${FG_BLUE}${CAP_L}${BG_BLUE}${FG_BASE}${BOLD} ${CHIP} ${MODEL} "
 LAST_FG="$FG_BLUE"
 
+# — Project segment (sky) — repo root basename
+if [ "${IS_GIT:-0}" = "1" ] && [ -n "$REPO_NAME" ]; then
+    LINE="${LINE}${LAST_FG}${BG_SKY}${SEP}${FG_BASE}${BOLD} ${FOLDER} ${REPO_NAME} "
+    LAST_FG="$FG_SKY"
+fi
+
 if [ "${IS_GIT:-0}" = "1" ]; then
     GIT_TEXT="${BRANCH} ${BRANCH_NAME}"
     [ "${STAGED:-0}"   -gt 0 ] && GIT_TEXT="${GIT_TEXT} +${STAGED}"
@@ -127,7 +145,7 @@ if [ "${IS_GIT:-0}" = "1" ]; then
 fi
 
 # Context + cost + duration segment
-LINE="${LINE}${LAST_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${TOKENS_IN_FMT}↓ ${TOKENS_OUT_FMT}↑ ${BAR} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
+LINE="${LINE}${LAST_FG}${BG_MAUVE}${SEP}${FG_BASE}${BOLD} ${TOKENS_IN_FMT}↓ ${TOKENS_OUT_FMT}↑${BAR_SEG} ${PCT}% ${COST_FMT} ${DURATION_FMT} "
 LAST_FG="$FG_MAUVE"
 
 # Output style — teal pill, hidden when style is "default"

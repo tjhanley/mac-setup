@@ -11,3 +11,6 @@
 
 # App Store installs (CopyLess 2, Magnet)
 # FEATURE_APP_STORE=1
+
+# Statusline: context window progress bar (disable to save horizontal space)
+# FEATURE_STATUSLINE_CONTEXT_BAR=1
