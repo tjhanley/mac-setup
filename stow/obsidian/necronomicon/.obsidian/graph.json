@@ -8,7 +8,7 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "path:Atlas/D&D  ",
+      "query": "path:Atlas/D&D",
       "color": {
         "a": 1,
         "rgb": 2442202
@@ -22,7 +22,7 @@
       }
     },
     {
-      "query": "path:Atlas/Sonatus  ",
+      "query": "path:Atlas/Sonatus",
       "color": {
         "a": 1,
         "rgb": 4833721
@@ -34,11 +34,11 @@
   "textFadeMultiplier": 0.5,
   "nodeSizeMultiplier": 1.17230034722222,
   "lineSizeMultiplier": 1,
-  "collapse-forces": true,
+  "collapse-forces": false,
   "centerStrength": 0.425347222222222,
   "repelStrength": 8.52083333333333,
   "linkStrength": 0.628298611111111,
   "linkDistance": 236,
-  "scale": 0.15698202138003683,
-  "close": false
+  "scale": 0.08156412535959527,
+  "close": true
 }
