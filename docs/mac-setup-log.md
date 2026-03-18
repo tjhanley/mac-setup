@@ -97,6 +97,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
+- `restow <package>` shell function: re-stows a single package from `~/Workspace/mac-setup/stow`.
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `pi` (pi), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
@@ -148,13 +149,13 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
-- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua` (stowed separately after LazyVim install)
+- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua`, `.config/nvim/lua/plugins/neo-tree.lua` (show hidden files by default) (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json` (vault registry); `necronomicon/.obsidian/` (vault config symlinked into `~/necronomicon`): all settings JSONs, `plugins/*/data.json` (plugin settings, not code), `themes/Catppuccin/` + `themes/AnuPpuccin/`, `snippets/settings-nav-contrast.css`. Plugin code (`main.js`, `manifest.json`, `styles.css`) is gitignored and re-downloaded by Obsidian.
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,gh-roadmap,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, gh-roadmap, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 - `jiratui/` — `.config/jiratui/config.yaml` (Catppuccin Mocha theme, search defaults; API credentials commented out — set per machine)
-- `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
+- `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
 - `opencode/` — `.config/opencode/opencode.json` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.json` (built-in catppuccin theme)
@@ -195,7 +196,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Dry run: `./setup.sh --dry-run`
 - Hard reset (repo wins): `./setup.sh --hard-reset`
 - Verbose brew: `DEBUG=true ./setup.sh`
-- Re-apply specific stow package: `(cd stow && stow --target="$HOME" --restow <package>)`
+- Re-apply specific stow package: `restow <package>` (or manually: `(cd stow && stow --target="$HOME" --restow <package>)`)
 
 ## Notable implementation notes
 - Stow conflicts happen when target files already exist and are not symlinks.

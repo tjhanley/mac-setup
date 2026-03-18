@@ -116,6 +116,7 @@ stow/
     .config/nvim/lua/config/local.lua      # repo-managed local options (loaded by LazyVim options.lua)
     .config/nvim/lua/config/keymaps.lua   # arrow keys disabled in n/i/v modes
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
+    .config/nvim/lua/plugins/neo-tree.lua # show hidden files by default
   obsidian/
     .config/obsidian/obsidian.json
     necronomicon/.obsidian/          # vault config (symlinked into ~/necronomicon)
@@ -140,7 +141,7 @@ stow/
   jiratui/
     .config/jiratui/config.yaml              # Catppuccin Mocha theme, search defaults
   skhd/
-    .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, s=Spotify)
+    .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari)
   karabiner/
     .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
   pi/
@@ -217,6 +218,8 @@ bats tests/
   `./scripts/export-zed-extensions.sh`
 - Re-apply all stow packages after a pull:
   `./scripts/restow.sh`
+- Re-apply a single stow package:
+  `restow <package>` (shell function defined in `.zshrc`)
 - Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
   `./scripts/skip-worktree.sh --help`
 - Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)

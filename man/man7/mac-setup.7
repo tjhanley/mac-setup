@@ -52,7 +52,8 @@ Each package under
 .B stow/
 mirrors $HOME structure.
 Re-stow with:
-.B (cd stow && stow \-\-target="$HOME" \-\-restow <package>)
+.B restow <package>
+(shell function in .zshrc; equivalent to stow \-R <package> \-d ~/Workspace/mac-setup/stow \-t ~)
 .PP
 .TS
 l l.
@@ -69,13 +70,13 @@ ghostty	.config/ghostty/config
 zellij	.config/zellij/config.kdl, layouts/default.kdl, scripts/
 mise	.config/mise/config.toml
 zed	.config/zed/settings.json
-nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua
+nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua, plugins/neo-tree.lua
 obsidian	.config/obsidian/obsidian.json
 claude	.claude/CLAUDE.md, skills/, statusline.sh
 eza	.config/eza/theme.yml
 yazi	.config/yazi/theme.toml, Catppuccin-mocha.tmTheme
 jiratui	.config/jiratui/config.yaml (Catppuccin Mocha, search defaults)
-skhd	.config/skhd/skhdrc (Hyper key app launchers)
+skhd	.config/skhd/skhdrc (Hyper key launchers: t=Ghostty b=Brave o=Obsidian m=Spotify s=Slack f=Safari)
 karabiner	.config/karabiner/assets/complex_modifications/hyper.json
 pi	.pi/agent/themes/catppuccin-mocha.json, extensions/powerline/, agents/
 opencode	.config/opencode/opencode.json, tui.json
@@ -329,7 +330,7 @@ Zsh history file (50k lines)
 \&./setup.sh \-\-dry\-run
 .TP
 .B Re-stow a package
-(cd stow && stow \-\-target="$HOME" \-\-restow git)
+restow git
 .TP
 .B Update runtimes
 Edit stow/mise/.config/mise/config.toml, then mise install
