@@ -23,12 +23,6 @@
   conflictstyle = diff3
 [diff]
   colorMoved = default
-[commit]
-#j  gpgSign = true
-[gpg]
-#  format = ssh
-[gpg "ssh"]
-#  program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 [filter "lfs"]
   required = true
   clean = git-lfs clean -- %f
