@@ -155,7 +155,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)
 - `yazi/` — `.config/yazi/theme.toml`, `.config/yazi/Catppuccin-mocha.tmTheme`
 - `jiratui/` — `.config/jiratui/config.yaml` (Catppuccin Mocha theme, search defaults; API credentials commented out — set per machine)
-- `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari)
+- `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari, n=NecroTomicon)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
 - `opencode/` — `.config/opencode/opencode.json` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.json` (built-in catppuccin theme)
