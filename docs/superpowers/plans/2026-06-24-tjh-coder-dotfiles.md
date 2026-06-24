@@ -295,7 +295,7 @@ install_tools() {
   # preview must still show these steps.
   if have mise || [[ "$DRY_RUN" == "1" ]]; then
     local mise_bin
-    mise_bin="$(command -v mise)"
+    mise_bin="$(command -v mise || true)"     # || true: don't trip set -e when absent
     [[ -z "$mise_bin" ]] && mise_bin="mise"   # dry-run on a box without mise yet
     for tool in eza lazygit yazi zoxide neovim; do
       local check="$tool"; [[ "$tool" == "neovim" ]] && check="nvim"
