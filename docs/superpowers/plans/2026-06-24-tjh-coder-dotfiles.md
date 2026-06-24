@@ -281,16 +281,17 @@ install_tools() {
   fi
 
   # mise (official installer) — manages the CLI tools below.
+  # Non-fatal: a transient outage must not abort the rest of the install.
   if ! have mise; then
-    run_cmd "curl -fsSL https://mise.run | sh"
+    run_cmd "curl -fsSL https://mise.run | sh" || warn "mise install failed; skipping mise-managed tools"
   fi
   # mise.run + the bat symlink install into ~/.local/bin; put it on PATH so the
   # `have mise` check below (and the rest of the script) can find them.
   export PATH="$HOME/.local/bin:$PATH"
 
-  # starship (official installer)
+  # starship (official installer) — non-fatal, same rationale as mise.
   if ! have starship; then
-    run_cmd "curl -fsSL https://starship.rs/install.sh | sh -s -- --yes"
+    run_cmd "curl -fsSL https://starship.rs/install.sh | sh -s -- --yes" || warn "starship install failed; skipping"
   fi
 
   # eza, lazygit, yazi, zoxide, neovim via mise (consistent, no apt-version skew).

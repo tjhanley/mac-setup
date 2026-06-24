@@ -93,24 +93,17 @@ Packages explicitly **not** brought over: `ghostty`, `karabiner`, `skhd`,
 - README documents testing in a throwaway container:
   `docker run -it ubuntu` → clone → `./install.sh`.
 
-## Deployment: new-repo Jira-push bootstrapping
+## Deployment: target namespace
 
-The target GitHub org enforces a push ruleset requiring a Jira key (e.g.
-`ENGOPS-\d+`) on pushes. A brand-new empty repo hits a chicken-and-egg: the first
-push to create `main` is gated.
+**Resolved during planning:** the repo lives in the **personal namespace
+`tjhanley-snt/tjh-coder-dotfiles`** (private), not the Sonatus org. Coder is wired
+to the `tjhanley-snt` Sonatus account, and a personal namespace has no Jira-key
+push ruleset — so work commits directly to `main` with plain Conventional Commit
+messages (no ticket prefix), and no PR is required.
 
-**Workaround:** create the repo with the default branch initialized server-side so
-no client push is needed for the first commit:
-
-```
-gh repo create <org>/tjh-coder-dotfiles --private --add-readme
-```
-
-GitHub writes the initial commit via the API, establishing `main` outside the push
-ruleset. All subsequent work flows through a `ENGOPS-XXXX-<topic>` branch + PR with
-the Jira key in the branch name / commit message, satisfying the rule normally.
-
-Per repo policy, an ENGOPS Jira ticket must exist and be referenced in the PR title.
+(The Jira-push bootstrapping dance — `gh repo create --add-readme` + an
+`ENGOPS-XXXX` branch/PR — would only have applied had this gone in the Sonatus org.
+It does not.)
 
 ## Target org + auth account
 
