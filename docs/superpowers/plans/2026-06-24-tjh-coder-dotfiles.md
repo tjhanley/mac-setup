@@ -10,8 +10,8 @@
 
 ## Global Constraints
 
-- Target repo: **Sonatus org**, `<org>/tjh-coder-dotfiles`, private. `gh auth switch` to the Sonatus-authorized account before any `gh` command (NOT the personal `tjhanley` account this `mac-setup` repo uses).
-- The org enforces a Jira-key push ruleset. Bootstrap the repo with `gh repo create --add-readme` (server-side first commit), then do all work on an `ENGOPS-XXXX-coder-dotfiles` branch via PR. An ENGOPS Jira ticket must exist and be referenced in the PR title.
+- Target repo: **`tjhanley-snt/tjh-coder-dotfiles`** (personal namespace of the Sonatus account `tjhanley-snt`), private. `gh auth switch --user tjhanley-snt` before any `gh` command (NOT the personal `tjhanley` account this `mac-setup` repo uses). Coder is wired to this Sonatus account.
+- No Jira-key push ruleset applies to a personal namespace: work directly on `main`, no feature branch, no PR. Commit messages use plain Conventional Commits (`feat:`, `docs:`, `chore:`) with no ticket prefix.
 - `install.sh` and `lib/common.sh` are **bash** (zsh may be absent at first run). Both start with `set -euo pipefail`.
 - Every function honors `DRY_RUN=1`: print the action with `warn`-style `dry-run:` prefix, do not execute.
 - Every install/link step is idempotent — skip if already done.
@@ -20,37 +20,37 @@
 
 ---
 
-### Task 1: Create and bootstrap the GitHub repo
+### Task 1: Create the GitHub repo
 
 **Files:**
-- Create (server-side): `README.md` via `--add-readme`
 - Local clone: `~/Workspace/tjh-coder-dotfiles/`
 
 **Interfaces:**
-- Produces: a cloned local repo on branch `ENGOPS-XXXX-coder-dotfiles` with `main` already established remotely.
+- Produces: a cloned local repo on `main` with the remote established.
 
 - [ ] **Step 1: Switch gh to the Sonatus account**
 
 ```bash
-gh auth switch --user <sonatus-username>   # confirm with: gh auth status
+gh auth switch --user tjhanley-snt && gh auth status
 ```
+Expected: active account is `tjhanley-snt`.
 
-- [ ] **Step 2: Create the repo with a server-side initial commit (Jira-rule bootstrap)**
+- [ ] **Step 2: Create the repo and clone it**
 
 ```bash
-gh repo create <org>/tjh-coder-dotfiles --private --add-readme \
+gh repo create tjhanley-snt/tjh-coder-dotfiles --private --clone \
   --description "Coder workspace dotfiles (Linux): stow configs + curated CLI toolset"
+mv tjh-coder-dotfiles ~/Workspace/tjh-coder-dotfiles 2>/dev/null || true
+cd ~/Workspace/tjh-coder-dotfiles
 ```
-Expected: repo created, `main` branch exists from GitHub's initial README commit — no client push needed.
+Expected: empty private repo created and cloned. Work happens directly on `main` (no push ruleset on a personal namespace).
 
-- [ ] **Step 3: Clone and branch**
+- [ ] **Step 3: Confirm clone location**
 
 ```bash
-git clone git@github.com:<org>/tjh-coder-dotfiles.git ~/Workspace/tjh-coder-dotfiles
-cd ~/Workspace/tjh-coder-dotfiles
-git switch -c ENGOPS-XXXX-coder-dotfiles
+cd ~/Workspace/tjh-coder-dotfiles && git remote -v
 ```
-Expected: on a feature branch carrying the Jira key, so subsequent pushes satisfy the ruleset.
+Expected: `origin` points to `tjhanley-snt/tjh-coder-dotfiles`.
 
 > All remaining tasks operate inside `~/Workspace/tjh-coder-dotfiles`. Source configs are read from `~/Workspace/mac-setup/stow/<pkg>/`.
 
@@ -164,7 +164,7 @@ Expected: no errors (warnings about `eval` are acceptable for `run_cmd`).
 
 ```bash
 git add lib/common.sh lib/common.test.sh
-git commit -m "ENGOPS-XXXX: add shared installer helpers"
+git commit -m "add shared installer helpers"
 ```
 
 ---
@@ -234,7 +234,7 @@ Expected: prints `warn: This installer targets Linux ...` and `exit=1` (proves t
 ```bash
 shellcheck install.sh
 git add install.sh
-git commit -m "ENGOPS-XXXX: add install.sh skeleton with Linux guard"
+git commit -m "add install.sh skeleton with Linux guard"
 ```
 
 ---
@@ -322,7 +322,7 @@ Expected: prints `dry-run:` lines for `apt-get update`, `apt-get install -y git 
 
 ```bash
 git add install.sh
-git commit -m "ENGOPS-XXXX: install curated CLI toolset (apt + mise + installers)"
+git commit -m "install curated CLI toolset (apt + mise + installers)"
 ```
 
 ---
@@ -365,7 +365,7 @@ stow_packages() {
 ```bash
 shellcheck install.sh
 git add install.sh
-git commit -m "ENGOPS-XXXX: stow config packages into HOME"
+git commit -m "stow config packages into HOME"
 ```
 
 ---
@@ -434,7 +434,7 @@ set_default_shell() {
 ```bash
 shellcheck install.sh
 git add install.sh
-git commit -m "ENGOPS-XXXX: install LazyVim nvim config and set zsh default shell"
+git commit -m "install LazyVim nvim config and set zsh default shell"
 ```
 
 ---
@@ -473,7 +473,7 @@ Expected: review any hits. Zellij status scripts (`battery.sh`, `mem.sh`) may us
 
 ```bash
 git add stow/
-git commit -m "ENGOPS-XXXX: vendor platform-neutral configs (starship, bat, eza, ripgrep, yazi, lazygit, mise, zellij, nvim overlay)"
+git commit -m "vendor platform-neutral configs (starship, bat, eza, ripgrep, yazi, lazygit, mise, zellij, nvim overlay)"
 ```
 
 ---
@@ -560,7 +560,7 @@ Expected: `clean`.
 
 ```bash
 git add stow/zsh/.zshrc
-git commit -m "ENGOPS-XXXX: vendor Linux-adapted .zshrc"
+git commit -m "vendor Linux-adapted .zshrc"
 ```
 
 ---
@@ -600,7 +600,7 @@ Expected: `clean`.
 
 ```bash
 git add stow/git/.gitconfig
-git commit -m "ENGOPS-XXXX: vendor Linux-adapted .gitconfig"
+git commit -m "vendor Linux-adapted .gitconfig"
 ```
 
 ---
@@ -645,13 +645,13 @@ Expected: second run prints `already present` / `already the default shell` styl
 
 ---
 
-### Task 11: README and final PR
+### Task 11: README and push
 
 **Files:**
-- Modify: `README.md` (replace the `--add-readme` stub)
+- Create: `README.md`
 
 **Interfaces:**
-- Produces: usage docs + an open PR referencing the ENGOPS ticket.
+- Produces: usage docs committed and pushed to `main`.
 
 - [ ] **Step 1: Write `README.md`**
 
@@ -671,7 +671,7 @@ Linux dotfiles for [Coder](https://coder.com) workspaces. Coder clones this repo
 
 Coder dashboard → Settings → Dotfiles → set repo URL to this repo. Or:
 
-    coder dotfiles git@github.com:<org>/tjh-coder-dotfiles.git
+    coder dotfiles git@github.com:tjhanley-snt/tjh-coder-dotfiles.git
 
 ## Preview without changing anything
 
@@ -690,22 +690,14 @@ Source of truth for config content is the `mac-setup` repo; files here are adapt
 for Linux.
 ```
 
-- [ ] **Step 2: Commit and push**
+- [ ] **Step 2: Commit and push to main**
 
 ```bash
 git add README.md
-git commit -m "ENGOPS-XXXX: document install flow and local testing"
-git push -u origin ENGOPS-XXXX-coder-dotfiles
+git commit -m "docs: document install flow and local testing"
+git push -u origin main
 ```
-Expected: push succeeds (branch name carries the Jira key, satisfying the ruleset).
-
-- [ ] **Step 3: Open the PR**
-
-```bash
-gh pr create --title "ENGOPS-XXXX: Coder workspace dotfiles" \
-  --body "Standalone Linux dotfiles repo for Coder workspaces. Installs curated CLI toolset, stows terminal configs, sets zsh default. Tested on ubuntu:24.04 (dry-run + real + idempotent). Spec: mac-setup docs/superpowers/specs/2026-06-24-tjh-coder-dotfiles-design.md"
-```
-Expected: PR created. Link the PR URL in the ENGOPS ticket.
+Expected: push succeeds (personal namespace, no ruleset).
 
 ---
 
@@ -724,9 +716,9 @@ Expected: PR created. Link the PR URL in the ENGOPS ticket.
 - skipped packages excluded → Task 7 (only neutral pkgs copied) ✓
 - DRY_RUN preview → Tasks 2,4,10 ✓
 - Docker testing → Task 10 ✓
-- Jira-push bootstrap (--add-readme + branch/PR) → Tasks 1,11 ✓
-- Sonatus org + gh auth switch → Tasks 1, Global Constraints ✓
+- Repo creation + push to main (personal namespace, no ruleset) → Tasks 1,11 ✓
+- `tjhanley-snt` account + gh auth switch → Task 1, Global Constraints ✓
 
-**Placeholder scan:** `<org>`, `<sonatus-username>`, `ENGOPS-XXXX` are intentional fill-ins the operator must supply (real org/account/ticket are environment values, not code). No "TODO"/"handle edge cases"/"similar to Task N" placeholders.
+**Placeholder scan:** No `<org>`/`<username>`/ticket placeholders remain — target is `tjhanley-snt/tjh-coder-dotfiles`. No "TODO"/"handle edge cases"/"similar to Task N" placeholders.
 
 **Type consistency:** helper names (`have`, `run_cmd`, `log`, `ok`, `warn`, `detect_pkg_mgr`, `SUDO`) used consistently across Tasks 2-6. `STOW_DIR`/`STOW_PKGS` consistent between Tasks 3,5,6.
