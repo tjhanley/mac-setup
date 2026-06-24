@@ -269,8 +269,10 @@ install_tools() {
   if [[ "$PKG_MGR" == "apt" ]]; then
     # spec format: aptpackage:binary
     _apt_install git:git zsh:zsh stow:stow ripgrep:rg bat:batcat fzf:fzf curl:curl unzip:unzip
-    # Ubuntu ships bat as `batcat`; expose it as `bat`
-    if have batcat && ! have bat; then
+    # Ubuntu ships bat as `batcat`; expose it as `bat`.
+    # DRY_RUN fires the branch too, so the preview shows the symlink even on a fresh box
+    # (where `have batcat` is still false because the apt install above was a no-op).
+    if [[ "$DRY_RUN" == "1" ]] || { have batcat && ! have bat; }; then
       run_cmd "mkdir -p \"\$HOME/.local/bin\""
       run_cmd "ln -sf \"\$(command -v batcat)\" \"\$HOME/.local/bin/bat\""
     fi
@@ -288,13 +290,18 @@ install_tools() {
     run_cmd "curl -fsSL https://starship.rs/install.sh | sh -s -- --yes"
   fi
 
-  # eza, lazygit, yazi, zoxide, neovim via mise (consistent, no apt-version skew)
-  if have mise; then
+  # eza, lazygit, yazi, zoxide, neovim via mise (consistent, no apt-version skew).
+  # DRY_RUN-aware: on a fresh box mise was just installed by a no-op above, so the
+  # preview must still show these steps.
+  if have mise || [[ "$DRY_RUN" == "1" ]]; then
     local mise_bin
     mise_bin="$(command -v mise)"
+    [[ -z "$mise_bin" ]] && mise_bin="mise"   # dry-run on a box without mise yet
     for tool in eza lazygit yazi zoxide neovim; do
       local check="$tool"; [[ "$tool" == "neovim" ]] && check="nvim"
-      have "$check" || run_cmd "$mise_bin use -g ${tool}@latest"
+      if [[ "$DRY_RUN" == "1" ]] || ! have "$check"; then
+        run_cmd "$mise_bin use -g ${tool}@latest"
+      fi
     done
   else
     warn "mise unavailable; skipping eza/lazygit/yazi/zoxide/neovim"
@@ -386,11 +393,14 @@ install_nvim() {
   log "Installing Neovim config (LazyVim + overlay)"
   local nvim_dir="$HOME/.config/nvim"
 
-  if [[ -d "$nvim_dir/.git" ]] || [[ -L "$nvim_dir/lua" ]]; then
-    ok "nvim config already present"
-  elif [[ -e "$nvim_dir" && ! -d "$nvim_dir" ]]; then
+  # Idempotency marker: the LazyVim starter ships init.lua; the overlay never does.
+  # (Do NOT test `-L lua` — stow links at the file level, so lua/ stays a real dir.)
+  if [[ -e "$nvim_dir" && ! -d "$nvim_dir" ]]; then
     warn "$nvim_dir exists and is not a directory; leaving it alone"
     return 0
+  fi
+  if [[ -f "$nvim_dir/init.lua" ]]; then
+    ok "nvim config already present"
   else
     run_cmd "git clone --depth 1 https://github.com/LazyVim/starter \"$nvim_dir\""
     run_cmd "rm -rf \"$nvim_dir/.git\""
