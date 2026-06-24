@@ -280,10 +280,13 @@ install_tools() {
     warn "Non-apt package manager ($PKG_MGR): install git zsh stow ripgrep bat fzf curl unzip manually if missing"
   fi
 
-  # mise (official installer) — manages runtimes; also provides a fallback for other tools
+  # mise (official installer) — manages the CLI tools below.
   if ! have mise; then
     run_cmd "curl -fsSL https://mise.run | sh"
   fi
+  # mise.run + the bat symlink install into ~/.local/bin; put it on PATH so the
+  # `have mise` check below (and the rest of the script) can find them.
+  export PATH="$HOME/.local/bin:$PATH"
 
   # starship (official installer)
   if ! have starship; then
@@ -347,11 +350,13 @@ git commit -m "install curated CLI toolset (apt + mise + installers)"
 
 ```bash
 # nvim is handled by install_nvim (LazyVim base + overlay), not here.
-STOW_PKGS=(zsh git starship zellij bat eza ripgrep yazi lazygit mise)
+# mise is NOT stowed: `mise use -g` owns ~/.config/mise/config.toml, so stowing
+# a config there would conflict.
+STOW_PKGS=(zsh git starship zellij bat eza ripgrep yazi lazygit)
 
 stow_packages() {
   log "Stowing config packages"
-  if ! have stow; then
+  if ! have stow && [[ "$DRY_RUN" != "1" ]]; then
     warn "stow not installed; skipping config symlinks"
     return 0
   fi
@@ -407,7 +412,7 @@ install_nvim() {
   fi
 
   # The overlay replaces starter's keymaps.lua; remove the conflicting file so stow can link ours.
-  if [[ -d "$STOW_DIR/nvim" ]] && have stow; then
+  if [[ -d "$STOW_DIR/nvim" ]] && { have stow || [[ "$DRY_RUN" == "1" ]]; }; then
     run_cmd "rm -f \"$nvim_dir/lua/config/keymaps.lua\""
     run_cmd "stow --restow --target=\"\$HOME\" --dir=\"$STOW_DIR\" nvim"
   fi
@@ -452,7 +457,7 @@ git commit -m "install LazyVim nvim config and set zsh default shell"
 ### Task 7: Vendor verbatim configs (git untouched here)
 
 **Files:**
-- Create: `stow/starship/.config/starship.toml`, `stow/bat/.config/bat/config`, `stow/eza/.config/eza/theme.yml`, `stow/ripgrep/.ripgreprc`, `stow/yazi/.config/yazi/theme.toml`, `stow/yazi/.config/yazi/Catppuccin-mocha.tmTheme`, `stow/lazygit/.config/lazygit/config.yml`, `stow/mise/.config/mise/config.toml`, `stow/zellij/...` (all files), `stow/nvim/.config/nvim/lua/...`
+- Create: `stow/starship/.config/starship.toml`, `stow/bat/.config/bat/config`, `stow/eza/.config/eza/theme.yml`, `stow/ripgrep/.ripgreprc`, `stow/yazi/.config/yazi/theme.toml`, `stow/yazi/.config/yazi/Catppuccin-mocha.tmTheme`, `stow/lazygit/.config/lazygit/config.yml`, `stow/zellij/...` (all files), `stow/nvim/.config/nvim/lua/...` (mise is NOT vendored)
 
 **Interfaces:**
 - Produces: stow packages that link cleanly into `$HOME` on Linux. These files are platform-neutral and copied as-is.
@@ -462,7 +467,8 @@ git commit -m "install LazyVim nvim config and set zsh default shell"
 ```bash
 cd ~/Workspace/tjh-coder-dotfiles
 SRC=~/Workspace/mac-setup/stow
-for p in starship bat eza ripgrep yazi lazygit mise zellij; do
+# mise is intentionally NOT vendored — mise owns ~/.config/mise/config.toml at runtime.
+for p in starship bat eza ripgrep yazi lazygit zellij; do
   mkdir -p "stow/$p"
   cp -R "$SRC/$p/." "stow/$p/"
 done
