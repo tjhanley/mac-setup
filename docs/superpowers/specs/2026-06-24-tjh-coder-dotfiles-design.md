@@ -112,11 +112,16 @@ the Jira key in the branch name / commit message, satisfying the rule normally.
 
 Per repo policy, an ENGOPS Jira ticket must exist and be referenced in the PR title.
 
-## Open items (resolve before/at implementation)
+## Target org + auth account
 
-- **Target org + auth account:** confirm whether this lives in the Sonatus org
-  (Jira-push rule applies; `gh auth switch` to the Sonatus-authorized account) or
-  the personal `tjhanley` account. The Jira-push note above assumes the org.
+**Resolved:** the repo lives in the **Sonatus org** (Coder is wired to the Sonatus
+account only). The Jira-push ruleset applies — use the `--add-readme` bootstrap and
+the `ENGOPS-XXXX-<topic>` branch + PR flow. `gh auth switch` to the
+Sonatus-authorized account before any `gh` operation (note: differs from this
+`mac-setup` repo, which uses the personal `tjhanley` account).
+
+## Open items (resolve at implementation)
+
 - Confirm the Coder workspace base image (Ubuntu assumed) to finalize the apt vs
   fallback tool split.
 ```
