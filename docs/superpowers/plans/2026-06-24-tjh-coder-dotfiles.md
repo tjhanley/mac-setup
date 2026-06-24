@@ -82,7 +82,7 @@ have sh        || fail "have sh should succeed"
 
 # run_cmd in dry-run does NOT execute (no file created), prints a dry-run line
 rm -f /tmp/ccdf_marker
-DRY_RUN=1 run_cmd "touch /tmp/ccdf_marker" | grep -q "dry-run:" || fail "dry-run should print dry-run:"
+DRY_RUN=1 run_cmd "touch /tmp/ccdf_marker" 2>&1 | grep -q "dry-run:" || fail "dry-run should print dry-run:"
 [[ ! -e /tmp/ccdf_marker ]] || fail "dry-run must not execute the command"
 
 # run_cmd with DRY_RUN=0 DOES execute
