@@ -1,5 +1,15 @@
 {
-  "cssTheme": "Catppuccin",
+  "cssTheme": "Tokyo Night",
   "theme": "obsidian",
-  "monospaceFontFamily": "BlexMono Nerd Font Mono"
+  "monospaceFontFamily": "BlexMono Nerd Font Mono",
+  "enabledCssSnippets": [
+    "settings-nav-contrast",
+    "wide-page",
+    "slides",
+    "header_spacing"
+  ],
+  "textFontFamily": "Avenir,Helvetica",
+  "baseFontSize": 13,
+  "accentColor": "#b695df",
+  "interfaceFontFamily": "Geneva"
 }

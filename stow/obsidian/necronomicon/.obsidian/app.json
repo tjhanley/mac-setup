@@ -1,3 +1,18 @@
 {
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": true,
+  "attachmentFolderPath": "assets",
+  "promptDelete": false,
+  "showInlineTitle": true,
+  "propertiesInDocument": "visible",
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "vimMode": true,
+  "openBehavior": "daily",
+  "showLineNumber": true
 }

@@ -167,11 +167,6 @@ alias gst='git status'
 alias gsw='git switch'
 alias gswc='git switch -c'
 
-# Prefer bat over cat when available
-if command -v bat >/dev/null 2>&1; then
-  alias cat='bat'
-fi
-
 # Dot navigation (.., ..., ....)
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -233,6 +228,12 @@ fi
 
 # Re-stow a single package from mac-setup
 restow() { stow -R "$1" -d ~/Workspace/mac-setup/stow -t ~; }
+
+# Caffeinate helpers — prevent sleep for common durations
+single()  { caffeinate -dis -t 3600  & print -P "%F{green}✓%f single shot: awake for 1 hour (pid $!)"; }
+double()  { caffeinate -dis -t 10800 & print -P "%F{green}✓%f double shot: awake for 3 hours (pid $!)"; }
+redbull() { caffeinate -dis -t 86400 & print -P "%F{green}✓%f redbull: awake for 24 hours (pid $!)"; }
+decaf()   { pkill caffeinate 2>/dev/null && print -P "%F{green}✓%f caffeine cleared" || print "no caffeinate running"; }
 
 if [[ -d "/Applications/Spotify.app" ]]; then
   alias spotify='open -a Spotify'
@@ -358,6 +359,47 @@ if [[ -f "$HOME/.secrets" ]]; then
   source "$HOME/.secrets"
 fi
 
+
+export AWS_PROFILE=225194532386_PowerUserAccess
+
+# AWS SSO login + export creds for Terraform
+awsl() {
+  aws login --profile "$AWS_PROFILE" && \
+  eval "$(aws configure export-credentials --profile "$AWS_PROFILE" --format env)" && \
+  print -P "%F{green}✓%f AWS creds exported for $AWS_PROFILE"
+}
+
 # OpenClaw Completion
 # source "/Users/tom/.openclaw/completions/openclaw.zsh"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Auto-fill Sonatus LDAP password from macOS Keychain for jmp-* ssh aliases.
+# Seed once: security add-generic-password -a "$USER" -s sonatus-ldap -w
+# Falls back to normal ssh if the keychain item is missing.
+ssh() {
+  if [[ "$1" == jmp-* ]]; then
+    local pw
+    pw="$(security find-generic-password -a "$USER" -s sonatus-ldap -w 2>/dev/null)"
+    if [[ -n "$pw" ]]; then
+      SSHPASS="$pw" sshpass -e command ssh "$@"
+      return
+    fi
+  fi
+  command ssh "$@"
+}
+
+# Per-repo gh account: reads gh.user from git config and exports GH_TOKEN so
+# the gh CLI uses the right GitHub account without a global auth switch.
+# Repos with no gh.user unset GH_TOKEN, falling back to the active account.
+_gh_set_token() {
+  local gh_user
+  gh_user=$(git config gh.user 2>/dev/null)
+  if [[ -n "$gh_user" ]]; then
+    export GH_TOKEN=$(gh auth token --user "$gh_user" 2>/dev/null)
+  else
+    unset GH_TOKEN
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd _gh_set_token
+_gh_set_token
