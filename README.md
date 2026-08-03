@@ -125,7 +125,7 @@ stow/
       app.json, appearance.json, hotkeys.json, ...
       plugins/*/data.json            # plugin settings (not code)
       themes/Catppuccin/, themes/AnuPpuccin/
-      snippets/settings-nav-contrast.css
+      snippets/settings-nav-contrast.css, snippets/header_spacing.css
   claude/
     .claude/CLAUDE.md                    # global Claude Code instructions
     .claude/settings.json                # plugins, hooks, model, permissions

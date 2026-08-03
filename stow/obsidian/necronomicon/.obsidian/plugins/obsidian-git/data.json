@@ -1,0 +1,14 @@
+{
+  "commitMessage": "vault: {{date}}",
+  "commitDateFormat": "YYYY-MM-DD HH:mm:ss",
+  "autoSaveInterval": 10,
+  "autoPushInterval": 10,
+  "autoPullInterval": 0,
+  "autoPullOnBoot": true,
+  "autoBackupAfterFileChange": true,
+  "differentIntervalCommitAndPush": true,
+  "disablePush": false,
+  "pullBeforePush": true,
+  "syncMethod": "rebase",
+  "setUpstreamFlag": false
+}

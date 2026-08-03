@@ -1,0 +1,95 @@
+/* Header sizing, body size, and sidebar legibility.
+   Colors use theme variables so this works with Catppuccin light/dark. */
+
+.cm-line.HyperMD-header {
+   padding-block: 0 !important;
+   color: var(--text-normal);
+   font-weight: 600;
+}
+
+/* Toned-down header sizes (was 1.5×, 1.4×, 1.2×) */
+.markdown-rendered h1, .markdown-source-view.mod-cm6 .cm-header-1 {
+   font-size: calc(var(--h1-size) * 0.85) !important;
+}
+
+.markdown-rendered h2, .markdown-source-view.mod-cm6 .cm-header-2 {
+   font-size: calc(var(--h2-size) * 0.85) !important;
+}
+
+.markdown-rendered h3, .markdown-source-view.mod-cm6 .cm-header-3,
+.markdown-rendered h4, .markdown-source-view.mod-cm6 .cm-header-4 {
+   font-size: calc(var(--h3-size) * 0.9) !important;
+}
+
+/* Larger body text */
+.markdown-source-view.mod-cm6 .cm-line {
+   font-size: 17px;
+   line-height: 1.6;
+}
+
+.markdown-preview-view {
+   font-size: 17px;
+   line-height: 1.7;
+}
+
+/* Larger, more legible sidebar file tree text */
+.nav-file-title,
+.nav-folder-title {
+   font-size: 15px !important;
+}
+
+/* Subtle blue-tinted nav background to distinguish it from main content */
+.workspace-split.mod-left-split .workspace-leaf-content {
+   background-color: #1c1e30 !important;
+}
+.nav-files-container {
+   background-color: #1c1e30;
+}
+
+/* Square tinted background on sub-items */
+.nav-files-container > div > .nav-folder[class*="rcs-item-"] .tree-item-children .nav-folder-title,
+.nav-files-container > div > .nav-folder[class*="rcs-item-"] .tree-item-children .nav-file-title {
+   background-color: color-mix(in srgb, currentColor 12%, transparent);
+   border-radius: 0 !important;
+   transition: background-color 0.15s ease;
+}
+
+/* Hover state — brighter tint */
+.nav-files-container > div > .nav-folder[class*="rcs-item-"] .tree-item-children .nav-folder-title:hover,
+.nav-files-container > div > .nav-folder[class*="rcs-item-"] .tree-item-children .nav-file-title:hover {
+   background-color: color-mix(in srgb, currentColor 28%, transparent) !important;
+}
+
+/* Border around the entire left nav pane */
+.workspace-split.mod-left-split {
+   border-right: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.nn-file-name {
+   color: var(--text-normal) !important;
+}
+
+/* ===== Notebook Navigator ===== */
+
+/* Match file explorer nav background */
+.nn-navigation-pane-scroller,
+.nn-navigation-pane-content {
+   background-color: #1c1e30;
+}
+
+/* Square all navitem corners */
+.nn-navitem {
+   --nn-theme-navitem-border-radius: 0px;
+}
+
+/* Tinted background on all nav items */
+.nn-navitem-content {
+   background-color: rgba(182, 149, 223, 0.08);
+   border-radius: 0 !important;
+   transition: background-color 0.15s ease;
+}
+
+/* Hover — brighter tint */
+.nn-navitem:hover .nn-navitem-content {
+   background-color: rgba(182, 149, 223, 0.22) !important;
+}
