@@ -35,6 +35,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Starts skhd as a launchd service (`skhd --start-service`) after `configure_keyboard_repeat`; idempotent (checks `launchctl print gui/<uid>/com.asmvik.skhd` before acting).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
 - Downloads `zjstatus.wasm` Zellij status-bar plugin from GitHub releases.
+- Downloads Zellij navigation plugins (`vim-zellij-navigator.wasm`, `zellij-autolock.wasm`) from GitHub releases (`install_zellij_nav_plugins`).
 - Ensures LazyVim `lua/config/options.lua` includes `pcall(require, "config.local")` to load repo-managed local options.
 - Stows `nvim` package separately after LazyVim install (moves known plugin-file conflicts into backup first).
 - Ensures LazyVim extras (claudecode) are present in `lazyvim.json`.
@@ -134,8 +135,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
 - Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (basalt, btop, claude, codex, jiratui, k9s, lazydocker, lazygit, nvim, opencode, pi, sidecar, yazi) in new floating panes.
-- zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s.
+- Custom keybind: `Ctrl Shift a` opens `scripts/agent-tracker` in a floating pane — a Supacode-style live table of all Claude Code agent sessions (status, project, age, last prompt), derived from the JSONL transcripts under `~/.claude/projects/` via mtime + last line. No daemon. Tunables (`ACTIVE_WINDOW` 2h, `LIVE_SECS` 60s, `REFRESH_SECS` 2s, `classify_status()` tiers) at the top of the script.
+- zjstatus custom status bar (`layouts/default.kdl`) with full Catppuccin Mocha palette defined as named variables: session icon + mode indicator (left), tabs with rounded powerline chiclets (center-left), notifications (center), agent-session count + CPU + memory stats + dynamic battery indicator + calendar icon + datetime (right). All pills use rounded powerline caps. Clean mode labels (no keybinding hints). Active tab highlighted in peach, inactive in blue. System stats via `scripts/cpu.sh` and `scripts/mem.sh`. Battery via `scripts/battery.sh` — picks from Nerd Font battery glyphs at 10% increments plus a charging state icon, refreshes every 30 s. Agent sessions via `scripts/agent-tracker --count` (mauve robot pill, `live/active` counts, refreshes every 10 s).
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
+- Seamless `Ctrl+h/j/k/l` navigation across Neovim splits and Zellij panes via three cooperating pieces: (1) **vim-zellij-navigator** (`vim-zellij-navigator.wasm`) bound to `Ctrl+hjkl` in `shared_except "locked"` — moves Zellij focus, crossing tabs on left/right (`move_focus_or_tab`); (2) **zellij-autolock** (`zellij-autolock.wasm`, loaded via `load_plugins`) — auto-switches to Locked mode when the focused pane runs a trigger program (`triggers "nvim|vim|fzf"`, `reaction_seconds 0.3`) so keys pass through, unlocking when focus leaves; (3) **zellij-nav.nvim** (`stow/nvim/.config/nvim/lua/plugins/zellij-nav.lua`) — handles the keys inside Neovim and hands focus back to Zellij at split edges. Both `.wasm` plugins downloaded to `~/.config/zellij/plugins/`.
 
 ## Stow packages
 - `zsh/` — `.zshrc`, `.zprofile`
@@ -146,10 +149,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `ssh/` — `.ssh/config` (1Password SSH agent, `Include config.local` for machine-specific hosts)
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
-- `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`
+- `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`, `.config/zellij/scripts/agent-tracker`
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
-- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua`, `.config/nvim/lua/plugins/neo-tree.lua` (show hidden files by default) (stowed separately after LazyVim install)
+- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua`, `.config/nvim/lua/plugins/neo-tree.lua` (show hidden files by default), `.config/nvim/lua/plugins/zellij-nav.lua` (zellij-nav.nvim — `Ctrl+hjkl` nav across nvim splits and Zellij panes) (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json` (vault registry); `necronomicon/.obsidian/` (vault config symlinked into `~/necronomicon`): all settings JSONs, `plugins/*/data.json` (plugin settings, not code), `themes/Catppuccin/` + `themes/AnuPpuccin/`, `snippets/settings-nav-contrast.css`. Plugin code (`main.js`, `manifest.json`, `styles.css`) is gitignored and re-downloaded by Obsidian.
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/skills/{commit,pr,fix-issue,gh-roadmap,simplify,test}/SKILL.md` (global skills: commit, PR, fix-issue, gh-roadmap, simplify, test), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)

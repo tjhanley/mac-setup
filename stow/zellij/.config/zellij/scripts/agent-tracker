@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""agent-tracker — a Supacode-style live view of all Claude Code agent sessions,
+rendered into a zellij pane (or summarized for the zjstatus bar via --count).
+
+Each Claude Code session is an append-only JSONL transcript at
+  ~/.claude/projects/<encoded-cwd>/<session-uuid>.jsonl
+This scans them all, derives a status per session, and redraws on a loop.
+
+Surfaces (both wired up by mac-setup):
+  - On-demand floating pane: keybind Super+Shift+a (see zellij config.kdl), or
+      zellij run -f -- ~/.config/zellij/scripts/agent-tracker
+  - Status-bar count: zjstatus calls `agent-tracker --count` on an interval
+      (see the command_agents_* block in layouts/default.kdl).
+
+Modes:
+  agent-tracker            live full-screen table, refreshes every REFRESH_SECS
+  agent-tracker --count    one-shot "<live>/<active>" for the status bar (mtime-only, fast)
+  agent-tracker --layout   print a zellij KDL snippet for pinning it in a layout
+"""
+import json
+import os
+import sys
+import time
+from pathlib import Path
+
+PROJECTS = Path.home() / ".claude" / "projects"
+REFRESH_SECS = 2
+ACTIVE_WINDOW = 2 * 3600  # only track sessions written within this many secs; older = hidden
+LIVE_SECS = 60            # "live" = transcript written within the last minute (for --count)
+
+
+def decode_project(dirname: str) -> str:
+    """The dir name is the cwd with '/' -> '-'. Show a short, readable label."""
+    p = dirname.lstrip("-").replace("-", "/")
+    return ".../" + "/".join(p.split("/")[-2:]) if "/" in p else p
+
+
+def read_session(path: Path) -> dict:
+    """Cheaply read a session's heartbeat: mtime + the last transcript line."""
+    last = {}
+    try:
+        with path.open("rb") as f:
+            try:  # seek near the end; read the final non-empty line
+                f.seek(-4096, os.SEEK_END)
+            except OSError:
+                f.seek(0)
+            tail = f.read().decode("utf-8", "replace").strip().splitlines()
+        for line in reversed(tail):
+            if line.strip():
+                last = json.loads(line)
+                break
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {
+        "id": path.stem[:8],
+        "project": decode_project(path.parent.name),
+        "age": time.time() - path.stat().st_mtime,  # seconds since last write
+        "last_type": last.get("type", "?"),         # e.g. user / assistant / summary
+        "prompt": (last.get("lastPrompt") or "")[:50],
+    }
+
+
+def classify_status(session: dict) -> tuple[str, str]:
+    """Return (label, ansi_color) for a session — the knob that defines "useful"."""
+    age, last = session["age"], session["last_type"]
+    if age < 5:
+        return ("● working", "32")                       # green: mtime still ticking = mid-response
+    if last == "assistant" and age < 600:
+        return ("◆ your turn", "36")                      # cyan: agent finished its turn, awaiting you
+    if age < 1800:
+        return ("○ idle", "33")                           # yellow: quiet < 30m
+    return ("· quiet", "90")                              # grey: recent today but long idle
+
+
+def render(sessions: list[dict]) -> str:
+    lines = ["\033[1m AGENT SESSIONS \033[0m  (refresh %ds, ctrl-c to quit)\n" % REFRESH_SECS]
+    lines.append("\033[90m%-12s %-22s %-8s %s\033[0m" % ("STATUS", "PROJECT", "AGE", "LAST PROMPT"))
+    for s in sorted(sessions, key=lambda x: x["age"]):
+        label, color = classify_status(s)
+        age = f"{int(s['age'])}s" if s["age"] < 90 else f"{int(s['age']//60)}m"
+        lines.append("\033[%sm%-12s\033[0m %-22s %-8s %s" % (color, label, s["project"], age, s["prompt"]))
+    return "\n".join(lines)
+
+
+def count() -> str:
+    """One-shot, mtime-only (no file reads) summary for the status bar: <live>/<active>."""
+    files = list(PROJECTS.glob("*/*.jsonl")) if PROJECTS.exists() else []
+    now = time.time()
+    ages = []
+    for f in files:
+        try:
+            ages.append(now - f.stat().st_mtime)
+        except OSError:
+            pass
+    active = [a for a in ages if a <= ACTIVE_WINDOW]
+    live = [a for a in active if a <= LIVE_SECS]
+    return f"{len(live)}/{len(active)}"
+
+
+def main():
+    if "--layout" in sys.argv:
+        print('Add to your zellij layout KDL:\n'
+              '  pane size=12 borderless=true {\n'
+              '    command "agent-tracker"\n'
+              '  }')
+        return
+    if "--count" in sys.argv:
+        print(count())
+        return
+    while True:
+        files = list(PROJECTS.glob("*/*.jsonl")) if PROJECTS.exists() else []
+        alls = [read_session(f) for f in files]
+        sessions = [s for s in alls if s["age"] <= ACTIVE_WINDOW]
+        hidden = len(alls) - len(sessions)
+        sys.stdout.write("\033[2J\033[H")  # clear + home
+        footer = f"\n\033[90m{hidden} older session(s) hidden (>{ACTIVE_WINDOW//3600}h)\033[0m" if hidden else ""
+        sys.stdout.write(render(sessions) + footer + "\n")
+        sys.stdout.flush()
+        time.sleep(REFRESH_SECS)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass

@@ -956,6 +956,41 @@ install_zjstatus() {
   fi
 }
 
+install_zellij_nav_plugins() {
+  log "Installing Zellij navigation plugins (vim-zellij-navigator, autolock)"
+
+  local plugins_dir="$HOME/.config/zellij/plugins"
+
+  # name -> release download URL (latest)
+  local -A plugins=(
+    "vim-zellij-navigator.wasm" "https://github.com/hiasr/vim-zellij-navigator/releases/latest/download/vim-zellij-navigator.wasm"
+    "zellij-autolock.wasm"      "https://github.com/fresh2dev/zellij-autolock/releases/latest/download/zellij-autolock.wasm"
+  )
+
+  run_cmd mkdir -p "$plugins_dir"
+
+  local name url wasm_path
+  for name url in ${(kv)plugins}; do
+    wasm_path="$plugins_dir/$name"
+
+    if [[ -f "$wasm_path" ]]; then
+      ok "$name already installed"
+      continue
+    fi
+
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      print -P "%F{yellow}dry-run:%f download $name -> $wasm_path"
+      continue
+    fi
+
+    if curl -fsSL -o "$wasm_path" "$url"; then
+      ok "$name installed at $wasm_path"
+    else
+      warn "Failed to download $name"
+    fi
+  done
+}
+
 install_docker_desktop() {
   log "Installing Docker Desktop"
 
@@ -1267,6 +1302,7 @@ main() {
   stow_nvim_plugins
   ensure_lazyvim_extras
   install_zjstatus
+  install_zellij_nav_plugins
   ensure_treesitter_parsers
   install_mise_tools
   install_gcloud_cli

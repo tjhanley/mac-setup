@@ -36,7 +36,7 @@ Generate SSH key (ed25519) if missing; upload to GitHub via gh
 .IP 11. 4
 Install Ghostty shaders, link macOS app configs (Zed, Obsidian)
 .IP 13. 4
-Install LazyVim, stow Neovim plugin configs, download zjstatus
+Install LazyVim, stow Neovim plugin configs, download zjstatus and Zellij nav plugins (vim-zellij-navigator, zellij-autolock)
 .IP 14. 4
 Install runtimes via mise (node, python, ruby, go)
 .IP 15. 4
@@ -70,7 +70,7 @@ ghostty	.config/ghostty/config
 zellij	.config/zellij/config.kdl, layouts/default.kdl, scripts/
 mise	.config/mise/config.toml
 zed	.config/zed/settings.json
-nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua, plugins/neo-tree.lua
+nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua, plugins/neo-tree.lua, plugins/zellij-nav.lua
 obsidian	.config/obsidian/obsidian.json
 claude	.claude/CLAUDE.md, skills/, statusline.sh
 eza	.config/eza/theme.yml
@@ -187,10 +187,12 @@ _
 Ctrl+p	Pane mode
 Ctrl+t	Tab mode
 Ctrl+n	Resize mode
-Ctrl+h	Move mode
 Ctrl+s	Scroll mode
 Ctrl+o	Session mode
 .TE
+.PP
+Note: zellij's default Ctrl+h (Move mode switch) is reassigned to Neovim/pane
+navigation (see Custom keybinds). Move panes via Pane mode H/J/K/L instead.
 .SS Resize mode (Ctrl+n)
 .TS
 l l.
@@ -203,7 +205,7 @@ l / Right	Resize right
 +	Increase size
 \-	Decrease size
 .TE
-.SS Move mode (Ctrl+h)
+.SS Move mode
 .TS
 l l.
 Keys	Action
@@ -241,8 +243,17 @@ Keys	Action
 _
 Super+k	Clear scrollback
 Super+Shift+l	Launcher (fzf app picker)
+Ctrl+Shift+a	Agent-tracker (Claude Code sessions, floating)
 Alt+arrows	Resize pane (no mode switch)
+Ctrl+h/j/k/l	Navigate Neovim splits and Zellij panes (seamless)
 .TE
+.PP
+Ctrl+h/j/k/l move focus across Neovim splits and Zellij panes as one grid
+(left/right cross tabs). Provided by the vim-zellij-navigator and
+zellij-autolock plugins plus zellij-nav.nvim; autolock locks the session while
+nvim/vim/fzf is focused so the keys pass through. See
+.B zellij.md
+for details.
 .SH GIT CONFIG
 Managed via stow at
 .BR ~/.gitconfig .

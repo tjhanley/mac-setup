@@ -66,7 +66,7 @@ See also: `man mac-setup` for the full system reference.
 14. Installs LazyVim starter (if no existing `~/.config/nvim`)
 15. Ensures LazyVim loads repo-managed local options (`pcall(require, "config.local")`)
 16. Stows Neovim plugin configs (Ghostty plugins) into LazyVim, moving known plugin-file conflicts to backup first
-17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`)
+17. Downloads zjstatus Zellij status-bar plugin (`zjstatus.wasm`) and the Neovim-navigation plugins (`vim-zellij-navigator.wasm`, `zellij-autolock.wasm`)
 18. Installs runtimes via `mise` from stow-managed `~/.config/mise/config.toml` only (with extended remote-fetch timeout + one retry)
 19. Installs `gcloud-cli` using `mise` Python
 20. Installs `docker-desktop` (pre-creates `/usr/local/cli-plugins` for docker-compose)
@@ -101,12 +101,13 @@ stow/
   ghostty/
     .config/ghostty/config
   zellij/
-    .config/zellij/config.kdl                # pane-mode r = rename (matches tab-mode r)
+    .config/zellij/config.kdl                # pane-mode r = rename; Ctrl+hjkl nvim/pane nav + autolock
     .config/zellij/layouts/default.kdl       # zjstatus Catppuccin Mocha status bar
     .config/zellij/scripts/battery.sh        # dynamic battery glyph for zjstatus
     .config/zellij/scripts/cpu.sh            # CPU usage for zjstatus
     .config/zellij/scripts/mem.sh            # memory usage for zjstatus
     .config/zellij/scripts/launcher.sh       # fzf app picker for Super+Shift+l
+    .config/zellij/scripts/agent-tracker     # Claude Code session tracker (Super+Shift+a + zjstatus count)
   mise/
     .config/mise/config.toml
   zed/
@@ -117,6 +118,7 @@ stow/
     .config/nvim/lua/config/keymaps.lua   # arrow keys disabled in n/i/v modes
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
     .config/nvim/lua/plugins/neo-tree.lua # show hidden files by default
+    .config/nvim/lua/plugins/zellij-nav.lua # Ctrl+hjkl nav across nvim splits + zellij panes
   obsidian/
     .config/obsidian/obsidian.json
     necronomicon/.obsidian/          # vault config (symlinked into ~/necronomicon)
