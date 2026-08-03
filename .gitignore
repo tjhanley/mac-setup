@@ -32,9 +32,12 @@ stow/zed/.config/zed/prompts/
 .claude/worktrees/
 .worktrees/
 
-# Claude Code runtime state (keep only settings.json)
+# Claude Code runtime state (keep settings.json, CLAUDE.md, authored skills)
 stow/claude/.claude/*
 !stow/claude/.claude/settings.json
+!stow/claude/.claude/CLAUDE.md
+!stow/claude/.claude/skills/
+stow/claude/.claude/skills/vault-tasks-workspace/
 
 # JiraTUI config (contains API credentials)
 stow/jiratui/.config/jiratui/config.yaml

@@ -33,6 +33,7 @@ These principles apply to ALL codebases, not just Go:
 ## Pull Requests
 
 All PRs across Sonatus repos require a Jira ticket. When creating a PR:
+
 1. Create (or identify) the relevant ENGOPS Jira ticket first
 2. Include the ticket key (e.g. `ENGOPS-1234`) in the PR title: `ENGOPS-1234: <description>`
 3. Link the PR URL in the Jira ticket description
@@ -47,6 +48,7 @@ All PRs across Sonatus repos require a Jira ticket. When creating a PR:
 ## Obsidian Vault Conventions
 
 All vault `.md` files must have valid YAML frontmatter with at minimum a `type:` field and `tags:`. When creating or editing markdown files in the Obsidian vault, always include frontmatter. Use the path to determine type:
+
 - `people/` → `type: person`
 - `projects/` → `type: project`
 - `tasks/` → `type: task`
@@ -62,3 +64,16 @@ On macOS: use Python or `/bin/zsh` for scripting when advanced features are need
 ## MCP & Integrations
 
 When MCP tools return empty or limited results (Slack message bodies hidden, Jira API limitations, Calendar auth expired), report the limitation clearly and continue with other data sources. Never silently retry the same failing query. Never abort a multi-step workflow because one integration failed — skip it, note what was skipped, and deliver what you can.
+
+## Jira Sync Conventions
+
+- When running jira-sync, paginate all results (Jira caps at 100 issues per query); never report counts from a single unpaginated query.
+- Extract fields with jq using defensive access for differently nested fields (e.g., check both `.fields.assignee.emailAddress` and nested variants).
+
+## MCP Server Health Checks
+
+- Before running any command that depends on an MCP server (Granola, Atlassian, Slack), verify the server is connected first; if it fails, report the diagnosis and remediation steps immediately rather than retrying repeatedly.
+
+## Note Editing
+
+- When merging generated content into daily/notes files, check for and avoid creating duplicate section headers (e.g., '## Notes') before writing.

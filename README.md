@@ -128,12 +128,13 @@ stow/
       snippets/settings-nav-contrast.css
   claude/
     .claude/CLAUDE.md                    # global Claude Code instructions
-    .claude/skills/commit/SKILL.md       # imperative commit with co-author
-    .claude/skills/pr/SKILL.md           # PR with summary + test plan
-    .claude/skills/fix-issue/SKILL.md    # read issue, fix, test, commit
-    .claude/skills/gh-roadmap/SKILL.md   # create GitHub milestones, issues, and Projects board from a plan
-    .claude/skills/simplify/SKILL.md     # review changed code, simplify, fix issues
-    .claude/skills/test/SKILL.md         # run tests, diagnose and fix failures
+    .claude/settings.json                # plugins, hooks, model, permissions
+    .claude/skills/*/SKILL.md            # global skills: commit, pr, fix-issue, simplify, test,
+                                         #   update-man, pre-push-check, powerline-unicode-writes,
+                                         #   necronomicon-format, confluence-page-properties,
+                                         #   context7-mcp, create-rfc, jira-sync, mcp-preflight,
+                                         #   organize, people-profile, supacode-cli, vault-tasks,
+                                         #   verify-references
     .claude/statusline.sh                # Catppuccin Mocha powerline status line for Claude Code
   eza/
     .config/eza/theme.yml                # Catppuccin Mocha theme
