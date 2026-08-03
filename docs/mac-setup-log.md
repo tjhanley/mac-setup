@@ -83,7 +83,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Rust `~/.cargo/bin` path export.
 - Starship init.
 - zoxide init.
-- fzf init with Catppuccin Mocha color scheme (`FZF_DEFAULT_OPTS`).
+- fzf init with Catppuccin Mocha color scheme (`FZF_DEFAULT_OPTS`). The `fzf --zsh` output is patched at source time (sed disables the perl branch) so ctrl-r uses the `fc -rl` fallback instead of zsh's `$history` parameter — `$history` omits commands imported from other sessions via `share_history`, which broke cross-pane history search in Zellij.
 - CLI completions cached to `~/.cache/zsh/completions/` and added to fpath before `compinit` (lazy-loaded): kubectl, docker, mise, gh, stern, rustup, cargo. uv completions provided via Homebrew site-functions.
 - History: `HISTSIZE`/`SAVEHIST` 50k, `share_history`, `hist_ignore_dups`, `hist_ignore_space`, `hist_reduce_blanks`.
 - Shell options: `auto_cd`, `extended_glob`, `correct`.
