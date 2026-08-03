@@ -39,6 +39,18 @@ stow/claude/.claude/*
 !stow/claude/.claude/skills/
 stow/claude/.claude/skills/vault-tasks-workspace/
 
+# Claude Code session workspace (notes/artifacts written through the stow symlink;
+# session-env/ contains secrets)
+stow/claude/Artifacts/
+stow/claude/Projects/
+stow/claude/Scheduled/
+stow/claude/session-env/
+
+# Pi agent runtime state (auth.json contains API credentials)
+stow/pi/.pi/agent/auth.json
+stow/pi/.pi/agent/sessions/
+stow/pi/.pi/agent/pi-crash.log
+
 # JiraTUI config (contains API credentials)
 stow/jiratui/.config/jiratui/config.yaml
 
