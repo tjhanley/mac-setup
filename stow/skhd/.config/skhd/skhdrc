@@ -7,3 +7,5 @@ cmd + ctrl + alt + shift - m : open -a Spotify
 cmd + ctrl + alt + shift - s : open -a Slack
 cmd + ctrl + alt + shift - f : open -a Safari
 cmd + ctrl + alt + shift - n : open -a NecroTomicon
+# Google Calendar Safari web app; full path avoids collision with system Calendar.app
+cmd + ctrl + alt + shift - c : open -a "$HOME/Applications/Calendar.app"

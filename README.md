@@ -144,7 +144,7 @@ stow/
   jiratui/
     .config/jiratui/config.yaml              # Catppuccin Mocha theme, search defaults
   skhd/
-    .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari, n=NecroTomicon)
+    .config/skhd/skhdrc                      # Hyper key app launchers (t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari, n=NecroTomicon, c=Calendar web app)
   karabiner/
     .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
   pi/
