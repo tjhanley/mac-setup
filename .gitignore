@@ -47,9 +47,12 @@ stow/claude/Scheduled/
 stow/claude/session-env/
 
 # Pi agent runtime state (auth.json contains API credentials)
+# ~/.pi/agent is stow-linked into this repo, so pi writes its state here
 stow/pi/.pi/agent/auth.json
 stow/pi/.pi/agent/sessions/
 stow/pi/.pi/agent/pi-crash.log
+stow/pi/.pi/agent/models-store.json
+stow/pi/.pi/agent/trust.json
 
 # JiraTUI config (contains API credentials)
 stow/jiratui/.config/jiratui/config.yaml

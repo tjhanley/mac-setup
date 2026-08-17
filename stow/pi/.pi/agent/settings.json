@@ -1,0 +1,8 @@
+{
+  "lastChangelogVersion": "0.84.2",
+  "theme": "catppuccin-mocha",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-5",
+  "defaultThinkingLevel": "high",
+  "skills": ["~/.claude/skills"]
+}

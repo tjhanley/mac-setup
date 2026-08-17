@@ -30,7 +30,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
-- Installs npm global tools (`@mariozechner/pi-coding-agent`) via `npm install -g`; skips if `npm` not found.
+- Installs npm global tools (`@earendil-works/pi-coding-agent`) via `npm install -g`; skips if `npm` not found.
 - Configures keyboard repeat speed via macOS defaults (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`).
 - Starts skhd as a launchd service (`skhd --start-service`) after `configure_keyboard_repeat`; idempotent (checks `launchctl print gui/<uid>/com.koekeishiya.skhd` before acting).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
@@ -73,7 +73,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Selected manager: `mise` (instead of `asdf`) for Node/Python/Ruby/Go.
 - Rust managed via `rustup`.
 - Cargo tools installed via `cargo-binstall`: basalt-tui.
-- npm global tools installed via `npm install -g`: @mariozechner/pi-coding-agent.
+- npm global tools installed via `npm install -g`: @earendil-works/pi-coding-agent.
 - opencode: installed via Homebrew tap (opencode-ai/tap). TUI coding agent with built-in Catppuccin theme. Alias: `oc`.
 - Shell activation for `mise` is in `.zshrc`.
 
@@ -171,6 +171,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Git status is cached per directory at `/tmp/statusline-git-cache-<dir>` with a 5-second TTL to avoid repeated subprocess calls on every render.
 
 ### Pi-agent (`stow/pi/`)
+- Package: `@earendil-works/pi-coding-agent` (the `@mariozechner/*` package is deprecated in favour of it). `~/.pi/agent` is stow-linked as a directory, so pi writes its own runtime state (`models-store.json`, `trust.json`, `sessions/`, `auth.json`) directly into this repo — all gitignored.
+- Settings: `~/.pi/agent/settings.json` — `claude-opus-5` on the `anthropic` provider, `defaultThinkingLevel: "high"` (mirrors Claude Code's `effortLevel`), `theme: "catppuccin-mocha"`, and `skills: ["~/.claude/skills"]` so pi reuses the Claude Code skill library instead of duplicating it. No `packages` array — `pi install` owns that key.
+- Prompt template: `~/.pi/agent/prompts/verify.md` → `/verify`, ported from `~/.claude/commands/verify.md`. Pi has no subagent tool, so step 2 spawns a cold sibling `pi -p --no-session --model claude-sonnet-5` process with `--append-system-prompt ~/.claude/agents/red-team.md` as the adversary, matching the manual-subagent pattern already used by `agents/*.md`.
 - Theme: `~/.pi/agent/themes/catppuccin-mocha.json` — 51-token Catppuccin Mocha theme for pi-agent TUI; activated via `theme: "catppuccin-mocha"` in `~/.pi/agent/settings.json`.
 - Powerline extension: `~/.pi/agent/extensions/powerline/` — TypeScript extension (no build step) with five segments: model name (blue), git branch + dirty indicator (green/yellow), active tool name (teal, hidden when idle), active subagent name (peach, hidden when idle), cost + context bar + duration (mauve). All hooks wrapped in try/catch; extension errors never propagate to the session.
 - Subagents: four declarative markdown agents with YAML frontmatter; invoked manually in sequence:

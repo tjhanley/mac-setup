@@ -835,7 +835,10 @@ install_npm_tools() {
     return
   fi
 
-  local -a npm_tools=(@mariozechner/pi-coding-agent)
+  # @mariozechner/pi-coding-agent is deprecated ("please use @earendil-works/
+  # pi-coding-agent instead going forward"); the earendil-works package is the
+  # maintained continuation (github.com/earendil-works/pi).
+  local -a npm_tools=(@earendil-works/pi-coding-agent)
 
   for pkg in "${npm_tools[@]}"; do
     if npm list -g --depth=0 "$pkg" 2>/dev/null | grep -q "$pkg"; then

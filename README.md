@@ -73,7 +73,7 @@ See also: `man mac-setup` for the full system reference.
 21. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 22. Installs Rust via `rustup-init`
 23. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-24. Installs npm global tools (`@mariozechner/pi-coding-agent`)
+24. Installs npm global tools (`@earendil-works/pi-coding-agent`)
 25. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
 26. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
 27. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
@@ -148,6 +148,8 @@ stow/
   karabiner/
     .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
   pi/
+    .pi/agent/settings.json                            # opus-5 default, high thinking, Catppuccin theme, reuses ~/.claude/skills
+    .pi/agent/prompts/verify.md                        # /verify — adversarial review gate (cold sibling pi process as adversary)
     .pi/agent/themes/catppuccin-mocha.json             # Catppuccin Mocha theme for pi-agent UI
     .pi/agent/extensions/powerline/index.ts            # powerline extension entry point (lifecycle hooks + state)
     .pi/agent/extensions/powerline/render.ts           # pure render function: state → ANSI footer string
@@ -175,7 +177,7 @@ obsidian, raycast, spotify, zed, font-blex-mono-nerd-font, font-jetbrains-mono-n
 
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
-npm global tools: @mariozechner/pi-coding-agent
+npm global tools: @earendil-works/pi-coding-agent
 
 opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
 
