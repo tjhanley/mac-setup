@@ -73,7 +73,7 @@ See also: `man mac-setup` for the full system reference.
 21. Installs App Store apps (CopyLess 2, Magnet) via `mas`
 22. Installs Rust via `rustup-init`
 23. Installs Cargo tools (`basalt-tui`) via `cargo-binstall`
-24. Installs npm global tools (`@earendil-works/pi-coding-agent`)
+24. Installs npm global tools (`@earendil-works/pi-coding-agent`) via mise's npm
 25. Configures keyboard repeat speed (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`)
 26. Starts skhd hotkey service via launchd (`skhd --start-service`); skips if already running
 27. Prunes old backups in `~/config-backups/`, keeping the 3 most recent
@@ -108,6 +108,8 @@ stow/
     .config/zellij/scripts/mem.sh            # memory usage for zjstatus
     .config/zellij/scripts/launcher.sh       # fzf app picker for Super+Shift+l
     .config/zellij/scripts/agent-tracker     # Claude Code session tracker (Super+Shift+a + zjstatus count)
+  herdr/
+    .config/herdr/config.toml                # agent multiplexer trial; Ctrl+Alt+hjkl pane motions, Catppuccin Mocha
   mise/
     .config/mise/config.toml
   zed/
@@ -118,7 +120,7 @@ stow/
     .config/nvim/lua/config/keymaps.lua   # arrow keys disabled in n/i/v modes
     .config/nvim/lua/plugins/ghostty.lua  # stowed after LazyVim install
     .config/nvim/lua/plugins/neo-tree.lua # show hidden files by default
-    .config/nvim/lua/plugins/zellij-nav.lua # Ctrl+hjkl nav across nvim splits + zellij panes
+    .config/nvim/lua/plugins/zellij-nav.lua # Ctrl+hjkl nav across nvim splits + zellij panes (only when $ZELLIJ is set)
   obsidian/
     .config/obsidian/obsidian.json
     necronomicon/.obsidian/          # vault config (symlinked into ~/necronomicon)
@@ -167,7 +169,7 @@ stow/
 ## CLI Tools
 
 Installed via Homebrew: awscli, bat, bats-core, btop, cargo-binstall, dashlane-cli, duf, dust, eza,
-fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, imagemagick, jiratui, jq, k9s,
+fastfetch, fd, fzf, fzf-tab, gh, git, git-delta, git-lfs, glow, herdr, imagemagick, jiratui, jq, k9s,
 kubectl, lazydocker, lazygit, mas, mise, neovim, opencode, ripgrep, rust, rustup-init, skhd
 (koekeishiya/formulae tap), starship, stern, stow, tldr, trash, tree-sitter-cli, typescript, uv, varlock, wget,
 yazi, zellij, zoxide, zsh-autosuggestions, zsh-syntax-highlighting
@@ -177,7 +179,7 @@ obsidian, raycast, spotify, zed, font-blex-mono-nerd-font, font-jetbrains-mono-n
 
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
-npm global tools: @earendil-works/pi-coding-agent
+npm global tools (mise node prefix): @earendil-works/pi-coding-agent
 
 opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
 

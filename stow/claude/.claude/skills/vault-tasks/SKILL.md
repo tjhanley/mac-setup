@@ -1,6 +1,6 @@
 ---
 name: vault-tasks
-description: Add, list, or update tasks in Tom's necronomicon Obsidian vault at ~/necronomicon/tasks/. Triggers on "add a task", "create a todo", "remind me to …", "what tasks do I have", "list my todos", "show open tasks", "what's on my plate", "mark X done", "close the X task", "X is blocked because …". Uses consistent frontmatter (type, status, tags, created), cross-links with [[wiki-links]], preserves vault conventions. Scope is intentionally narrow: vault files under `~/necronomicon/tasks/` only — do not pull in Jira/Slack/Daily Brief data unless the user explicitly asks for a cross-system view.
+description: Add, list, or update tasks in Tom's necronomicon Obsidian vault at ~/necronomicon/tasks/. Triggers on "add a task", "create a todo", "remind me to …", "what tasks do I have", "list my todos", "show open tasks", "what's on my plate", "mark X done", "close the X task", "X is blocked because …". Uses consistent frontmatter (type, status, tags, created), cross-links with [[wiki-links]], preserves vault conventions. Scope is intentionally narrow — vault files under `~/necronomicon/tasks/` only — do not pull in Jira/Slack/Daily Brief data unless the user explicitly asks for a cross-system view.
 ---
 
 # Vault Tasks

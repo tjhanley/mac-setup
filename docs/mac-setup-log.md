@@ -30,7 +30,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Installs App Store apps (CopyLess 2, Magnet) via `mas`.
 - Installs Rust via `rustup-init` when needed.
 - Installs Cargo tools (`basalt-tui`) via `cargo-binstall` (falls back to `cargo install`).
-- Installs npm global tools (`@earendil-works/pi-coding-agent`) via `npm install -g`; skips if `npm` not found.
+- Installs npm global tools (`@earendil-works/pi-coding-agent`) via `mise exec node -- npm install -g`; falls back to a bare `npm` with a warning if mise node is missing, and skips entirely if neither is available. npm is pinned to the mise prefix because bootstrap runs non-interactively (where `mise activate` from `.zshrc` has not run) and a bare `npm` resolves to Homebrew's, which previously installed a second pi copy under `/opt/homebrew/lib/node_modules` visible only to non-interactive shells.
 - Configures keyboard repeat speed via macOS defaults (`InitialKeyRepeat=10`, `KeyRepeat=1`, `ApplePressAndHoldEnabled=false`).
 - Starts skhd as a launchd service (`skhd --start-service`) after `configure_keyboard_repeat`; idempotent (checks `launchctl print gui/<uid>/com.koekeishiya.skhd` before acting).
 - Clones Ghostty shaders (`hackr-sh/ghostty-shaders`) to `~/.local/share/ghostty/shaders/` to avoid writing into stow-managed repo paths; migrates legacy non-repo installs from `~/.config/ghostty/shaders/`.
@@ -50,6 +50,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zoxide, eza, yazi
 - kubectl, k9s, stern, awscli
 - zellij
+- herdr — agent-aware multiplexer, installed alongside zellij for evaluation (not auto-started)
 - mise, rust, rustup-init, cargo-binstall, mas
 - lazydocker
 - jiratui — Jira TUI client
@@ -73,7 +74,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Selected manager: `mise` (instead of `asdf`) for Node/Python/Ruby/Go.
 - Rust managed via `rustup`.
 - Cargo tools installed via `cargo-binstall`: basalt-tui.
-- npm global tools installed via `npm install -g`: @earendil-works/pi-coding-agent.
+- npm global tools installed via `mise exec node -- npm install -g` (mise node prefix, single location): @earendil-works/pi-coding-agent.
 - opencode: installed via Homebrew tap (opencode-ai/tap). TUI coding agent with built-in Catppuccin theme. Alias: `oc`.
 - Shell activation for `mise` is in `.zshrc`.
 
@@ -99,7 +100,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - `restow <package>` shell function: re-stows a single package from `~/Workspace/mac-setup/stow`.
-- AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `pi` (pi), `k` (kubectl), `gal` (gcloud auth login).
+- AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.
 - `~/.local/bin` added to PATH (mise shims, pipx, user scripts).
@@ -140,6 +141,28 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zjstatus plugin downloaded to `~/.config/zellij/plugins/zjstatus.wasm`.
 - Seamless `Ctrl+h/j/k/l` navigation across Neovim splits and Zellij panes via three cooperating pieces: (1) **vim-zellij-navigator** (`vim-zellij-navigator.wasm`) bound to `Ctrl+hjkl` in `shared_except "locked"` — moves Zellij focus, crossing tabs on left/right (`move_focus_or_tab`); (2) **zellij-autolock** (`zellij-autolock.wasm`, loaded via `load_plugins`) — auto-switches to Locked mode when the focused pane runs a trigger program (`triggers "nvim|vim|fzf"`, `reaction_seconds 0.3`) so keys pass through, unlocking when focus leaves; (3) **zellij-nav.nvim** (`stow/nvim/.config/nvim/lua/plugins/zellij-nav.lua`) — handles the keys inside Neovim and hands focus back to Zellij at split edges. Both `.wasm` plugins downloaded to `~/.config/zellij/plugins/`.
 
+### Herdr
+Agent-aware multiplexer (`brew "herdr"`, homebrew-core, 0.8.0 at time of writing) installed **alongside** Zellij for evaluation. Config at `stow/herdr/.config/herdr/config.toml` → `~/.config/herdr/config.toml`. Validate with `herdr config check`; reload a running server with `herdr server reload-config` or `prefix+shift+r`.
+
+**Motions are deliberately two-tier, not a copy of the Zellij scheme:**
+- `Ctrl+hjkl` — Neovim windows only. Herdr never binds these, so they reach the pane program untouched; readline `Ctrl+k`/`Ctrl+w` still work in shell panes.
+- `Ctrl+Alt+hjkl` — Herdr pane focus. Works from every pane, including inside Neovim and other full-screen TUIs.
+- `prefix+<key>` (`Ctrl+b` prefix) — tmux-style defaults kept as the discoverable fallback; `prefix+?` lists every active binding.
+
+Why not the seamless single-chord Zellij setup: that depends on **zellij-autolock** making Zellij stand down so Neovim can see `Ctrl+hjkl`. Herdr has no lock or passthrough mode and no editor integration, so any chord bound in Herdr is consumed before the pane sees it. `Ctrl+Alt` is the modifier family terminals and macOS leave alone — plain `Alt+hjkl` is already taken by the Ghostty word-motion remaps in `stow/ghostty/.config/ghostty/config`. Herdr's own CLI (`herdr pane focus --direction`, `herdr pane edges`) would make an inner-program-driven seamless scheme possible later, since the pane program can delegate outward instead of asking Herdr to stand down.
+
+Other bindings and parity notes:
+- Move pane: `prefix+Shift+hjkl` (`swap_pane_*`), matching Zellij pane-mode `H/J/K/L`. Accepted by 0.8.0 but absent from `herdr --default-config`.
+- Resize: `prefix+r` resize mode, then `hjkl`. Direct `resize_pane_left/down/up/right` chords exist only in the repo's unreleased `docs/next` — 0.8.0's `herdr config check` rejects them as unknown keys. Revisit after an upgrade.
+- Splits/zoom: `prefix+v` / `prefix+minus` / `prefix+z`, plus direct `Ctrl+Alt+d` / `Ctrl+Alt+Shift+d` / `Ctrl+Alt+z`.
+- Tabs: `prefix+c`/`p`/`n` plus `Ctrl+Alt+c`/`[`/`]`. **No equivalent of Zellij's `move_focus_or_tab`** — Herdr has no focus-or-cross-to-next-tab action, so edge-crossing tab movement is a separate chord.
+- Theme `catppuccin` (= Mocha; `catppuccin-mocha` is an accepted alias), `auto_switch = false`.
+- `terminal.new_cwd = "follow"`, `session.resume_agents_on_restore = true`.
+- Not ported from Zellij: `launcher.sh` (would need its `zellij run` tail rewritten to `herdr pane split`) and `agent-tracker` (largely redundant — Herdr's sidebar shows per-agent working/blocked/idle natively).
+- Not configured because Herdr already defaults to it: mouse capture, pane borders, session persistence, and `$EDITOR` (nvim) for `prefix+e` scrollback.
+
+**Zellij remains the Ghostty default.** To switch, edit `stow/zsh/.zshrc:117-122` — the auto-start block guards on `command -v zellij`, `$ZELLIJ` and `NO_AUTO_ZELLIJ`; swap `exec zellij` for `exec herdr` and the guards for `$HERDR_SESSION`/`NO_AUTO_HERDR`. Until then, launch Herdr manually with `herdr`.
+
 ## Stow packages
 - `zsh/` — `.zshrc`, `.zprofile`
 - `git/` — `.gitconfig`, `.gitignore` (global gitignore with macOS, AI tooling, secrets patterns)
@@ -150,9 +173,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `starship/` — `.config/starship.toml`
 - `ghostty/` — `.config/ghostty/config`
 - `zellij/` — `.config/zellij/config.kdl`, `.config/zellij/layouts/default.kdl`, `.config/zellij/scripts/{cpu,mem,battery,launcher}.sh`, `.config/zellij/scripts/agent-tracker`
+- `herdr/` — `.config/herdr/config.toml` (agent multiplexer; two-tier hjkl motions, Catppuccin Mocha)
 - `mise/` — `.config/mise/config.toml`
 - `zed/` — `.config/zed/settings.json`, `.config/zed/keymap.json` (arrow keys disabled in vim normal/insert/visual modes)
-- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua`, `.config/nvim/lua/plugins/neo-tree.lua` (show hidden files by default), `.config/nvim/lua/plugins/zellij-nav.lua` (zellij-nav.nvim — `Ctrl+hjkl` nav across nvim splits and Zellij panes) (stowed separately after LazyVim install)
+- `nvim/` — `.config/nvim/lua/config/local.lua` (disable unused providers; loaded from LazyVim `options.lua` hook), `.config/nvim/lua/config/keymaps.lua` (arrow keys disabled in n/i/v modes), `.config/nvim/lua/plugins/ghostty.lua`, `.config/nvim/lua/plugins/neo-tree.lua` (show hidden files by default), `.config/nvim/lua/plugins/zellij-nav.lua` (zellij-nav.nvim — `Ctrl+hjkl` nav across nvim splits and Zellij panes; gated on `cond = vim.env.ZELLIJ ~= nil` so Herdr panes fall back to LazyVim's own window maps) (stowed separately after LazyVim install)
 - `obsidian/` — `.config/obsidian/obsidian.json` (vault registry); `necronomicon/.obsidian/` (vault config symlinked into `~/necronomicon`): all settings JSONs, `plugins/*/data.json` (plugin settings, not code), `themes/Catppuccin/` + `themes/AnuPpuccin/`, `snippets/settings-nav-contrast.css` + `snippets/header_spacing.css`. Plugin code (`main.js`, `manifest.json`, `styles.css`) is gitignored and re-downloaded by Obsidian.
 - `claude/` — `.claude/CLAUDE.md` (global instructions), `.claude/settings.json` (plugins, hooks, model, permissions), `.claude/skills/*/SKILL.md` (global skills: commit, pr, fix-issue, simplify, test, update-man, pre-push-check, powerline-unicode-writes, necronomicon-format, confluence-page-properties, context7-mcp, create-rfc, jira-sync, mcp-preflight, organize, people-profile, supacode-cli, vault-tasks, verify-references; skill eval workspaces like `vault-tasks-workspace/` are gitignored), `.claude/statusline.sh` (Catppuccin Mocha powerline status line for Claude Code)
 - `eza/` — `.config/eza/theme.yml` (Catppuccin Mocha theme)

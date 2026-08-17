@@ -44,7 +44,7 @@ Install gcloud-cli, Docker Desktop, App Store apps
 .IP 16. 4
 Install Rust via rustup-init and Cargo tools (basalt-tui) via cargo-binstall
 .IP 17. 4
-Install npm global tools (@earendil-works/pi-coding-agent) via npm install -g
+Install npm global tools (@earendil-works/pi-coding-agent) via mise exec node \-\- npm install -g
 .IP 18. 4
 Prune old backups in ~/config-backups/, keeping the 3 most recent
 .SH STOW PACKAGES
@@ -68,6 +68,7 @@ ssh	.ssh/config (1Password agent, Include config.local)
 starship	.config/starship.toml
 ghostty	.config/ghostty/config
 zellij	.config/zellij/config.kdl, layouts/default.kdl, scripts/
+herdr	.config/herdr/config.toml (agent multiplexer; two-tier hjkl motions)
 mise	.config/mise/config.toml
 zed	.config/zed/settings.json
 nvim	.config/nvim/lua/config/options.lua, plugins/ghostty.lua, plugins/neo-tree.lua, plugins/zellij-nav.lua
@@ -126,7 +127,6 @@ y	yazi (cwd-on-exit wrapper)
 cc	claude
 cx	codex
 oc	opencode
-pi	pi
 gal	gcloud auth login
 spotify	open \-a Spotify (when installed)
 .TE
@@ -251,9 +251,39 @@ Ctrl+h/j/k/l	Navigate Neovim splits and Zellij panes (seamless)
 Ctrl+h/j/k/l move focus across Neovim splits and Zellij panes as one grid
 (left/right cross tabs). Provided by the vim-zellij-navigator and
 zellij-autolock plugins plus zellij-nav.nvim; autolock locks the session while
-nvim/vim/fzf is focused so the keys pass through. See
+nvim/vim/fzf is focused so the keys pass through. The zellij-nav.nvim spec is
+gated on
+.BR $ZELLIJ ,
+so the keys revert to plain LazyVim window motions outside zellij. See
 .B zellij.md
 for details.
+.SH HERDR KEYBINDS
+Agent multiplexer installed alongside zellij for evaluation; zellij remains the
+Ghostty default. Motions are two-tier because herdr has no lock or passthrough
+mode, so any chord it binds never reaches the pane program.
+.PP
+.TS
+l l.
+Keys	Action
+_
+Ctrl+b	Prefix (tmux-style); prefix+? lists all bindings
+Ctrl+Alt+h/j/k/l	Focus pane (works inside Neovim and TUIs)
+Ctrl+h/j/k/l	Neovim windows only; herdr leaves these unbound
+prefix+Shift+h/j/k/l	Move pane (as zellij pane-mode H/J/K/L)
+prefix+r	Resize mode, then hjkl
+Ctrl+Alt+d	Split vertical (prefix+v)
+Ctrl+Alt+Shift+d	Split horizontal (prefix+minus)
+Ctrl+Alt+z	Toggle zoom (prefix+z)
+Ctrl+Alt+c	New tab (prefix+c)
+Ctrl+Alt+[ / ]	Previous / next tab (prefix+p, prefix+n)
+prefix+q	Detach, leaving everything running
+.TE
+.PP
+No equivalent of zellij's move_focus_or_tab: herdr cannot cross to the next tab
+from a pane edge, so tab movement is its own chord. Validate config changes with
+.B herdr config check
+and reload a running server with
+.BR "herdr server reload-config" .
 .SH GIT CONFIG
 Managed via stow at
 .BR ~/.gitconfig .
@@ -301,8 +331,17 @@ Opt out per-shell with:
 .PP
 Only triggers when all of these are true: interactive shell, in Ghostty,
 not already inside zellij or tmux.
+.PP
+herdr is not auto-started; run
+.B herdr
+manually. To make it the default instead, swap
+.B exec zellij
+in the auto-start block of
+.B .zshrc
+for
+.BR "exec herdr" .
 .SH THEME
-Catppuccin Mocha everywhere: Ghostty, Zellij (zjstatus), Starship, Zed,
+Catppuccin Mocha everywhere: Ghostty, Zellij (zjstatus), herdr, Starship, Zed,
 Yazi, bat, lazygit, eza, FZF.
 .SH FILES
 .TP

@@ -830,7 +830,17 @@ install_cargo_tools() {
 install_npm_tools() {
   log "Installing npm global tools"
 
-  if ! need_cmd npm; then
+  # Pin npm to mise's node so globals always land in exactly one prefix.
+  # Bootstrap runs non-interactively and `mise activate` lives in .zshrc, so a
+  # bare `npm` here resolves to Homebrew's npm and installs a second copy under
+  # /opt/homebrew/lib/node_modules that only non-interactive shells ever see.
+  local -a npm_cmd
+  if need_cmd mise && mise which node >/dev/null 2>&1; then
+    npm_cmd=(mise exec node -- npm)
+  elif need_cmd npm; then
+    npm_cmd=(npm)
+    warn "mise node not found; using $(command -v npm) (globals may land outside the mise prefix)"
+  else
     warn "npm not found; skipping npm global tools (is mise node installed?)"
     return
   fi
@@ -841,17 +851,17 @@ install_npm_tools() {
   local -a npm_tools=(@earendil-works/pi-coding-agent)
 
   for pkg in "${npm_tools[@]}"; do
-    if npm list -g --depth=0 "$pkg" 2>/dev/null | grep -q "$pkg"; then
+    if "${npm_cmd[@]}" list -g --depth=0 "$pkg" 2>/dev/null | grep -q "$pkg"; then
       ok "$pkg already installed"
       continue
     fi
 
     if [[ "$DRY_RUN" -eq 1 ]]; then
-      print -P "%F{yellow}dry-run:%f npm install -g $pkg"
+      print -P "%F{yellow}dry-run:%f ${npm_cmd[*]} install -g $pkg"
       continue
     fi
 
-    run_cmd npm install -g "$pkg" && ok "Installed $pkg"
+    run_cmd "${npm_cmd[@]}" install -g "$pkg" && ok "Installed $pkg"
   done
 }
 
