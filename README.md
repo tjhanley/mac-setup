@@ -208,6 +208,8 @@ shell options, git config, runtimes, theme, files, and common tasks.
 - Re-running the script is safe and idempotent.
 - Backups live in `~/config-backups/` (timestamped).
 - Open Ghostty, Raycast, Zed once after install if you use them.
+- Local tooling data is ignored: agent databases, Herdr sessions, Pi package caches, the Supacode-managed Pi extension, and installed TWG skill bundles.
+- Install TWG skills per machine. Their bundled license prohibits redistribution. Keep skill evaluation workspaces under `~/.claude/skill-workspaces/`.
 
 ## Tests
 

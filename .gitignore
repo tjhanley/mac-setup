@@ -37,7 +37,9 @@ stow/claude/.claude/*
 !stow/claude/.claude/settings.json
 !stow/claude/.claude/CLAUDE.md
 !stow/claude/.claude/skills/
-stow/claude/.claude/skills/vault-tasks-workspace/
+# skill-creator eval workspaces live in stow/claude/.claude/skill-workspaces/
+# (already covered by the wildcard above), never under skills/ — pi discovers
+# SKILL.md recursively, so a nested snapshot collides with the real skill name.
 
 # Claude Code session workspace (notes/artifacts written through the stow symlink;
 # session-env/ contains secrets)
@@ -53,6 +55,24 @@ stow/pi/.pi/agent/sessions/
 stow/pi/.pi/agent/pi-crash.log
 stow/pi/.pi/agent/models-store.json
 stow/pi/.pi/agent/trust.json
+stow/pi/.pi/agent/mcp-cache.json
+# pi installs extension packages here (78 MB+); pi writes its own npm/.gitignore
+# with `*` plus `!.gitignore`, so only that 12-byte file would otherwise show up
+stow/pi/.pi/agent/npm/
+# Supacode generates and updates this integration when launching Pi.
+stow/pi/.pi/agent/extensions/supacode/
+
+# Installed TWG skills are vendor-managed and not licensed for redistribution.
+stow/claude/.claude/skills/twg/
+stow/claude/.claude/skills/twg-*/
+stow/opencode/.config/opencode/skills/twg/
+stow/opencode/.config/opencode/skills/twg-*/
+
+# OpenCode project databases and local initialization state.
+/.opencode/opencode.db*
+/.opencode/init
+# Settings left by the removed Quota plugin.
+stow/opencode/.config/opencode/opencode-quota/
 
 # JiraTUI config (contains API credentials)
 stow/jiratui/.config/jiratui/config.yaml
@@ -60,8 +80,22 @@ stow/jiratui/.config/jiratui/config.yaml
 # Zellij compiled plugins (installed at runtime)
 stow/zellij/.config/zellij/plugins/
 
+# Herdr runtime state (~/.config/herdr is stow-linked into this repo, so the
+# server writes its sockets, logs and session state here)
+stow/herdr/.config/herdr/*.log
+stow/herdr/.config/herdr/*.sock
+stow/herdr/.config/herdr/.plugins.lock
+stow/herdr/.config/herdr/plugins/
+stow/herdr/.config/herdr/sessions/
+stow/herdr/.config/herdr/config.toml.bak*
+stow/herdr/.config/herdr/session.json
+stow/herdr/.config/herdr/release-notes.json
+
 # Backups
 config-backups/
 
 # OS
 Thumbs.db
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/

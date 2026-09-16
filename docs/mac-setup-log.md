@@ -213,6 +213,8 @@ Other bindings and parity notes:
 - Obsidian settings symlinked similarly. Config is seeded with `{}` if missing (required by basalt-tui).
 
 ## Repo hygiene
+- Local tooling exclusions cover OpenCode databases and Quota leftovers, Herdr sessions and release state, Pi caches and packages, and the Supacode-managed Pi extension.
+- Installed TWG skill bundles stay local because their bundled license prohibits redistribution. Skill evaluation workspaces belong under `~/.claude/skill-workspaces/`, outside recursive skill discovery.
 - `.gitignore` covers macOS files, editor dirs, `.env`, `.secrets`, backups.
 - `README.md` with usage, structure, and customization notes.
 - `CLAUDE.md` / `AGENTS.md` — agent instructions for Claude Code and Codex to keep docs in sync.
