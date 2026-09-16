@@ -227,6 +227,7 @@ Other bindings and parity notes:
   - `reviewer.md` — claude-sonnet-4-6, tools: read/grep/find/ls, read-only code reviewer; returns structured verdict
 
 ## macOS app config linking
+- Obsidian preferences include the saved graph scale, Excalidraw vault-library storage and Markdown image defaults, and refreshed Omnisearch settings. Excalidraw JavaScript script-file options are disabled.
 - Zed settings symlinked from `~/.config/zed/settings.json` to `~/Library/Application Support/Zed/settings.json`. Zed keymap similarly linked (`keymap.json`).
 - Obsidian settings symlinked similarly. Config is seeded with `{}` if missing (required by basalt-tui).
 
