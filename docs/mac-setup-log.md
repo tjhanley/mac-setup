@@ -231,6 +231,8 @@ Other bindings and parity notes:
 - Obsidian settings symlinked similarly. Config is seeded with `{}` if missing (required by basalt-tui).
 
 ## Repo hygiene
+- Graft project integration uses `.mcp.json` (`graft mcp`), `.claude/settings.json` lifecycle hooks, helper entry points, and `.claude/skills/graft/SKILL.md`. Install `@nanonets/graft` separately with npm.
+- Graft helpers resolve a local or global installation and do nothing if it is unavailable. `.ignore` makes graph cards searchable while `.gitignore` excludes the generated `graft/` tree.
 - Local tooling exclusions cover OpenCode databases and Quota leftovers, Herdr sessions and release state, Pi caches and packages, and the Supacode-managed Pi extension.
 - Installed TWG skill bundles stay local because their bundled license prohibits redistribution. Skill evaluation workspaces belong under `~/.claude/skill-workspaces/`, outside recursive skill discovery.
 - `.gitignore` covers macOS files, editor dirs, `.env`, `.secrets`, backups.

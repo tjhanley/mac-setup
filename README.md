@@ -228,6 +228,7 @@ bats tests/
 
 ## Customize
 
+- Graft repository indexing uses `.mcp.json`, `.claude/helpers/`, and the project `graft` skill. Install it with `npm install -g @nanonets/graft`; generated graphs stay local.
 - Configure GitHub account routing in `.zshrc`: `gh.user` takes priority, followed by the remote owner and the workspace directory default.
 - Use `claudespend [DAYS]` with the scripts in `~/claude-spend-audit` to summarize local usage. Kiro terminals load their shell integration automatically.
 - Add/remove packages in `brew/Brewfile`
