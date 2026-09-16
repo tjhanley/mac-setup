@@ -197,7 +197,7 @@ Other bindings and parity notes:
 - `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari, n=NecroTomicon, c=Google Calendar Safari web app at `~/Applications/Calendar.app`)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
-- `opencode/` — `.config/opencode/opencode.jsonc` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.jsonc` (Catppuccin Macchiato selection); `.config/opencode/themes/catppuccin-latte.json` (optional fixed light palette)
+- `opencode/` — `.config/opencode/opencode.jsonc` (model: anthropic/claude-sonnet-4-6, autoupdate: false, remote MCP server `drata` at https://agentgov-mcp-server.drata.com/mcp); `.config/opencode/tui.jsonc` (Catppuccin Macchiato selection); `.config/opencode/themes/catppuccin-latte.json` (optional fixed light palette)
 
 ### Claude Code workflow
 - Global instructions require citations and adversarial review. Vault frontmatter and note-editing rules live in `necronomicon-format`; defensive Jira field extraction lives in `jira-sync`.

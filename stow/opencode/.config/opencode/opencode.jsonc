@@ -4,5 +4,12 @@
   "model": "anthropic/claude-sonnet-4-6",
   "provider": {
     "openrouter": {}
+  },
+  "mcp": {
+    "drata": {
+      "type": "remote",
+      "url": "https://agentgov-mcp-server.drata.com/mcp",
+      "enabled": true
+    }
   }
 }
