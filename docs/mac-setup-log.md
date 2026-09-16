@@ -98,6 +98,10 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - yazi cwd-on-exit wrapper: `y`.
 - Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
+- GitHub account selection maps the `snt-devx` owner to `tjhanley-snt` in `GH_ACCOUNT_BY_OWNER` (`stow/zsh/.zshrc`).
+- GitHub account routing checks `git config gh.user`, the remote owner, then `GH_ACCOUNT_BY_PATH`. Tokens are cached per account within the shell. Unknown GitHub owners use the active gh account rather than a directory fallback.
+- Kiro shell integration loads when `TERM_PROGRAM=kiro`. `claudespend [DAYS]` runs the local `~/claude-spend-audit` scripts and calculates a run rate for the selected period without changing the parent shell directory.
+- `tests/shell-helpers.bats` covers account priority, remote parsing, token caching and clearing, and spend-report date filtering and parser failure.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - `restow <package>` shell function: re-stows a single package from `~/Workspace/mac-setup/stow`.
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `k` (kubectl), `gal` (gcloud auth login).

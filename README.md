@@ -221,6 +221,8 @@ bats tests/
 
 ## Customize
 
+- Configure GitHub account routing in `.zshrc`: `gh.user` takes priority, followed by the remote owner and the workspace directory default.
+- Use `claudespend [DAYS]` with the scripts in `~/claude-spend-audit` to summarize local usage. Kiro terminals load their shell integration automatically.
 - Add/remove packages in `brew/Brewfile`
 - Add stow packages under `stow/`
 - Update runtime versions in `stow/mise/.config/mise/config.toml`

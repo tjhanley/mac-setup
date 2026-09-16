@@ -412,18 +412,137 @@ ssh() {
   command ssh "$@"
 }
 
-# Per-repo gh account: reads gh.user from git config and exports GH_TOKEN so
-# the gh CLI uses the right GitHub account without a global auth switch.
-# Repos with no gh.user unset GH_TOKEN, falling back to the active account.
-_gh_set_token() {
-  local gh_user
-  gh_user=$(git config gh.user 2>/dev/null)
-  if [[ -n "$gh_user" ]]; then
-    export GH_TOKEN=$(gh auth token --user "$gh_user" 2>/dev/null)
-  else
-    unset GH_TOKEN
+# Per-directory gh account. Exports GH_TOKEN so that both `gh` AND git use the
+# right identity, without depending on the global `gh auth switch` state -- git
+# routes github.com creds through `!gh auth git-credential` (see
+# credential.https://github.com.helper), which honours GH_TOKEN over the active
+# account. If the active account drifts, private repos 404 as "Repository not
+# found", so nothing here is allowed to fall back to it silently.
+#
+# Resolution order:  git config gh.user  ->  remote owner  ->  path default.
+
+# GitHub owner -> gh account.
+# TODO(tom): add any other orgs you have access to (sonatus-* forks, etc).
+typeset -gA GH_ACCOUNT_BY_OWNER=(
+  sonatus   tjhanley-snt
+  snt-devx  tjhanley-snt
+  tjhanley  tjhanley
+)
+
+# Fallback for directories that are not inside a git repo yet. This is what
+# covers `git clone` of a private repo: there is no remote to derive from until
+# the clone finishes, so the enclosing directory decides the identity.
+typeset -gA GH_ACCOUNT_BY_PATH=(
+  "$HOME/Workspace"  tjhanley-snt
+)
+
+typeset -gA _gh_token_cache _gh_warned_owners
+
+# Owner from a remote URL. Handles https, scp-style ssh, and ssh host aliases:
+#   https://github.com/sonatus/iac-live.git      -> sonatus
+#   git@github.com:tjhanley/necronomicon.git     -> tjhanley
+#   git@github.com-personal:tjhanley/mac-setup   -> tjhanley
+_gh_remote_owner() {
+  local url=${1#*://}   # strip scheme, if any
+  url=${url#*@}         # strip user@, if any
+  [[ $url == *[:/]* ]] || return 1
+  local host=${url%%[:/]*} path=${url#*[:/]}
+  [[ $host == github.com || $host == github.com-* ]] || return 1
+  path=${path%%/*}
+  [[ -n $path ]] && print -r -- $path
+}
+
+# These two helpers return values via $REPLY rather than stdout on purpose. A
+# `$(...)` call would run them in a subshell, where writes to the cache and the
+# warned-owners map are discarded -- which silently defeats both the token cache
+# and the warn-once behaviour.
+
+# Sets REPLY to the token for account $1. One `gh auth token` spawn per account
+# per shell, not per cd.
+_gh_token_for() {
+  if [[ -z ${_gh_token_cache[$1]} ]]; then
+    _gh_token_cache[$1]=$(gh auth token --user "$1" 2>/dev/null)
   fi
+  REPLY=${_gh_token_cache[$1]}
+  [[ -n $REPLY ]]
+}
+
+# Sets REPLY to the account for $PWD. Returns non-zero if none applies.
+_gh_account_for_pwd() {
+  local acct owner url dir
+  REPLY=
+
+  # 1. explicit per-repo override always wins
+  acct=$(git config gh.user 2>/dev/null)
+  [[ -n $acct ]] && { REPLY=$acct; return 0 }
+
+  # 2. derive from the remote's owner
+  url=$(git config remote.origin.url 2>/dev/null)
+  if [[ -n $url ]] && owner=$(_gh_remote_owner "$url"); then
+    acct=${GH_ACCOUNT_BY_OWNER[$owner]}
+    [[ -n $acct ]] && { REPLY=$acct; return 0 }
+    # A github.com remote we have no mapping for. Warn once per owner per shell
+    # so an unmapped private repo does not present as a phantom 404.
+    if [[ -o interactive && -z ${_gh_warned_owners[$owner]} ]]; then
+      _gh_warned_owners[$owner]=1
+      print -u2 "gh: no account mapped for owner '$owner'; using gh's active account"
+    fi
+    return 1
+  fi
+
+  # 3. not in a git repo with a github remote -- fall back on location
+  for dir in ${(k)GH_ACCOUNT_BY_PATH}; do
+    if [[ $PWD == $dir || $PWD == $dir/* ]]; then
+      REPLY=${GH_ACCOUNT_BY_PATH[$dir]}
+      return 0
+    fi
+  done
+  return 1
+}
+
+_gh_set_token() {
+  local acct
+  if _gh_account_for_pwd; then
+    acct=$REPLY
+    if _gh_token_for "$acct"; then
+      export GH_TOKEN=$REPLY
+      return
+    fi
+    [[ -o interactive ]] &&
+      print -u2 "gh: no stored token for '$acct'; run: gh auth login --user $acct"
+  fi
+  unset GH_TOKEN
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd _gh_set_token
 _gh_set_token
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# --- Claude Code spend audit ------------------------------------------------
+# claudespend [DAYS]  re-parse transcripts and print the headline block.
+# Defaults to the last 30 days, counting today. Runs in a subshell because the
+# audit scripts open turns.csv relative to the current directory: the job has to
+# cd, your shell does not.
+claudespend() {
+  local days=${1:-30}
+  local end start
+  end=$(date +%Y-%m-%d)
+  start=$(date -v-$((days - 1))d +%Y-%m-%d)
+  (
+    cd ~/claude-spend-audit || return 1
+    # Full history on purpose: turns.csv is shared by the other scripts.
+    python3 parse_transcripts.py || return 1
+    echo
+    python3 stats.py --start "$start" --end "$end"
+    # stats.py hardcodes a 31-day divisor for its run rate, so recompute it.
+    python3 - "$start" "$end" <<'PY'
+import csv, datetime, sys
+start, end = sys.argv[1], sys.argv[2]
+rows = [r for r in csv.DictReader(open('turns.csv')) if start <= r['date'] <= end]
+total = sum(float(r['cost_total']) for r in rows)
+days = (datetime.date.fromisoformat(end) - datetime.date.fromisoformat(start)).days + 1
+print(f"\nCORRECTED run rate: ${total / days * 30:,.2f}/30d over {days} days (${total / days:,.2f}/day)")
+PY
+  )
+}
