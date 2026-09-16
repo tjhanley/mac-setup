@@ -4,5 +4,10 @@
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-5",
   "defaultThinkingLevel": "high",
-  "skills": ["~/.claude/skills"]
+  "skills": [
+    "~/.claude/skills"
+  ],
+  "packages": [
+    "npm:pi-mcp-adapter"
+  ]
 }

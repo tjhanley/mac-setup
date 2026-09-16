@@ -207,7 +207,9 @@ Other bindings and parity notes:
 
 ### Pi-agent (`stow/pi/`)
 - Package: `@earendil-works/pi-coding-agent` (the `@mariozechner/*` package is deprecated in favour of it). `~/.pi/agent` is stow-linked as a directory, so pi writes its own runtime state (`models-store.json`, `trust.json`, `sessions/`, `auth.json`) directly into this repo — all gitignored.
-- Settings: `~/.pi/agent/settings.json` — `claude-opus-5` on the `anthropic` provider, `defaultThinkingLevel: "high"` (mirrors Claude Code's `effortLevel`), `theme: "catppuccin-mocha"`, and `skills: ["~/.claude/skills"]` so pi reuses the Claude Code skill library instead of duplicating it. No `packages` array — `pi install` owns that key.
+- Pi settings select `claude-opus-5`, high thinking, and Catppuccin Mocha. `skills` reuses `~/.claude/skills`, and `packages` includes `npm:pi-mcp-adapter`.
+- Pi MCP configuration at `~/.pi/agent/mcp.json` imports Claude Code servers and declares a direct Atlassian HTTP endpoint. Credentials remain in local authentication stores.
+- Pi MCP installation is a manual step after bootstrap: `pi install npm:pi-mcp-adapter`. The adapter cache and installed packages are gitignored.
 - Prompt template: `~/.pi/agent/prompts/verify.md` → `/verify`, ported from `~/.claude/commands/verify.md`. Pi has no subagent tool, so step 2 spawns a cold sibling `pi -p --no-session --model claude-sonnet-5` process with `--append-system-prompt ~/.claude/agents/red-team.md` as the adversary, matching the manual-subagent pattern already used by `agents/*.md`.
 - Theme: `~/.pi/agent/themes/catppuccin-mocha.json` — 51-token Catppuccin Mocha theme for pi-agent TUI; activated via `theme: "catppuccin-mocha"` in `~/.pi/agent/settings.json`.
 - Powerline extension: `~/.pi/agent/extensions/powerline/` — TypeScript extension (no build step) with five segments: model name (blue), git branch + dirty indicator (green/yellow), active tool name (teal, hidden when idle), active subagent name (peach, hidden when idle), cost + context bar + duration (mauve). All hooks wrapped in try/catch; extension errors never propagate to the session.

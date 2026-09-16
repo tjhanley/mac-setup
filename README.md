@@ -150,7 +150,8 @@ stow/
   karabiner/
     .config/karabiner/assets/complex_modifications/hyper.json  # Caps Lock → Hyper (held) / Escape (tap); karabiner.json intentionally unmanaged
   pi/
-    .pi/agent/settings.json                            # opus-5 default, high thinking, Catppuccin theme, reuses ~/.claude/skills
+    .pi/agent/settings.json                            # opus-5 default, high thinking, Catppuccin theme, reuses ~/.claude/skills, pi-mcp-adapter package
+    .pi/agent/mcp.json                                 # Claude Code server imports + direct Atlassian MCP endpoint
     .pi/agent/prompts/verify.md                        # /verify — adversarial review gate (cold sibling pi process as adversary)
     .pi/agent/themes/catppuccin-mocha.json             # Catppuccin Mocha theme for pi-agent UI
     .pi/agent/extensions/powerline/index.ts            # powerline extension entry point (lifecycle hooks + state)
@@ -181,6 +182,8 @@ obsidian, raycast, spotify, zed, font-blex-mono-nerd-font, font-jetbrains-mono-n
 Cargo tools: basalt-tui (Obsidian vault TUI)
 
 npm global tools (mise node prefix): @earendil-works/pi-coding-agent
+
+Pi MCP setup: run `pi install npm:pi-mcp-adapter` on each machine. The tracked `mcp.json` imports Claude Code servers and adds an Atlassian endpoint.
 
 opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`. The Quota plugin is not enabled in the server or TUI configuration.
 

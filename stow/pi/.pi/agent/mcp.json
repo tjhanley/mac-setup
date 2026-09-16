@@ -1,0 +1,9 @@
+{
+  "imports": ["claude-code"],
+  "mcpServers": {
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2"
+    }
+  }
+}
