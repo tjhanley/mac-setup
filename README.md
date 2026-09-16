@@ -232,7 +232,13 @@ bats tests/
   `restow <package>` (shell function defined in `.zshrc`)
 - Manage local skip-worktree paths (stored in `.local/skip-worktree.paths`):
   `./scripts/skip-worktree.sh --help`
-- Add machine-specific secrets to `~/.secrets` (sourced conditionally if present)
+- Add machine-specific secrets to `~/.secrets` (sourced conditionally if present).
+  Never export credentials from `stow/zsh/.zshrc` — `~/.zshrc` is a stow symlink
+  into this repo, so anything set there becomes tracked content.
+- Map secrets to Dashlane items in `~/.secrets-config` (copy from
+  `.secrets-config.example`), then run `refresh-secrets`. Note it rewrites
+  `~/.secrets` wholesale, so every var you need must be listed, and use
+  `KEY=$OTHER_KEY` for vars that just mirror another
 - Declare shared env vars in `.env.schema` (varlock format); run `varlock run -- <command>` to inject
 - Toggle per-machine features in `~/.mac-setup.local` (copy from `.mac-setup.local.example`)
 

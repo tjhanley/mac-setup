@@ -334,15 +334,36 @@ function refresh-secrets() {
     echo ""
     while IFS='=' read -r key vault_path; do
       [[ -z "$key" || "$key" == \#* ]] && continue
+
+      # Alias entry (KEY=$OTHER_KEY): mirrors another var instead of hitting the
+      # vault. Emitted verbatim so the reference expands when ~/.secrets is
+      # sourced, keeping one vault item as the single source of truth. Must be
+      # listed after the entry it references.
+      if [[ "$vault_path" == \$* ]]; then
+        echo "export $key=\"$vault_path\""
+        continue
+      fi
+
       val=$("$dcli_bin" read "$vault_path") || {
         print -P "%F{red}error:%f failed to get $key from Dashlane (path: $vault_path)" >&2
         /bin/rm -f "$tmp"
         return 1
       }
-      # dcli read sometimes returns full JSON — extract password field if so
+      # dcli read sometimes returns full JSON — extract the password field, or
+      # the note field for secure notes (long values like JWTs live there).
       if [[ "$val" == \{* ]]; then
-        val=$(echo "$val" | /usr/bin/sed -n 's/.*"password":"\([^"]*\)".*/\1/p')
+        local extracted
+        extracted=$(echo "$val" | /usr/bin/sed -n 's/.*"password":"\([^"]*\)".*/\1/p')
+        [[ -z "$extracted" ]] && extracted=$(echo "$val" | /usr/bin/sed -n 's/.*"note":"\([^"]*\)".*/\1/p')
+        val="$extracted"
       fi
+
+      # TODO(tom): guard against an empty $val here.
+      # A vault item can resolve to nothing (wrong field name, blank entry, JSON
+      # shape dcli didn't match). dcli exits 0, so the error above never fires and
+      # we write `export KEY=""` — replacing a working ~/.secrets with a silently
+      # broken one. Decide: abort the whole refresh, or skip this key and warn?
+
       echo "export $key=\"$val\""
     done < "$config"
   } > "$tmp"
@@ -360,6 +381,10 @@ fi
 
 
 export AWS_PROFILE=225194532386_PowerUserAccess
+# Credentials do NOT belong in this file. ~/.zshrc is a stow symlink into the
+# mac-setup repo, so anything exported here becomes tracked content. Secrets
+# live in ~/.secrets (gitignored, outside the repo), sourced above and
+# regenerated from Dashlane by refresh-secrets.
 
 # AWS SSO login + export creds for Terraform
 awsl() {

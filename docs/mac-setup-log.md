@@ -106,6 +106,11 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `~/.local/bin` added to PATH (mise shims, pipx, user scripts).
 - Conditional `source ~/.secrets` for machine-specific tokens/keys (not tracked in git).
 - `refresh-secrets` function: reads `~/.secrets-config` (KEY=dl://title/field mappings), calls `dcli read` per key, writes `~/.secrets` atomically (tempfile → mv). Requires `dcli` authenticated.
+  - Rewrites `~/.secrets` wholesale — a var absent from `~/.secrets-config` is destroyed on the next run, so the config is the complete inventory.
+  - Alias entries (`KEY=$OTHER_KEY`) are emitted verbatim instead of triggering a vault lookup, letting one item back several vars (e.g. `TF_VAR_artifactory_access_token` mirrors `JFROG_ACCESS_TOKEN`). Must be listed after the var they reference, since the reference expands when `~/.secrets` is sourced.
+  - JSON responses from `dcli read` fall back to the `note` field when `password` is absent — secure notes hold long values like JWTs, which previously resolved to an empty string with no error.
+  - Credentials must never be exported from `stow/zsh/.zshrc`: `~/.zshrc` is a stow symlink into the repo, so exports there become tracked content. `tests/secrets.bats` guards this with a `git grep` leak check.
+- Known broken: `scripts/bootstrap-dashlane.sh` calls `dcli secret create|update ... --stdin`, which dcli 6.2614.0 does not implement (`dcli secret` only takes `[options] [filters...]`, so `create` is parsed as a title filter). Vault items must be created by hand in the Dashlane app until the script is rewritten or dcli gains write support.
 - `.env.schema` (varlock format) replaces `.env.example` — sensitive vars use `exec('dcli read "..."')`, resolved at `varlock run` time.
 - zsh plugins loaded last: autosuggestions, syntax-highlighting.
 
@@ -221,7 +226,8 @@ Other bindings and parity notes:
 - `scripts/export-zed-extensions.sh` for syncing installed Zed extensions.
 - `scripts/restow.sh` — re-applies all stow packages after a pull (`stow --restow` on every package under `stow/`).
 - `scripts/skip-worktree.sh` for managing local skip-worktree paths (stored in `.local/skip-worktree.paths`).
-- `tests/` — bats-core test suite (structure, syntax, bootstrap dry-run). CI via `.github/workflows/ci.yml` on push/PR to main.
+- `tests/` — bats-core test suite (structure, syntax, bootstrap dry-run, secrets). CI via `.github/workflows/ci.yml` on push/PR to main.
+  - `tests/secrets.bats` extracts `refresh-secrets` from `.zshrc` and runs it against a stubbed `dcli` in a temp `$HOME`, so it never touches the real vault or `~/.secrets`. Covers vault lookups, note-field fallback, alias entries, `600` file mode, failure atomicity, and a tracked-file secret leak check.
 - `man/man7/mac-setup.7` — custom man page (`man mac-setup`); symlinked into Homebrew's man path during bootstrap. Includes zellij keybinds reference (resize, move, pane, custom).
 - `docs/guides/` — usage guides for tools (zellij, shell, git) and workflows (theming, customization, bootstrap). Linked from README and man page.
 
