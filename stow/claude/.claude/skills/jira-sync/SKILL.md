@@ -111,3 +111,10 @@ whose header shows `total == collected` and refuse to render otherwise:
 if cache.total != cache.collected:
     print "STALE/PARTIAL cache — run /jira-sync first"; stop
 ```
+
+## Field extraction (migrated from global CLAUDE.md)
+
+Extract fields with `jq` using defensive access for differently nested fields —
+e.g. check both `.fields.assignee.emailAddress` and nested variants. (The
+pagination requirement that accompanied this note is already enforced above and
+in this skill's description, so it was not duplicated here.)

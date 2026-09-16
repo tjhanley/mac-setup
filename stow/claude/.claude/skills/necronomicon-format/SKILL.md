@@ -158,3 +158,22 @@ One-line description.
 - Jarlaxle = the correct spelling (not Jarjaxon, not Jarjaxle)
 - Elminster = the correct spelling (not Eleminster)
 - Strip all D&D Beyond / wiki navigation noise from clipped content
+
+## Frontmatter type by path (migrated from global CLAUDE.md)
+
+All vault `.md` files must have valid YAML frontmatter with at minimum a `type:`
+field and `tags:`. When creating or editing markdown files in the vault, always
+include frontmatter. Use the path to determine type:
+
+- `people/` → `type: person`
+- `projects/` → `type: project`
+- `tasks/` → `type: task`
+- `ideas/` → `type: idea`
+- `Atlas/Sonatus/DailyBrief/` → `type: daily-brief`
+- `Atlas/Sonatus/DailySummary/` → `type: daily-summary`
+- `Clippings/` → `type: clipping`
+
+## Note editing (migrated from global CLAUDE.md)
+
+- When merging generated content into daily/notes files, check for and avoid
+  creating duplicate section headers (e.g. '## Notes') before writing.

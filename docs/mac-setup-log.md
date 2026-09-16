@@ -199,9 +199,15 @@ Other bindings and parity notes:
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
 - `opencode/` — `.config/opencode/opencode.jsonc` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.jsonc` (Catppuccin Macchiato selection); `.config/opencode/themes/catppuccin-latte.json` (optional fixed light palette)
 
-### Claude Code status line
+### Claude Code workflow
+- Global instructions require citations and adversarial review. Vault frontmatter and note-editing rules live in `necronomicon-format`; defensive Jira field extraction lives in `jira-sync`.
+- Settings select `opus[1m]`, auto permissions, and ELI5 output. The plugin roster and skill overrides control which integrations are active.
+- The active status line is `claudetui statusline`. Hooks also call `claudetui` and the local `~/.claude/hooks/require-adversarial-review.py` script. These dependencies need separate per-machine installation.
+- OpenCode has a `red-team` agent at `~/.config/opencode/agents/red-team.md` for source and claim review.
+
+### Optional Claude Code powerline status line
 - File: `stow/claude/.claude/statusline.sh` (stowed to `~/.claude/statusline.sh`).
-- Activated via the `statusLine` key in `~/.claude/settings.json`.
+- To use this script, set the `statusLine.command` key in `~/.claude/settings.json` to `~/.claude/statusline.sh`.
 - Single powerline-style line with four segments: model name, git branch + dirty indicator, context usage bar + session cost, vim mode pill.
 - Colors: Catppuccin Mocha truecolor — Blue for model name, Green for clean git branch and INSERT mode pill, Yellow for dirty git branch and NORMAL mode pill, Mauve for context % bar and session cost. Vim mode pill is omitted when vim mode is not active.
 - Git status is cached per directory at `/tmp/statusline-git-cache-<dir>` with a 5-second TTL to avoid repeated subprocess calls on every render.

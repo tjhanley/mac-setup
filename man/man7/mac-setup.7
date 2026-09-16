@@ -7,7 +7,7 @@ mac-setup \- opinionated macOS bootstrap with Homebrew, Stow, and Catppuccin Moc
 .SH DESCRIPTION
 Idempotent macOS bootstrap that installs packages via Homebrew, manages
 dotfiles with GNU Stow, installs runtimes with mise, and applies
-Catppuccin Mocha theming across all tools.
+Catppuccin themes across tools.
 .PP
 The repo lives at
 .B ~/Workspace/mac-setup
@@ -80,7 +80,7 @@ jiratui	.config/jiratui/config.yaml (Catppuccin Mocha, search defaults)
 skhd	.config/skhd/skhdrc (Hyper key launchers: t=Ghostty b=Brave o=Obsidian m=Spotify s=Slack f=Safari n=NecroTomicon c=Calendar web app)
 karabiner	.config/karabiner/assets/complex_modifications/hyper.json
 pi	.pi/agent/settings.json, mcp.json, prompts/verify.md, themes/catppuccin-mocha.json, extensions/powerline/, agents/
-opencode	.config/opencode/opencode.json, tui.json
+opencode	.config/opencode/opencode.jsonc, tui.jsonc, themes/, agents/red-team.md
 .TE
 .SH GIT ALIASES
 OMZ-style aliases defined in .zshrc:
@@ -344,8 +344,11 @@ in the auto-start block of
 for
 .BR "exec herdr" .
 .SH THEME
-Catppuccin Mocha everywhere: Ghostty, Zellij (zjstatus), herdr, Starship, Zed,
+Catppuccin Mocha: Ghostty, Zellij (zjstatus), herdr, Starship, Zed,
 Yazi, bat, lazygit, eza, FZF.
+.PP
+OpenCode selects Catppuccin Macchiato. A custom Latte theme is also available.
+Claude Code selects the separately installed claudetui status line.
 .SH FILES
 .TP
 .B ~/Workspace/mac-setup/

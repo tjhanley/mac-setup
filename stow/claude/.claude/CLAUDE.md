@@ -45,18 +45,6 @@ All PRs across Sonatus repos require a Jira ticket. When creating a PR:
 - Verify git remote auth before pushing. If a push fails, diagnose root cause (missing scope, wrong remote) — don't just retry
 - If a git operation fails, diagnose the root cause. Don't retry the identical command.
 
-## Obsidian Vault Conventions
-
-All vault `.md` files must have valid YAML frontmatter with at minimum a `type:` field and `tags:`. When creating or editing markdown files in the Obsidian vault, always include frontmatter. Use the path to determine type:
-
-- `people/` → `type: person`
-- `projects/` → `type: project`
-- `tasks/` → `type: task`
-- `ideas/` → `type: idea`
-- `Atlas/Sonatus/DailyBrief/` → `type: daily-brief`
-- `Atlas/Sonatus/DailySummary/` → `type: daily-summary`
-- `Clippings/` → `type: clipping`
-
 ## Platform Notes
 
 On macOS: use Python or `/bin/zsh` for scripting when advanced features are needed. macOS ships bash 3 which lacks associative arrays, `${var,,}` lowercase syntax, `mapfile`, and other bash 4+ features. Do not write bash scripts that depend on these.
@@ -65,15 +53,63 @@ On macOS: use Python or `/bin/zsh` for scripting when advanced features are need
 
 When MCP tools return empty or limited results (Slack message bodies hidden, Jira API limitations, Calendar auth expired), report the limitation clearly and continue with other data sources. Never silently retry the same failing query. Never abort a multi-step workflow because one integration failed — skip it, note what was skipped, and deliver what you can.
 
-## Jira Sync Conventions
-
-- When running jira-sync, paginate all results (Jira caps at 100 issues per query); never report counts from a single unpaginated query.
-- Extract fields with jq using defensive access for differently nested fields (e.g., check both `.fields.assignee.emailAddress` and nested variants).
-
 ## MCP Server Health Checks
 
 - Before running any command that depends on an MCP server (Granola, Atlassian, Slack), verify the server is connected first; if it fails, report the diagnosis and remediation steps immediately rather than retrying repeatedly.
 
-## Note Editing
+## Factual claims
 
-- When merging generated content into daily/notes files, check for and avoid creating duplicate section headers (e.g., '## Notes') before writing.
+Every factual claim must be traceable to something a reader can open and check.
+
+- Cite inline: `claim [^src]`, where the source is a URL, a `path/to/file.py:42`
+  reference, a command and its output, or a named query.
+- No source available? Write `[UNVERIFIED]` on that sentence. Do not drop the
+  claim silently and do not assert it as if sourced.
+- These are not sources: "I recall", "typically", "it is well known",
+  "generally", "as of my training data", a plausible-looking URL you did not
+  open.
+- Numbers, dates, versions, prices, names, and quotes require a source every
+  time, with no exceptions for how obvious they seem.
+- If a source is behind a paywall or otherwise unreadable, say so. An
+  uncheckable citation is `[UNVERIFIED]`, not support.
+- Distinguish what the source _says_ from what you _infer_ from it. Inference
+  is fine; labelling inference as citation is not.
+
+## Adversarial review gate
+
+Before presenting any research output, comparison, recommendation, migration
+plan, root-cause analysis, or number-bearing summary:
+
+1. **Extract.** Build a claims table from the draft:
+   `claim | source | load-bearing? | confidence`.
+   Load-bearing means the conclusion changes if the claim is false.
+2. **Attack.** Launch the `red-team` agent with the draft and the table.
+   Give it the draft as-is; do not pre-defend it or tell it which claims you
+   are confident about.
+3. **Resolve.** Address every CONTRADICTED and UNSUPPORTED verdict before you
+   respond. Fixing means finding a real source, weakening the claim to what
+   the evidence supports, or cutting it. It does not mean re-asserting it.
+4. **Disclose.** Report the surviving unresolved items to the user in the
+   response body — not in a footnote, not omitted. If a load-bearing claim
+   survives as UNSUPPORTED, say plainly that the conclusion is unsafe.
+
+Rules for the gate itself:
+
+- Do not skip it because the answer seems obvious. Obvious is where errors hide.
+- Do not skip it because you are short on context or time. Say you are skipping
+  it and why, so the user can decide.
+- Do not act as your own adversary in the main thread. The point of a separate
+  agent is that it has not spent the last hour becoming attached to this draft.
+- One re-review after substantive edits. Beyond that, report remaining
+  disagreement rather than looping.
+
+### Known limits of this gate
+
+State these to the user when the stakes warrant it:
+
+- A reviewer sharing your training data shares your blind spots. It catches
+  citation drift, arithmetic, staleness, and overreach well; it catches
+  _shared misconceptions_ poorly. Run the reviewer on a different model where
+  the answer matters.
+- This produces **sourced and challenged**, not **proven**. Do not describe
+  reviewed output as verified, confirmed, or proven fact.

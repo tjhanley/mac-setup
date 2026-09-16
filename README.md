@@ -137,7 +137,7 @@ stow/
                                          #   context7-mcp, create-rfc, jira-sync, mcp-preflight,
                                          #   organize, people-profile, supacode-cli, vault-tasks,
                                          #   verify-references
-    .claude/statusline.sh                # Catppuccin Mocha powerline status line for Claude Code
+    .claude/statusline.sh                # optional powerline status line; claudetui selected in settings
   eza/
     .config/eza/theme.yml                # Catppuccin Mocha theme
   yazi/
@@ -166,6 +166,7 @@ stow/
     .config/opencode/opencode.jsonc              # model + autoupdate config
     .config/opencode/tui.jsonc                   # Catppuccin Macchiato theme selection
     .config/opencode/themes/catppuccin-latte.json # optional fixed light palette
+    .config/opencode/agents/red-team.md          # adversarial source review
 ```
 
 ## CLI Tools
@@ -188,6 +189,8 @@ Pi MCP setup: run `pi install npm:pi-mcp-adapter` on each machine. The tracked `
 opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`. The Quota plugin is not enabled in the server or TUI configuration.
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
+
+Claude configuration selects `opus[1m]`, auto permissions, ELI5 output, and `claudetui` hooks and status line. Install `claudetui` and local `~/.claude/hooks/` scripts separately. Global instructions require sources and adversarial review, with vault and Jira rules in their respective skills.
 
 Shell completions: kubectl, docker, mise, gh, stern, rustup, cargo, gcloud, fzf, uv, yazi
 
