@@ -162,8 +162,9 @@ stow/
     .pi/agent/agents/worker.md                         # subagent: sonnet, full tools, executes plans
     .pi/agent/agents/reviewer.md                       # subagent: sonnet, read-only code reviewer
   opencode/
-    .config/opencode/opencode.json               # model + autoupdate config
-    .config/opencode/tui.json                    # Catppuccin theme
+    .config/opencode/opencode.jsonc              # model + autoupdate config
+    .config/opencode/tui.jsonc                   # Catppuccin Macchiato theme selection
+    .config/opencode/themes/catppuccin-latte.json # optional fixed light palette
 ```
 
 ## CLI Tools
@@ -181,7 +182,7 @@ Cargo tools: basalt-tui (Obsidian vault TUI)
 
 npm global tools (mise node prefix): @earendil-works/pi-coding-agent
 
-opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`.
+opencode: installed via Homebrew tap (opencode-ai/tap). Alias: `oc`. The Quota plugin is not enabled in the server or TUI configuration.
 
 Claude Code: installed via the official standalone installer (`~/.local/bin/claude`), not Homebrew.
 

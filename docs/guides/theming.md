@@ -1,6 +1,6 @@
 # Theming
 
-Catppuccin Mocha is applied consistently across every tool in this setup. This guide covers how each tool is themed, and how to re-theme the entire setup if you want a different palette.
+Catppuccin Mocha is the default theme in this setup. OpenCode selects the built-in Catppuccin Macchiato theme through `stow/opencode/.config/opencode/tui.jsonc`. The custom `themes/catppuccin-latte.json` in the same directory remains available as an optional fixed light palette. This guide covers how each tool is themed, and how to re-theme the entire setup if you want a different palette.
 
 ## Catppuccin Mocha palette
 

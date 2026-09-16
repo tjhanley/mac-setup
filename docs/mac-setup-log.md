@@ -75,7 +75,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Rust managed via `rustup`.
 - Cargo tools installed via `cargo-binstall`: basalt-tui.
 - npm global tools installed via `mise exec node -- npm install -g` (mise node prefix, single location): @earendil-works/pi-coding-agent.
-- opencode: installed via Homebrew tap (opencode-ai/tap). TUI coding agent with built-in Catppuccin theme. Alias: `oc`.
+- opencode: installed via Homebrew tap (opencode-ai/tap). TUI coding agent with the built-in Catppuccin Macchiato theme. Alias: `oc`. Removed the Quota plugin entries from `opencode.jsonc` and `tui.jsonc`.
 - Shell activation for `mise` is in `.zshrc`.
 
 ## Shell config (`stow/zsh/.zshrc`)
@@ -110,7 +110,9 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - zsh plugins loaded last: autosuggestions, syntax-highlighting.
 
 ## Theme + terminal work
-### Catppuccin Mocha (consistent across tools)
+### Catppuccin themes
+
+- OpenCode: `catppuccin-macchiato` in `~/.config/opencode/tui.jsonc` selects the built-in Macchiato theme. The custom `themes/catppuccin-latte.json` remains available as an optional fixed light palette.
 - Starship: powerline-style with `catppuccin_mocha` palette.
 - Ghostty: `theme = "Catppuccin Mocha"`, BlexMono Nerd Font (IBM Plex Mono).
 - Zellij: `theme "catppuccin-mocha"` (built-in).
@@ -185,7 +187,7 @@ Other bindings and parity notes:
 - `skhd/` — `.config/skhd/skhdrc` (Hyper key app launchers: t=Ghostty, b=Brave, o=Obsidian, m=Spotify, s=Slack, f=Safari, n=NecroTomicon, c=Google Calendar Safari web app at `~/Applications/Calendar.app`)
 - `karabiner/` — `.config/karabiner/assets/complex_modifications/hyper.json` (Caps Lock → Hyper held / Escape tap; `karabiner.json` is intentionally unmanaged — Karabiner atomically rewrites it)
 - `pi/` — `.pi/agent/themes/catppuccin-mocha.json` (Catppuccin Mocha theme for pi-agent UI); `.pi/agent/extensions/powerline/` (TypeScript powerline extension: Catppuccin Mocha footer showing model name, git branch + dirty state, active tool, active subagent, cost/context bar + session duration); `.pi/agent/agents/explore.md`, `planner.md`, `worker.md`, `reviewer.md` (declarative subagents with YAML frontmatter)
-- `opencode/` — `.config/opencode/opencode.json` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.json` (built-in catppuccin theme)
+- `opencode/` — `.config/opencode/opencode.jsonc` (model: anthropic/claude-sonnet-4-6, autoupdate: false); `.config/opencode/tui.jsonc` (Catppuccin Macchiato selection); `.config/opencode/themes/catppuccin-latte.json` (optional fixed light palette)
 
 ### Claude Code status line
 - File: `stow/claude/.claude/statusline.sh` (stowed to `~/.claude/statusline.sh`).
@@ -241,5 +243,5 @@ Other bindings and parity notes:
 ## Current state
 - Repo is pushing successfully to `origin/main`.
 - Setup is idempotent and rerunnable.
-- Catppuccin Mocha theme consistent across all configured tools.
+- Catppuccin Mocha is the default theme. OpenCode uses Catppuccin Macchiato.
 - Prompt, terminal, shell, and package bootstrap are all configured.
