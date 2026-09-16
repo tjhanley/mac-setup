@@ -153,6 +153,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - Seamless `Ctrl+h/j/k/l` navigation across Neovim splits and Zellij panes via three cooperating pieces: (1) **vim-zellij-navigator** (`vim-zellij-navigator.wasm`) bound to `Ctrl+hjkl` in `shared_except "locked"` — moves Zellij focus, crossing tabs on left/right (`move_focus_or_tab`); (2) **zellij-autolock** (`zellij-autolock.wasm`, loaded via `load_plugins`) — auto-switches to Locked mode when the focused pane runs a trigger program (`triggers "nvim|vim|fzf"`, `reaction_seconds 0.3`) so keys pass through, unlocking when focus leaves; (3) **zellij-nav.nvim** (`stow/nvim/.config/nvim/lua/plugins/zellij-nav.lua`) — handles the keys inside Neovim and hands focus back to Zellij at split edges. Both `.wasm` plugins downloaded to `~/.config/zellij/plugins/`.
 
 ### Herdr
+- The Brewfile installs Herdr and Stow manages `config.toml`. Neovim's Zellij plugin uses a conditional load so other terminals retain LazyVim window navigation.
 Agent-aware multiplexer (`brew "herdr"`, homebrew-core, 0.8.0 at time of writing) installed **alongside** Zellij for evaluation. Config at `stow/herdr/.config/herdr/config.toml` → `~/.config/herdr/config.toml`. Validate with `herdr config check`; reload a running server with `herdr server reload-config` or `prefix+shift+r`.
 
 **Motions are deliberately two-tier, not a copy of the Zellij scheme:**

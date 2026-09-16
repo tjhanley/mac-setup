@@ -54,6 +54,8 @@ brew "imagemagick"
 # Terminal + multiplexer
 cask "ghostty"
 brew "zellij"
+# Agent-aware multiplexer, trialled alongside zellij (see docs/mac-setup-log.md)
+brew "herdr"
 brew "koekeishiya/formulae/skhd"
 
 # Fonts

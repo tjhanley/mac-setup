@@ -1,0 +1,65 @@
+# Herdr — agent multiplexer (https://herdr.dev/docs/configuration/)
+# Reload after editing: `herdr server reload-config`, or prefix+shift+r in-app.
+#
+# Motion model — two tiers, deliberately NOT the Zellij single-chord scheme:
+#
+#   ctrl+h/j/k/l      Neovim windows only. Herdr never binds these, so they pass
+#                     through untouched to the pane program (readline ctrl+k,
+#                     ctrl+w and friends survive in shell panes).
+#   ctrl+alt+h/j/k/l  Herdr pane focus. Works from every pane, including inside
+#                     Neovim and other full-screen TUIs.
+#   prefix+<key>      tmux-style defaults, kept as the discoverable fallback
+#                     (prefix+? lists every active binding).
+#
+# Why two tiers instead of Zellij's seamless ctrl+h/j/k/l: that setup needs
+# zellij-autolock to make Zellij stand down so Neovim can see the chord. Herdr
+# has no lock/passthrough mode, so any chord bound here is consumed before the
+# pane sees it. ctrl+alt is the one modifier family terminals and macOS leave
+# alone; plain alt+h/j/k/l is already taken by our Ghostty word-motion remaps
+# (stow/ghostty/.config/ghostty/config).
+
+[keys]
+prefix = "ctrl+b"
+
+# Pane focus.
+focus_pane_left = ["prefix+h", "ctrl+alt+h"]
+focus_pane_down = ["prefix+j", "ctrl+alt+j"]
+focus_pane_up = ["prefix+k", "ctrl+alt+k"]
+focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+
+# Move a pane within the layout. prefix+shift+<hjkl> already matches Zellij's
+# pane-mode H/J/K/L; spelled out here so the parity is obvious.
+swap_pane_left = "prefix+shift+h"
+swap_pane_down = "prefix+shift+j"
+swap_pane_up = "prefix+shift+k"
+swap_pane_right = "prefix+shift+l"
+
+# Resize. prefix+r enters a Zellij-style resize mode, then hjkl. Direct
+# resize_pane_left/down/up/right chords exist only in Herdr's unreleased docs,
+# not in 0.8.0 — `herdr config check` rejects them. Revisit after an upgrade.
+resize_mode = "prefix+r"
+
+# Splits and zoom.
+split_vertical = ["prefix+v", "ctrl+alt+d"]
+split_horizontal = ["prefix+minus", "ctrl+alt+shift+d"]
+zoom = ["prefix+z", "ctrl+alt+z"]
+
+# Tabs. Note: Herdr has no "focus pane or cross to the next tab at the edge"
+# action, so the Zellij move_focus_or_tab behaviour on ctrl+h / ctrl+l has no
+# equivalent — tab movement is its own chord.
+new_tab = ["prefix+c", "ctrl+alt+c"]
+previous_tab = ["prefix+p", "ctrl+alt+["]
+next_tab = ["prefix+n", "ctrl+alt+]"]
+
+[theme]
+# "catppuccin" is Mocha; "catppuccin-mocha" is accepted as an alias.
+name = "catppuccin"
+auto_switch = false
+
+[terminal]
+# Inherit the focused pane's directory for new panes, tabs and workspaces.
+new_cwd = "follow"
+
+[session]
+# Bring agents back on restore, not just their panes.
+resume_agents_on_restore = true
