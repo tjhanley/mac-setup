@@ -144,6 +144,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 
 ### Zellij
 - Pane frames enabled with rounded corners; `simplified_ui true` to hide the built-in hint bar (zjstatus replaces it); session name hidden from frames; `session_serialization false`.
+- Zellij 0.45.0 changed the frame UI: frames default to one centered title line, and a stack renders as a list of titles with the expanded pane pinned to the bottom. `pane_frame_style "full"` and `stacked_pane_list false` restore the pre-0.45.0 look (full borders, expanded pane in place).
 - Scrollback editor set to nvim; mouse mode enabled.
 - Custom keybind: pane mode `r` remapped to rename pane (consistent with tab mode `r` for rename tab).
 - Custom keybind: `Alt l` opens a floating fzf launcher (`scripts/launcher.sh`) to launch apps (basalt, btop, claude, codex, jiratui, k9s, lazydocker, lazygit, nvim, opencode, pi, sidecar, yazi) in new floating panes.

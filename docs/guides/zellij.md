@@ -230,6 +230,8 @@ Set in `stow/zellij/.config/zellij/config.kdl`:
 |---------|-------|--------|
 | `simplified_ui` | true | Hides built-in hint bar (zjstatus replaces it) |
 | `pane_frames` | true | Borders around panes |
+| `pane_frame_style` | full | Full border around each pane (0.45.0 default is `titles`, a single centered title line) |
+| `stacked_pane_list` | false | Renders the expanded pane in place inside a stack (pre-0.45.0 behavior) instead of a title list |
 | `rounded_corners` | true | Rounded pane frame corners |
 | `hide_session_name` | true | Removes session name from frame titles |
 | `scrollback_editor` | nvim | Opens scrollback in Neovim |

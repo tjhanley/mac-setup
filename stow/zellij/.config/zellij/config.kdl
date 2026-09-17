@@ -6,6 +6,10 @@ theme "catppuccin-mocha";
 // UI preferences
 simplified_ui true;
 pane_frames true;
+// Restore the pre-0.45.0 look: full borders around panes, and the expanded
+// pane rendered in place inside a stack instead of a centered title list.
+pane_frame_style "full";
+stacked_pane_list false;
 scrollback_editor "nvim";
 mouse_mode true;
 session_serialization true;
