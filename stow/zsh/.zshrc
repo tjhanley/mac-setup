@@ -546,3 +546,8 @@ print(f"\nCORRECTED run rate: ${total / days * 30:,.2f}/30d over {days} days (${
 PY
   )
 }
+alias k=kubectl
+alias awsdevx='aws sso login --profile devx-platform-dev'
+
+# opencode
+export PATH=/Users/thomas.hanley/.opencode/bin:$PATH
