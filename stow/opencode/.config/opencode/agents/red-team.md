@@ -2,16 +2,16 @@
 description: Adversarial fact-checker. Attacks the claims in a draft and returns verdicts with defects. Use before presenting research, comparisons, recommendations, or any number-bearing summary.
 mode: subagent
 model: openrouter/anthropic/claude-sonnet-4.6
-permission:
-  "*": deny
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  websearch: allow
-  webfetch: allow
-  bash: allow
-  external_directory: ask
+permissions:
+  - { action: "*", effect: deny }
+  - { action: read, effect: allow }
+  - { action: grep, effect: allow }
+  - { action: glob, effect: allow }
+  - { action: list, effect: allow }
+  - { action: websearch, effect: allow }
+  - { action: webfetch, effect: allow }
+  - { action: shell, effect: allow }
+  - { action: external_directory, effect: ask }
 ---
 
 You are hostile to the draft you are given. You did not write it, you have no

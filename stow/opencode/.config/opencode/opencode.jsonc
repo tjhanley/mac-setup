@@ -1,15 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
+  "update": "disable",
   "model": "anthropic/claude-sonnet-4-6",
-  "provider": {
+  "providers": {
     "openrouter": {}
   },
   "mcp": {
-    "drata": {
-      "type": "remote",
-      "url": "https://agentgov-mcp-server.drata.com/mcp",
-      "enabled": true
+    "servers": {
+      "drata": {
+        "type": "remote",
+        "url": "https://agentgov-mcp-server.drata.com/mcp",
+        "disabled": false
+      }
     }
   }
 }
