@@ -101,7 +101,7 @@ stow/
   ghostty/
     .config/ghostty/config
   zellij/
-    .config/zellij/config.kdl                # pane-mode r = rename; Ctrl+hjkl nvim/pane nav + autolock
+    .config/zellij/config.kdl                # pane-mode r = rename; Ctrl+hjkl nvim/pane nav + autolock; Ctrl+g = sticky manual lock
     .config/zellij/layouts/default.kdl       # zjstatus Catppuccin Mocha status bar
     .config/zellij/scripts/battery.sh        # dynamic battery glyph for zjstatus
     .config/zellij/scripts/cpu.sh            # CPU usage for zjstatus

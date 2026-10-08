@@ -15,8 +15,20 @@ mouse_mode true;
 session_serialization true;
 
 keybinds {
+    // Manual lock (e.g. ssh + screen): Ctrl+g also pauses autolock, otherwise
+    // autolock sees a non-trigger pane and unlocks again after reaction_seconds.
+    locked {
+        bind "Ctrl g" {
+            MessagePlugin "autolock" { payload "toggle"; }
+            SwitchToMode "normal"
+        }
+    }
     shared_except "locked" {
         unbind "Ctrl q"
+        bind "Ctrl g" {
+            MessagePlugin "autolock" { payload "toggle"; }
+            SwitchToMode "locked"
+        }
         // Seamless Ctrl+h/j/k/l navigation between Neovim splits and Zellij panes.
         // In Neovim panes, zellij-autolock locks the session so these keys reach
         // Neovim (zellij-nav.nvim crosses the edge back into Zellij). Elsewhere
