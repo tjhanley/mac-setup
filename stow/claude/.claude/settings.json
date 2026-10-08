@@ -1,6 +1,7 @@
 {
   "permissions": {
     "allow": [
+      "mcp__Claude_Browser__*",
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
@@ -30,9 +31,7 @@
       "Bash(gh run:*)",
       "Bash(gh completion:*)",
       "Bash(claude mcp:*)",
-      "Bash(bash:*)",
       "Bash(/bin/bash:*)",
-      "Bash(zsh:*)",
       "Bash(test:*)",
       "Bash(echo Exit: $?:*)",
       "Bash(echo \"Exit: $?\")",
@@ -41,18 +40,14 @@
       "Bash(ls:*)",
       "Bash(head:*)",
       "Bash(mkdir:*)",
-      "Bash(rm:*)",
       "Bash(ln:*)",
-      "Bash(chmod +x:*)",
       "Bash(grep:*)",
-      "Bash(xargs:*)",
       "Bash(fd:*)",
       "Bash(man:*)",
       "Bash(mandoc:*)",
       "Bash(col:*)",
       "Bash(/bin/cat:*)",
       "Bash(xxd:*)",
-      "Bash(python3:*)",
       "Bash(pip3 show:*)",
       "Bash(lsof:*)",
       "Bash(fc-list:*)",
@@ -89,7 +84,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-sonnet-5-5",
   "skillOverrides": {
     "context7-mcp": "off",
     "twg": "off",
@@ -108,7 +103,9 @@
     "test": "off",
     "fix-issue": "off",
     "pr": "off",
-    "commit": "off"
+    "commit": "off",
+    "twg-space-creation": "off",
+    "create-rfc": "off"
   },
   "hooks": {
     "Notification": [
@@ -299,7 +296,8 @@
     "devex@snt-codeagent-marketplace": true,
     "devx-cloudops@devx-skills": false,
     "simple-english@simple-english": true,
-    "portal@portal": false
+    "portal@portal": false,
+    "kariba-ops@snt-codeagent-marketplace": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -340,6 +338,40 @@
       "effortLevel": "medium"
     }
   },
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(node scripts/collect-secrets.js:*) in /Users/thomas.hanley/Workspace/fastlane-bridge"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: Sonatus (inferred from CLAUDE.md Jira project conventions and github org `snt-internal-apps`)",
+      "**Cloud provider(s)**: AWS (README references AWS Secrets Manager paths via devx-gitops)",
+      "**Repository visibility**: Internal (snt-internal-apps/fastlane-bridge, via gh)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: AWS Secrets Manager, paths defined in the `devx-gitops` repo; secrets are set as environment variables, never committed (`.env`, `.env.*` gitignored)",
+      "**Default / protected branches**: main (default); no rulesets or classic protected branches listed via gh",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo (snt-internal-apps/fastlane-bridge) and its remote(s) only (no additional orgs configured)",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: Sonatus Launch Control proxy (identity headers X-User-Email, X-User-Display-Name, X-User-Groups) — this repo trusts it instead of doing its own login",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: scripts/collect-secrets.js (filename suggests secret-collection logic); `.env`/`.env.*` files (gitignored, hold real secret values per README) — share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development",
+      "**Trusted repo**: /Users/thomas.hanley/Workspace/fastlane-bridge (snt-internal-apps/fastlane-bridge, internal visibility) and its configured remote",
+      "**Org-specific CLIs**: None configured",
+      "routine under /Users/thomas.hanley/Workspace/fastlane-bridge/ prefix"
+    ]
+  }
 }

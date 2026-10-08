@@ -34,8 +34,10 @@ These principles apply to ALL codebases, not just Go:
 
 All PRs across Sonatus repos require a Jira ticket. When creating a PR:
 
-1. Create (or identify) the relevant ENGOPS Jira ticket first
-2. Include the ticket key (e.g. `ENGOPS-1234`) in the PR title: `ENGOPS-1234: <description>`
+1. Create (or identify) the relevant Jira ticket first, in the project that repo
+   uses — `DEVX` in devx-gitops and devx-platform, `ENGOPS` elsewhere. Check the
+   repo's recent commit subjects if you are unsure.
+2. Include the ticket key in the PR title: `DEVX-1234: <description>`
 3. Link the PR URL in the Jira ticket description
 
 ## Git Operations
