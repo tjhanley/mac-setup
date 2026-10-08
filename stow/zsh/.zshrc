@@ -551,3 +551,14 @@ alias awsdevx='aws sso login --profile devx-platform-dev'
 
 # opencode
 export PATH=/Users/thomas.hanley/.opencode/bin:$PATH
+
+# >>> revenium-gemini-cli-metering >>>
+if [ -f "/Users/thomas.hanley/.gemini/revenium.env" ]; then
+    source "/Users/thomas.hanley/.gemini/revenium.env"
+fi
+# <<< revenium-gemini-cli-metering <<<
+# >>> revenium-claude-code-metering >>>
+if [ -f "/Users/thomas.hanley/.claude/revenium.env" ]; then
+    source "/Users/thomas.hanley/.claude/revenium.env"
+fi
+# <<< revenium-claude-code-metering <<<
