@@ -102,6 +102,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - GitHub account routing checks `git config gh.user`, the remote owner, then `GH_ACCOUNT_BY_PATH`. Tokens are cached per account within the shell. Unknown GitHub owners use the active gh account rather than a directory fallback.
 - Kiro shell integration loads when `TERM_PROGRAM=kiro`. `claudespend [DAYS]` runs the local `~/claude-spend-audit` scripts and calculates a run rate for the selected period without changing the parent shell directory.
 - `tests/shell-helpers.bats` covers account priority, remote parsing, token caching and clearing, and spend-report date filtering and parser failure.
+- `ssh()` wrapper (`_ssh_real` keeps the jmp-* keychain logic). Inside Zellij it renames the pane to `[ssh@host]` and sets a tinted background (`zellij action set-pane-color --bg "#4a1f2e"`), then undoes both when ssh exits. The host is the last argument with `user@` removed. A trailing remote command gives the wrong host.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - `restow <package>` shell function: re-stows a single package from `~/Workspace/mac-setup/stow`.
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `k` (kubectl), `gal` (gcloud auth login).
