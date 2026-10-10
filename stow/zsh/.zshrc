@@ -418,7 +418,7 @@ ssh() {
   [[ -z "$ZELLIJ" ]] && { _ssh_real "$@"; return; }
   local host="${${@[-1]}#*@}"
   zellij action rename-pane "[ssh@$host]"
-  zellij action set-pane-color --bg "#4a1f2e"
+  zellij action set-pane-color --bg "#38395a"
   _ssh_real "$@"
   local rc=$?
   zellij action undo-rename-pane
