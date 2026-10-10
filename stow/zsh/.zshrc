@@ -400,7 +400,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # Auto-fill Sonatus LDAP password from macOS Keychain for jmp-* ssh aliases.
 # Seed once: security add-generic-password -a "$USER" -s sonatus-ldap -w
 # Falls back to normal ssh if the keychain item is missing.
-ssh() {
+_ssh_real() {
   if [[ "$1" == jmp-* ]]; then
     local pw
     pw="$(security find-generic-password -a "$USER" -s sonatus-ldap -w 2>/dev/null)"
@@ -410,6 +410,20 @@ ssh() {
     fi
   fi
   command ssh "$@"
+}
+
+# In zellij: tint the pane and set title "[ssh@host]" while ssh runs, then undo.
+# Host is the last arg (user@ stripped); wrong if a remote command is passed.
+ssh() {
+  [[ -z "$ZELLIJ" ]] && { _ssh_real "$@"; return; }
+  local host="${${@[-1]}#*@}"
+  zellij action rename-pane "[ssh@$host]"
+  zellij action set-pane-color --bg "#38395a"
+  _ssh_real "$@"
+  local rc=$?
+  zellij action undo-rename-pane
+  zellij action set-pane-color --reset
+  return $rc
 }
 
 # Per-directory gh account. Exports GH_TOKEN so that both `gh` AND git use the
@@ -551,3 +565,14 @@ alias awsdevx='aws sso login --profile devx-platform-dev'
 
 # opencode
 export PATH=/Users/thomas.hanley/.opencode/bin:$PATH
+
+# >>> revenium-gemini-cli-metering >>>
+if [ -f "/Users/thomas.hanley/.gemini/revenium.env" ]; then
+    source "/Users/thomas.hanley/.gemini/revenium.env"
+fi
+# <<< revenium-gemini-cli-metering <<<
+# >>> revenium-claude-code-metering >>>
+if [ -f "/Users/thomas.hanley/.claude/revenium.env" ]; then
+    source "/Users/thomas.hanley/.claude/revenium.env"
+fi
+# <<< revenium-claude-code-metering <<<
