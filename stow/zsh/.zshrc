@@ -380,7 +380,6 @@ if [[ -f "$HOME/.secrets" ]]; then
 fi
 
 
-export AWS_PROFILE=225194532386_PowerUserAccess
 # Credentials do NOT belong in this file. ~/.zshrc is a stow symlink into the
 # mac-setup repo, so anything exported here becomes tracked content. Secrets
 # live in ~/.secrets (gitignored, outside the repo), sourced above and
