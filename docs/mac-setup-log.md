@@ -172,6 +172,7 @@ Other bindings and parity notes:
 - Tabs: `prefix+c`/`p`/`n` plus `Ctrl+Alt+c`/`[`/`]`. **No equivalent of Zellij's `move_focus_or_tab`** — Herdr has no focus-or-cross-to-next-tab action, so edge-crossing tab movement is a separate chord.
 - Theme `catppuccin` (= Mocha; `catppuccin-mocha` is an accepted alias), `auto_switch = false`.
 - `terminal.new_cwd = "follow"`, `session.resume_agents_on_restore = true`.
+- `ui.tab_bar_position = "bottom"` puts the tab row below the panes, matching Zellij's bottom status bar. Corner shape is not configurable; herdr draws on terminal cells, so tabs and sidebar rows stay square.
 - Not ported from Zellij: `launcher.sh` (would need its `zellij run` tail rewritten to `herdr pane split`) and `agent-tracker` (largely redundant — Herdr's sidebar shows per-agent working/blocked/idle natively).
 - Not configured because Herdr already defaults to it: mouse capture, pane borders, session persistence, and `$EDITOR` (nvim) for `prefix+e` scrollback.
 

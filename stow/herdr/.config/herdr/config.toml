@@ -56,6 +56,10 @@ next_tab = ["prefix+n", "ctrl+alt+]"]
 name = "catppuccin"
 auto_switch = false
 
+[ui]
+# Tab row below the panes, next to Zellij's bottom status bar.
+tab_bar_position = "bottom"
+
 [terminal]
 # Inherit the focused pane's directory for new panes, tabs and workspaces.
 new_cwd = "follow"
