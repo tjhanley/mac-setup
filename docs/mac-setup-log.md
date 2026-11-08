@@ -96,7 +96,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - eza aliases: `ls`, `ll` (with `--git`, `--header`, `--time-style=relative`), `la`, `lt` (with `--git`, `--git-ignore`).
 - eza Catppuccin Mocha theme via `~/.config/eza/theme.yml`.
 - yazi cwd-on-exit wrapper: `y`.
-- Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`.
+- Auto-starts zellij (`exec zellij`) for interactive Ghostty shells; opt out with `NO_AUTO_ZELLIJ=1`. Skipped inside herdr desktop, detected by `HC_TERMINAL_SOCKET` (herdr desktop reports `TERM_PROGRAM=ghostty`).
 - Git aliases (OMZ-style): `g`, `ga`, `gaa`, `gb`, `gba`, `gc`, `gcmsg`, `gco`, `gcb`, `gd`, `gds`, `gf`, `gl`, `gp`, `gpf`, `glog`, `gloga`, `grb`, `grbi`, `gst`, `gsw`, `gswc`.
 - GitHub account selection maps the `snt-devx` owner to `tjhanley-snt` in `GH_ACCOUNT_BY_OWNER` (`stow/zsh/.zshrc`).
 - GitHub account routing checks `git config gh.user`, the remote owner, then `GH_ACCOUNT_BY_PATH`. Tokens are cached per account within the shell. Unknown GitHub owners use the active gh account rather than a directory fallback.

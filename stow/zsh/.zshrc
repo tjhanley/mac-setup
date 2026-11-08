@@ -115,9 +115,10 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 
 # Auto-start zellij for interactive Ghostty shells.
+# Skipped inside herdr desktop (it sets HC_TERMINAL_SOCKET; TERM_PROGRAM stays ghostty).
 # Opt out per-shell with: NO_AUTO_ZELLIJ=1 zsh
 if command -v zellij >/dev/null 2>&1; then
-  if [[ $- == *i* ]] && [[ -t 1 ]] && [[ "${TERM_PROGRAM:-}" == "ghostty" ]] && [[ -z "${ZELLIJ:-}" ]] && [[ -z "${TMUX:-}" ]] && [[ "${NO_AUTO_ZELLIJ:-0}" != "1" ]]; then
+  if [[ $- == *i* ]] && [[ -t 1 ]] && [[ "${TERM_PROGRAM:-}" == "ghostty" ]] && [[ -z "${ZELLIJ:-}" ]] && [[ -z "${TMUX:-}" ]] && [[ -z "${HC_TERMINAL_SOCKET:-}" ]] && [[ "${NO_AUTO_ZELLIJ:-0}" != "1" ]]; then
     exec zellij
   fi
 fi
