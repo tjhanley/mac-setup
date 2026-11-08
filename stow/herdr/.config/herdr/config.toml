@@ -1,3 +1,4 @@
+onboarding = false
 # Herdr — agent multiplexer (https://herdr.dev/docs/configuration/)
 # Reload after editing: `herdr server reload-config`, or prefix+shift+r in-app.
 #
@@ -56,9 +57,22 @@ next_tab = ["prefix+n", "ctrl+alt+]"]
 name = "catppuccin"
 auto_switch = false
 
+# Mocha draws the selected row and sidebar dividers in base (#1e1e2e), the
+# same as the Ghostty background, so both vanish. Lift them to surface tones.
+[theme.custom]
+active_row_bg = "#45475a" # surface1
+surface_dim = "#585b70"   # surface2
+
 [ui]
 # Tab row below the panes, next to Zellij's bottom status bar.
 tab_bar_position = "bottom"
+status_indicators = "symbols"
+
+[ui.toast]
+delivery = "terminal"
+
+[ui.sound]
+enabled = false
 
 [terminal]
 # Inherit the focused pane's directory for new panes, tabs and workspaces.

@@ -173,6 +173,8 @@ Other bindings and parity notes:
 - Theme `catppuccin` (= Mocha; `catppuccin-mocha` is an accepted alias), `auto_switch = false`.
 - `terminal.new_cwd = "follow"`, `session.resume_agents_on_restore = true`.
 - `ui.tab_bar_position = "bottom"` puts the tab row below the panes, matching Zellij's bottom status bar. Corner shape is not configurable; herdr draws on terminal cells, so tabs and sidebar rows stay square.
+- `[theme.custom]` lifts `active_row_bg` (surface1 `#45475a`) and `surface_dim` (surface2 `#585b70`). Per the config comment, Mocha draws the selected row and sidebar dividers in base (`#1e1e2e`), which matches the Ghostty background, so they were hard to see.
+- `ui.status_indicators = "symbols"`, `ui.toast.delivery = "terminal"`, `ui.sound.enabled = false`, `onboarding = false`.
 - Not ported from Zellij: `launcher.sh` (would need its `zellij run` tail rewritten to `herdr pane split`) and `agent-tracker` (largely redundant — Herdr's sidebar shows per-agent working/blocked/idle natively).
 - Not configured because Herdr already defaults to it: mouse capture, pane borders, session persistence, and `$EDITOR` (nvim) for `prefix+e` scrollback.
 

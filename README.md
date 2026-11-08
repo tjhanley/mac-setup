@@ -109,7 +109,7 @@ stow/
     .config/zellij/scripts/launcher.sh       # fzf app picker for Super+Shift+l
     .config/zellij/scripts/agent-tracker     # Claude Code session tracker (Super+Shift+a + zjstatus count)
   herdr/
-    .config/herdr/config.toml                # agent multiplexer trial; Ctrl+Alt+hjkl pane motions, Catppuccin Mocha
+    .config/herdr/config.toml                # agent multiplexer trial; Ctrl+Alt+hjkl pane motions, Catppuccin Mocha with lifted row/divider tones
   mise/
     .config/mise/config.toml
   zed/
