@@ -105,6 +105,7 @@ This note captures all setup work completed in the `mac-setup` repo so far.
 - `ssh()` wrapper (`_ssh_real` keeps the jmp-* keychain logic). Inside Zellij it renames the pane to `[ssh@host]` and sets a tinted background (`zellij action set-pane-color --bg "#38395a (dark lavender, Catppuccin Mocha lavender mixed into base)"`), then undoes both when ssh exits. The host is the last argument with `user@` removed. A trailing remote command gives the wrong host.
 - Tool aliases: `lg` (lazygit), `zj`/`zja` (zellij), `d` (docker), `lzd` (lazydocker).
 - `restow <package>` shell function: re-stows a single package from `~/Workspace/mac-setup/stow`.
+- Coder aliases: `eb` (ssh to `main.echo-base.thomashanley.coder`), `herdremote` (`herdr --remote` to the same host).
 - AI + cloud aliases: `cx` (codex), `cc` (claude), `oc` (opencode), `k` (kubectl), `gal` (gcloud auth login).
 - Claude Code installed via standalone installer (`~/.local/bin/claude`), not Homebrew cask.
 - gcloud SDK path and completion sourcing with mise Python for CLOUDSDK_PYTHON.

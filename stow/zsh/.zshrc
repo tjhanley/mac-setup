@@ -562,6 +562,8 @@ PY
 }
 alias k=kubectl
 alias awsdevx='aws sso login --profile devx-platform-dev'
+alias eb='ssh main.echo-base.thomashanley.coder'
+alias herdremote="herdr --remote main.echo-base.thomashanley.coder"
 
 # opencode
 export PATH=/Users/thomas.hanley/.opencode/bin:$PATH

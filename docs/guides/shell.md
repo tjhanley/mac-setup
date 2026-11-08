@@ -160,6 +160,8 @@ Colors use the Catppuccin Mocha palette via `FZF_DEFAULT_OPTS`.
 | `...` | `cd ../..` |
 | `....` | `cd ../../..` |
 | `.....` | `cd ../../../..` |
+| `eb` | `ssh main.echo-base.thomashanley.coder` |
+| `herdremote` | `herdr --remote main.echo-base.thomashanley.coder` |
 
 ## Plugins
 
