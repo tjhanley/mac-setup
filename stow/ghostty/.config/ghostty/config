@@ -13,6 +13,9 @@ keybind = alt+l=esc:f
 keybind = alt+j=csi:B
 keybind = alt+k=csi:A
 
+# Free Cmd+K for Herdr's clear_pane (stow/herdr config.toml)
+keybind = cmd+k=unbind
+
 # Shaders (uncomment to enable — installed to ~/.local/share/ghostty/shaders/)
 # custom-shader = ~/.local/share/ghostty/shaders/crt.glsl
 # custom-shader = ~/.local/share/ghostty/shaders/bloom.glsl

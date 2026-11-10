@@ -52,6 +52,9 @@ new_tab = ["prefix+c", "ctrl+alt+c"]
 previous_tab = ["prefix+p", "ctrl+alt+["]
 next_tab = ["prefix+n", "ctrl+alt+]"]
 
+# Clear the focused pane (screen + scrollback). No-op in full-screen TUIs.
+clear_pane = ["prefix+ctrl+k", "cmd+k"]
+
 [theme]
 # "catppuccin" is Mocha; "catppuccin-mocha" is accepted as an alias.
 name = "catppuccin"
